@@ -1,6 +1,5 @@
-import * as React from 'react';
+import * as React from "react";
 
 export default function Crafts() {
-  return (
-    <h1>Welcome to Crafts</h1>
-  );
+  return <h1>Welcome to Crafts</h1>;
+}
