@@ -3,15 +3,53 @@ import Grid from "@mui/material/Grid";
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { kebabCase } from "lodash";
+
+interface CraftImage {
+  height: number;
+  url: string;
+}
+
+interface Craft {
+  description: string | React.ReactElement<unknown>;
+  images: CraftImage[];
+  title: string;
+}
 
 export default function Crafts() {
   const cardMaxWidth = 345;
-
+  const crafts: Craft[] = [
+    {
+      description: "Completed October 30th, 2022",
+      images: [
+        { height: 240, url: "https://i.imgur.com/JWV2oJh.jpg" },
+        { height: 140, url: "https://i.imgur.com/cAzvOoI.jpg" },
+      ],
+      title: "Halloween Table Runner",
+    },
+    {
+      description: "Completed September 21st, 2022",
+      images: [{ height: 240, url: "https://i.imgur.com/x6tfjo8.jpg" }],
+      title: "Baby Blanket and Matching Poro Lovey",
+    },
+    {
+      description: "Completed June 23rd, 2021",
+      images: [{ height: 440, url: "https://i.imgur.com/f9h8e2a.jpg" }],
+      title: "Baby Blanket - DnD & Space Themed",
+    },
+    {
+      description: "Completed August 29th, 2018",
+      images: [
+        { height: 240, url: "https://i.imgur.com/9Idv1Fe.jpg" },
+        { height: 240, url: "https://i.imgur.com/6ZxdnN9.jpg" },
+        { height: 440, url: "https://i.imgur.com/I6y6h7E.jpg" },
+      ],
+      title: "Dragonscale Dice Bag",
+    },
+  ];
   return (
     <Container maxWidth="lg" sx={{ height: "80vh", overflowY: "auto" }}>
       <Box>
@@ -34,87 +72,35 @@ export default function Crafts() {
           justifyContent="center"
           spacing={{ xs: 2, md: 3 }}
         >
-          <Grid item>
-            <Card sx={{ maxWidth: cardMaxWidth }}>
-              <CardMedia
-                component="img"
-                height="240"
-                image="https://i.imgur.com/JWV2oJh.jpg"
-                alt="halloween-table-runner-close-up"
-              />
-              <CardMedia
-                component="img"
-                height="140"
-                image="https://i.imgur.com/cAzvOoI.jpg"
-                alt="halloween-table-runner"
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  Halloween Table Runner
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Completed October 30th, 2022
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+          {crafts.map((craft) => {
+            return (
+              <Grid item>
+                <Card key={craft.title} sx={{ maxWidth: cardMaxWidth }}>
+                  {craft.images.map((image, i) => {
+                    const alt = `${kebabCase(craft.title)}-${i + 1}`;
+                    return (
+                      <CardMedia
+                        component="img"
+                        height={image.height}
+                        key={alt}
+                        image={image.url}
+                        alt={alt}
+                      />
+                    );
+                  })}
 
-          <Grid item>
-            <Card sx={{ maxWidth: cardMaxWidth }}>
-              <CardMedia
-                component="img"
-                height="240"
-                image="https://i.imgur.com/x6tfjo8.jpg"
-                alt="baby-blanket-and-poro-lovey"
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  Baby Blanket and Matching Poro Lovey
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Completed September 21st, 2022
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item>
-            <Card sx={{ maxWidth: cardMaxWidth }}>
-              <CardMedia
-                component="img"
-                height="440"
-                image="https://i.imgur.com/f9h8e2a.jpg"
-                alt="space-dnd-themed-baby-blanket"
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  Baby Blanket - DnD & Space Themed
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Completed June 23rd, 2021
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item>
-            <Card sx={{ maxWidth: cardMaxWidth }}>
-              <CardMedia
-                component="img"
-                height="440"
-                image="https://i.imgur.com/f9h8e2a.jpg"
-                alt="space-dnd-themed-baby-blanket"
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  Baby Blanket - DnD & Space Themed
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Completed June 23rd, 2021
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {craft.title}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {craft.description}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            );
+          })}
         </Grid>
       </Box>
     </Container>
