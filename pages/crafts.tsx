@@ -6,7 +6,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { kebabCase } from "lodash";
+import { kebabCase, startCase } from "lodash";
 
 interface CraftImage {
   height: number;
@@ -17,6 +17,7 @@ interface Craft {
   description: string | React.ReactElement<unknown>;
   images: CraftImage[];
   title: string;
+  type: string;
 }
 
 export default function Crafts() {
@@ -29,16 +30,19 @@ export default function Crafts() {
         { height: 140, url: "https://i.imgur.com/cAzvOoI.jpg" },
       ],
       title: "Halloween Table Runner",
+      type: "crochet",
     },
     {
       description: "Completed September 21st, 2022",
       images: [{ height: 240, url: "https://i.imgur.com/x6tfjo8.jpg" }],
       title: "Baby Blanket and Matching Poro Lovey",
+      type: "crochet",
     },
     {
       description: "Completed June 23rd, 2021",
       images: [{ height: 440, url: "https://i.imgur.com/f9h8e2a.jpg" }],
       title: "Baby Blanket - DnD & Space Themed",
+      type: "crochet",
     },
     {
       description: "Completed August 29th, 2018",
@@ -48,6 +52,7 @@ export default function Crafts() {
         { height: 440, url: "https://i.imgur.com/I6y6h7E.jpg" },
       ],
       title: "Dragonscale Dice Bag",
+      type: "crochet",
     },
   ];
   return (
@@ -74,8 +79,8 @@ export default function Crafts() {
         >
           {crafts.map((craft) => {
             return (
-              <Grid item>
-                <Card key={craft.title} sx={{ maxWidth: cardMaxWidth }}>
+              <Grid item key={craft.title}>
+                <Card sx={{ maxWidth: cardMaxWidth }}>
                   {craft.images.map((image, i) => {
                     const alt = `${kebabCase(craft.title)}-${i + 1}`;
                     return (
@@ -90,11 +95,11 @@ export default function Crafts() {
                   })}
 
                   <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
+                    <Typography component="span" gutterBottom variant="h5">
                       {craft.title}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {craft.description}
+                      {startCase(craft.type)}&nbsp;-&nbsp;{craft.description}
                     </Typography>
                   </CardContent>
                 </Card>
