@@ -10,12 +10,18 @@ export default function Videos() {
         <Grid
           alignItems="center"
           container
+          direction="column"
           justifyContent="center"
-          sx={{ my: 2 }}
+          sx={{ my: 2, width: "100%" }}
         >
-          <Grid item>
+          <Grid item xs={12}>
             <Typography variant="h4" component="h1" gutterBottom>
               Videos
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="body2" component="div" gutterBottom>
+              A list of videos that I have created/edited
             </Typography>
           </Grid>
         </Grid>
@@ -25,12 +31,25 @@ export default function Videos() {
           container
           justifyContent="center"
           spacing={{ xs: 2, md: 3 }}
+          sx={{ pt: 2 }}
         >
           <Grid item>
             <iframe
               width="560"
               height="315"
               src="https://www.youtube.com/embed/SSdPp6KwKr0"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </Grid>
+
+          <Grid item>
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/wpBDWXHUG5c"
               title="YouTube video player"
               frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -47,18 +66,6 @@ export default function Videos() {
               src="https://www.youtube.com/embed/GGSFg4iSp5c"
               title="YouTube video player"
               width="560"
-            ></iframe>
-          </Grid>
-
-          <Grid item>
-            <iframe
-              width="560"
-              height="315"
-              src="https://www.youtube.com/embed/wpBDWXHUG5c"
-              title="YouTube video player"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
             ></iframe>
           </Grid>
 
