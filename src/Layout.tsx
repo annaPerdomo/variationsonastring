@@ -14,7 +14,7 @@ export default function Layout({ children }: Props) {
     <Container maxWidth="lg">
       <Box
         sx={{
-          my: 4,
+          mt: 4,
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
@@ -25,7 +25,9 @@ export default function Layout({ children }: Props) {
 
         <main>{children}</main>
 
-        <Copyright />
+        <footer>
+          <Copyright />
+        </footer>
       </Box>
     </Container>
   );

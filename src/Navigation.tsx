@@ -30,8 +30,6 @@ function Naviation() {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
-
-  console.log({ anchorElNav });
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
