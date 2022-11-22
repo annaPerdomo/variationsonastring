@@ -4,6 +4,12 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
 export default function Videos() {
+  const videos = [
+    "https://www.youtube.com/embed/SSdPp6KwKr0",
+    "https://www.youtube.com/embed/wpBDWXHUG5c",
+    "https://www.youtube.com/embed/GGSFg4iSp5c",
+    "https://www.youtube.com/embed/BF8kIE-MNLw",
+  ];
   return (
     <Container maxWidth="lg" sx={{ height: "80vh", overflowY: "auto" }}>
       <Box>
@@ -33,53 +39,19 @@ export default function Videos() {
           spacing={{ xs: 2, md: 3 }}
           sx={{ pt: 2 }}
         >
-          <Grid item>
-            <iframe
-              width="560"
-              height="315"
-              src="https://www.youtube.com/embed/SSdPp6KwKr0"
-              title="YouTube video player"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-            ></iframe>
-          </Grid>
-
-          <Grid item>
-            <iframe
-              width="560"
-              height="315"
-              src="https://www.youtube.com/embed/wpBDWXHUG5c"
-              title="YouTube video player"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-            ></iframe>
-          </Grid>
-
-          <Grid item>
-            <iframe
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-              frameborder="0"
-              height="315"
-              src="https://www.youtube.com/embed/GGSFg4iSp5c"
-              title="YouTube video player"
-              width="560"
-            ></iframe>
-          </Grid>
-
-          <Grid item>
-            <iframe
-              width="560"
-              height="315"
-              src="https://www.youtube.com/embed/BF8kIE-MNLw"
-              title="YouTube video player"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-            ></iframe>
-          </Grid>
+          {videos.map((video) => (
+            <Grid item key={video}>
+              <iframe
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                frameBorder="0"
+                height="315"
+                src={video}
+                title="YouTube video player"
+                width="560"
+              />
+            </Grid>
+          ))}
         </Grid>
       </Box>
     </Container>
