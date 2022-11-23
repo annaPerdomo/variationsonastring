@@ -13,7 +13,7 @@ export default function Video({ src }: Props) {
       height="315"
       src={src}
       title="YouTube video player"
-      width={isMobile ? 400 : 560}
+      width={isMobile ? 300 : 560}
     />
   );
 }
