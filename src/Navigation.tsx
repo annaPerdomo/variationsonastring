@@ -6,6 +6,7 @@ import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -33,17 +34,7 @@ function Naviation() {
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
-        <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
-          <Button
-            component={Link}
-            href="/"
-            sx={{ display: { xs: "none", md: "flex" } }}
-          >
-            <ArrowBackIosIcon />
-            <MusicNoteIcon />
-            <ArrowForwardIosIcon sx={{ display: { marginLeft: 8 } }} />
-          </Button>
-
+        <Toolbar disableGutters>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -84,15 +75,35 @@ function Naviation() {
                 </MenuItem>
               ))}
             </Menu>
+
+            <Grid
+              alignItems="center"
+              container
+              justifyContent="center"
+              sx={{ width: "100%" }}
+            >
+              <Grid item>
+                <Button
+                  component={Link}
+                  href="/"
+                  sx={{ display: { xs: "flex", md: "none" } }}
+                >
+                  <Box sx={{ mr: 1, mt: 1 }}>
+                    <ArrowBackIosIcon />
+                    <MusicNoteIcon />
+                    <ArrowForwardIosIcon sx={{ ml: 1 }} />
+                  </Box>
+                </Button>
+              </Grid>
+            </Grid>
           </Box>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            <ArrowBackIosIcon sx={{ display: { xs: "flex", md: "none" } }} />
-            <MusicNoteIcon sx={{ display: { xs: "flex", md: "none" } }} />
-            <ArrowForwardIosIcon
-              sx={{ display: { xs: "flex", md: "none", marginLeft: 8 } }}
-            />
-
+          <Box sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}>
+            <Button component={Link} href="/">
+              <ArrowBackIosIcon />
+              <MusicNoteIcon />
+              <ArrowForwardIosIcon sx={{ ml: 1 }} />
+            </Button>
             {pages.map((page) => (
               <Button
                 component={Link}
