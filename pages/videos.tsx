@@ -2,6 +2,9 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+import dynamic from "next/dynamic";
+
+const DynamicVideo = dynamic(() => import("../src/Video"), { ssr: false });
 
 export default function Videos() {
   const videos = [
@@ -41,15 +44,7 @@ export default function Videos() {
         >
           {videos.map((video) => (
             <Grid item key={video}>
-              <iframe
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                frameBorder="0"
-                height="315"
-                src={video}
-                title="YouTube video player"
-                width="560"
-              />
+              <DynamicVideo src={video} />
             </Grid>
           ))}
         </Grid>
