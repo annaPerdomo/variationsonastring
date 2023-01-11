@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 export default function Copyright() {
   return (
     <Box sx={{ pt: 2 }}>
-      <Typography variant="body2" color="text.secondary" align="center">
+      <Typography variant="subtitle2" color="text.secondary" align="center">
         {"Copyright © "}
         <MuiLink color="inherit" href="https://github.com/annaperdomo">
           Variations on a String

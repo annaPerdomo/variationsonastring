@@ -110,7 +110,11 @@ function Naviation() {
                 href={`/${lowerCase(page)}`}
                 key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{
+                  color: "white",
+                  display: "block",
+                  my: 2,
+                }}
               >
                 {page}
               </Button>

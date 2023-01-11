@@ -11,7 +11,7 @@ interface Props {
 
 export default function Layout({ children }: Props) {
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="xl">
       <Box
         sx={{
           mt: 4,
@@ -24,11 +24,11 @@ export default function Layout({ children }: Props) {
         <Navigation />
 
         <main>{children}</main>
-
-        <footer>
-          <Copyright />
-        </footer>
       </Box>
+
+      <footer>
+        <Copyright />
+      </footer>
     </Container>
   );
 }
