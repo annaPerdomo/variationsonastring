@@ -1,9 +1,27 @@
 import { red } from "@mui/material/colors";
 import { createTheme } from "@mui/material/styles";
-import { Roboto } from "@next/font/google";
+import {
+  Archivo,
+  Major_Mono_Display,
+  Montserrat_Subrayada,
+} from "@next/font/google";
 
-export const roboto = Roboto({
-  weight: ["300", "400", "500", "700"],
+export const archivo = Archivo({
+  weight: ["400"],
+  subsets: ["latin"],
+  display: "swap",
+  fallback: ["Helvetica", "Arial", "sans-serif"],
+});
+
+export const majorMonoDisplay = Major_Mono_Display({
+  weight: ["400"],
+  subsets: ["latin"],
+  display: "swap",
+  fallback: ["Helvetica", "Arial", "sans-serif"],
+});
+
+export const montserratSubrayada = Montserrat_Subrayada({
+  weight: ["400", "700"],
   subsets: ["latin"],
   display: "swap",
   fallback: ["Helvetica", "Arial", "sans-serif"],
@@ -24,7 +42,13 @@ const theme = createTheme({
     mode: "dark",
   },
   typography: {
-    fontFamily: roboto.style.fontFamily,
+    button: {
+      fontFamily: montserratSubrayada.style.fontFamily,
+    },
+    fontFamily: archivo.style.fontFamily,
+    h4: {
+      fontFamily: majorMonoDisplay.style.fontFamily,
+    },
   },
 });
 
