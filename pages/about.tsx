@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
-import Link from "../src/Link";
+import Link from "../src/components/Link";
 import Typography from "@mui/material/Typography";
 
 export default function About() {
