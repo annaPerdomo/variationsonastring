@@ -4,7 +4,9 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import dynamic from "next/dynamic";
 
-const DynamicVideo = dynamic(() => import("../src/Video"), { ssr: false });
+const DynamicVideo = dynamic(() => import("../src/components/Video"), {
+  ssr: false,
+});
 
 export default function Videos() {
   const videos = [

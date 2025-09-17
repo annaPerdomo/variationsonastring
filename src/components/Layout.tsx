@@ -1,3 +1,4 @@
+import { SettingsApplicationsOutlined } from "@mui/icons-material";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import * as React from "react";
@@ -12,19 +13,11 @@ interface Props {
 export default function Layout({ children }: Props) {
   return (
     <Container maxWidth="xl">
-      <Box
-        sx={{
-          mt: 4,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Navigation />
+      <Navigation />
 
-        <main>{children}</main>
-      </Box>
+      <section>
+        {children}
+      </section>
 
       <footer>
         <Copyright />
