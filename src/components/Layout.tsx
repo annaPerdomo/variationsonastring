@@ -16,14 +16,7 @@ export default function Layout({ children }: Props) {
       <Navigation />
 
       <section>
-        {/* <Box
-          sx={{
-            flex: "1 1 0%",
-            width: "100%",
-          }}
-        > */}
         {children}
-        {/* </Box> */}
       </section>
 
       <footer>
