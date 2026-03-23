@@ -32,6 +32,7 @@
       --color-paper:      #fdf9f3;
       --color-surface:    #ffffff;
       --color-surface-2:  #f5f0ea;
+      --color-nav:        rgba(253, 249, 243, 0.94);  /* light: warm semi-transparent */
       --color-border:     rgba(26, 26, 46, 0.08);
       --color-text-muted: rgba(26, 26, 46, 0.55);
 
@@ -46,14 +47,39 @@
       --nav-height: 80px;
     }
 
-    /* Dark mode — applied via [data-theme="dark"] on <html> */
+    /* Light mode section backgrounds — defined on :root first so dark mode
+       override below wins via cascade order (later = higher priority). */
+    :root {
+      --bg-hero:    #fdf9f3;
+      --bg-work:    #ffffff;
+      --bg-crafts:  #f5f0ff;
+      --bg-videos:  #edf5ff;
+      --bg-about:   #1a1a2e;
+      /* Text that lives on always-dark surfaces (about section, marquee, footer) */
+      --color-on-dark:       #f0ece4;
+      --color-on-dark-muted: rgba(240, 236, 228, 0.6);
+      --color-on-dark-faint: rgba(240, 236, 228, 0.12);
+    }
+
+    /* Dark mode — comes AFTER :root so it takes precedence */
     [data-theme="dark"] {
       --color-ink:        #f0ece4;
       --color-paper:      #13111a;
-      --color-surface:    #1e1b26;
+      --color-surface:    #243045;
       --color-surface-2:  #252230;
+      --color-nav:        rgba(20, 17, 30, 0.96);  /* dark: warm purple-black, matches hero family */
       --color-border:     rgba(240, 236, 228, 0.1);
       --color-text-muted: rgba(240, 236, 228, 0.45);
+
+      --bg-hero:    #0f0d16;
+      --bg-work:    #1a2535;
+      --bg-crafts:  #1a1530;
+      --bg-videos:  #0e1a2a;
+      --bg-about:   #0d0b14;
+      /* These stay the same in dark mode — they're always light-on-dark */
+      --color-on-dark:       #f0ece4;
+      --color-on-dark-muted: rgba(240, 236, 228, 0.6);
+      --color-on-dark-faint: rgba(240, 236, 228, 0.12);
     }
 
     /* =====================================================================
@@ -132,22 +158,34 @@
        Elements start hidden; JS adds .is-visible when they scroll into view.
     ===================================================================== */
 
+    /*
+     * Reveal animation: elements start fully visible (no hidden flash),
+     * but gently float up when they scroll into the viewport.
+     * Using will-change only on transform so opacity is never the
+     * thing hiding content if JS is slow or observer doesn't fire.
+     */
     .reveal {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    /* JS will add .needs-reveal before the page renders to opt into animation */
+    .reveal.needs-reveal {
       opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
+      transform: translateY(24px);
     }
 
     .reveal.is-visible {
-      opacity: 1;
-      transform: translateY(0);
+      opacity: 1 !important;
+      transform: translateY(0) !important;
     }
 
-    .reveal.delay-1 { transition-delay: 0.1s; }
-    .reveal.delay-2 { transition-delay: 0.2s; }
-    .reveal.delay-3 { transition-delay: 0.3s; }
-    .reveal.delay-4 { transition-delay: 0.4s; }
-    .reveal.delay-5 { transition-delay: 0.5s; }
+    .reveal.delay-1 { transition-delay: 0.08s; }
+    .reveal.delay-2 { transition-delay: 0.16s; }
+    .reveal.delay-3 { transition-delay: 0.24s; }
+    .reveal.delay-4 { transition-delay: 0.32s; }
+    .reveal.delay-5 { transition-delay: 0.40s; }
 
     /* =====================================================================
        NAV
@@ -164,15 +202,21 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 24px;
-      backdrop-filter: blur(12px);
-      background: color-mix(in srgb, var(--color-paper) 88%, transparent);
-      border-bottom: 1px solid rgba(26, 26, 46, 0.06);
-      transition: box-shadow 0.3s ease;
+      /* Always use an explicit dark/light bg — never inherit from the hero */
+      background: var(--color-nav);
+      border-bottom: 1px solid var(--color-border);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
     }
 
     .nav.scrolled {
-      box-shadow: 0 4px 30px rgba(26, 26, 46, 0.08);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    /* Nav right zone: links + toggle pill together */
+    .nav__right {
+      display: flex;
+      align-items: center;
+      gap: 28px;
     }
 
     /* Logo mark + brand name */
@@ -181,7 +225,6 @@
       align-items: center;
       gap: 12px;
       text-decoration: none;
-      flex-shrink: 0;
     }
 
     .nav__logo-img {
@@ -212,7 +255,7 @@
     /* Nav links */
     .nav__links {
       display: flex;
-      gap: 36px;
+      gap: 32px;
       list-style: none;
     }
 
@@ -289,7 +332,7 @@
       font-size: 1rem;
       line-height: 1.7;
       color: var(--color-ink);
-      opacity: 0.65;
+      opacity: 0.75;  /* bumped from 0.65 — legible on dark backgrounds */
       max-width: 540px;
       margin: 16px auto 0;
     }
@@ -583,7 +626,7 @@
     ===================================================================== */
 
     .work {
-      background: var(--color-paper);
+      background: var(--bg-work);
     }
 
     .work__grid {
@@ -601,11 +644,32 @@
       overflow: hidden;
       border: 1px solid var(--color-border);
       transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
+      position: relative;
     }
+
+    /* Subtle color accent strip along the top of each card */
+    .work-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: 16px 16px 0 0;
+    }
+
+    .work-card:nth-child(1)::before { background: var(--color-coral); }
+    .work-card:nth-child(2)::before { background: var(--color-teal); }
+    .work-card:nth-child(3)::before { background: var(--color-lavender); }
+    .work-card:nth-child(4)::before { background: var(--color-marigold); }
+    .work-card:nth-child(5)::before { background: var(--color-sky); }
 
     .work-card:hover {
       transform: translateY(-8px) rotate(-0.5deg);
-      box-shadow: 0 24px 60px rgba(26, 26, 46, 0.12);
+      box-shadow: 0 24px 60px rgba(26, 26, 46, 0.16);
+    }
+
+    /* In light mode, add a resting shadow so white cards lift off white bg */
+    .work-card {
+      box-shadow: 0 2px 16px rgba(26, 26, 46, 0.07);
     }
 
     .work-card__header {
@@ -620,7 +684,7 @@
       width: 100px;
       height: 100px;
       border-radius: 0 16px 0 100%;
-      opacity: 0.1;
+      opacity: 0.18;
     }
 
     .work-card__icon {
@@ -640,7 +704,8 @@
       font-weight: 300;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      opacity: 0.4;
+      color: var(--color-ink);
+      opacity: 0.55;  /* 0.4 was too dim in dark mode */
       margin-bottom: 6px;
     }
 
@@ -678,8 +743,11 @@
       letter-spacing: 0.06em;
       padding: 4px 10px;
       border-radius: 4px;
-      background: rgba(26, 26, 46, 0.06);
+      /* Use border instead of background fill — works in both modes */
+      background: transparent;
+      border: 1px solid var(--color-border);
       color: var(--color-ink);
+      opacity: 0.8;
     }
 
     .work-card__link {
@@ -708,7 +776,7 @@
     ===================================================================== */
 
     .crafts {
-      background: linear-gradient(180deg, #fff5f0 0%, var(--color-paper) 100%);
+      background: var(--bg-crafts);
     }
 
     .crafts__filters {
@@ -727,11 +795,12 @@
       text-transform: uppercase;
       padding: 10px 24px;
       border-radius: 100px;
-      border: 1.5px solid var(--color-border);
+      border: 1.5px solid var(--color-ink);
       background: transparent;
       color: var(--color-ink);
       cursor: pointer;
       transition: all 0.25s ease;
+      opacity: 0.7;
     }
 
     .filter-btn:hover,
@@ -739,21 +808,54 @@
       background: var(--color-ink);
       border-color: var(--color-ink);
       color: var(--color-paper);
+      opacity: 1;
     }
 
+    /*
+     * Masonry grid using CSS columns.
+     * Cards hidden via JS get display:none; we remove them from the DOM
+     * flow while keeping the columns intact by never having 0 visible
+     * cards in a column (JS ensures at least some are always visible).
+     */
     .crafts__masonry {
-      columns: 3;
-      column-gap: 24px;
+      column-count: 3;
+      column-gap: 20px;
       max-width: 1200px;
       margin: 0 auto;
     }
 
-    /* Hide cards beyond the first 6 until "Show more" is clicked */
+    .craft-card {
+      /* break-inside prevents a card from splitting across columns */
+      break-inside: avoid;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: inline-block; /* inline-block plays nicer with columns than block */
+      width: 100%;
+    }
+
+    .craft-card:hover {
+      transform: scale(1.02);
+    }
+
+    /* Cap image height so no single photo dominates the layout */
+    .craft-card img,
+    .craft-card-img {
+      width: 100%;
+      max-height: 320px;
+      display: block;
+      object-fit: cover;
+    }
+
+    /* Cards hidden by the Show More limit */
     .craft-card.is-hidden {
       display: none;
     }
 
-    /* Also hide filtered-out cards entirely instead of greying out */
+    /* Cards hidden by the active filter */
     .craft-card.is-filtered-out {
       display: none;
     }
@@ -775,7 +877,7 @@
       background: transparent;
       color: var(--color-ink);
       cursor: pointer;
-      transition: all 0.25s ease;
+      transition: background 0.25s ease, color 0.25s ease;
       display: inline-flex;
       align-items: center;
       gap: 10px;
@@ -789,28 +891,6 @@
     .show-more-btn .btn-count {
       font-size: 0.68rem;
       opacity: 0.55;
-    }
-
-    .craft-card {
-      break-inside: avoid;
-      margin-bottom: 24px;
-      border-radius: 16px;
-      overflow: hidden;
-      position: relative;
-      cursor: pointer;
-      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-      display: block;
-    }
-
-    .craft-card:hover {
-      transform: scale(1.02);
-    }
-
-    .craft-card img,
-    .craft-card-img {
-      width: 100%;
-      display: block;
-      object-fit: cover;
     }
 
     .craft-card__overlay {
@@ -852,7 +932,7 @@
     ===================================================================== */
 
     .videos {
-      background: linear-gradient(180deg, var(--color-paper) 0%, #f0f4ff 100%);
+      background: var(--bg-videos);
     }
 
     .videos__grid {
@@ -899,13 +979,9 @@
     ===================================================================== */
 
     .about {
-      background: var(--color-ink);
-      color: var(--color-paper);
+      background: var(--bg-about);
+      color: var(--color-on-dark);
       overflow: hidden;
-    }
-
-    [data-theme="dark"] .about {
-      background: #0d0b14;
     }
 
     .about__grid {
@@ -943,8 +1019,8 @@
     .about__text {
       font-size: 1rem;
       line-height: 1.85;
-      color: var(--color-paper);
-      opacity: 0.75;
+      color: var(--color-on-dark);
+      opacity: 0.82;
       margin-bottom: 18px;
     }
 
@@ -961,10 +1037,10 @@
       font-weight: 500;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--color-paper);
+      color: var(--color-on-dark);
       text-decoration: none;
       padding: 11px 20px;
-      border: 1px solid rgba(255,255,255,0.18);
+      border: 1px solid rgba(240, 236, 228, 0.35);
       border-radius: 4px;
       transition: all 0.25s ease;
     }
@@ -983,9 +1059,9 @@
 
     .skill-block {
       padding: 24px;
-      border: 1px solid rgba(253, 249, 243, 0.1);
+      border: 1px solid var(--color-on-dark-faint);
       border-radius: 12px;
-      background: rgba(255,255,255,0.04);
+      background: rgba(255,255,255,0.06);
       transition: background 0.3s ease, transform 0.3s ease;
     }
 
@@ -1004,7 +1080,7 @@
       font-size: 0.95rem;
       font-weight: 700;
       font-style: italic;
-      color: var(--color-paper);
+      color: var(--color-on-dark);
       margin-bottom: 6px;
     }
 
@@ -1012,8 +1088,8 @@
       font-family: var(--font-mono);
       font-size: 0.68rem;
       font-weight: 300;
-      color: var(--color-paper);
-      opacity: 0.5;
+      color: var(--color-on-dark);
+      opacity: 0.65;
       line-height: 1.6;
       letter-spacing: 0.03em;
     }
@@ -1021,7 +1097,7 @@
     .skill-block__bar {
       margin-top: 12px;
       height: 3px;
-      background: rgba(253, 249, 243, 0.12);
+      background: var(--color-on-dark-faint);
       border-radius: 2px;
       overflow: hidden;
     }
@@ -1062,8 +1138,8 @@
       font-weight: 300;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--color-paper);
-      opacity: 0.5;
+      color: var(--color-on-dark);
+      opacity: 0.55;
     }
 
     /* Decorative blobs */
@@ -1079,7 +1155,7 @@
       width: 320px;
       height: 320px;
       background: var(--color-coral);
-      opacity: 0.06;
+      opacity: 0.15;
     }
 
     .about__blob--2 {
@@ -1088,7 +1164,7 @@
       width: 200px;
       height: 200px;
       background: var(--color-teal);
-      opacity: 0.08;
+      opacity: 0.18;
     }
 
     /* =====================================================================
@@ -1130,7 +1206,7 @@
       display: inline-block;
     }
 
-    /* Dark mode toggle button in the nav */
+    /* Theme toggle pill — sits after the nav links */
     .theme-toggle {
       background: none;
       border: 1.5px solid var(--color-border);
@@ -1140,7 +1216,6 @@
       font-size: 1rem;
       line-height: 1;
       transition: background 0.2s ease, border-color 0.2s ease;
-      flex-shrink: 0;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -1148,14 +1223,6 @@
 
     .theme-toggle:hover {
       background: var(--color-border);
-    }
-
-    .theme-toggle .toggle-label {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--color-ink);
     }
 
     /* Show/hide sun and moon icons based on current mode */
@@ -1178,6 +1245,10 @@
       .nav {
         padding: 0 24px;
         gap: 16px;
+      }
+
+      .nav__right {
+        gap: 20px;
       }
 
       .nav__links {
@@ -1219,7 +1290,7 @@
       }
 
       .crafts__masonry {
-        columns: 2;
+        column-count: 2;
       }
 
       .videos__grid {
@@ -1252,6 +1323,10 @@
         display: none;
       }
 
+      .nav__right {
+        gap: 14px;
+      }
+
       .nav__links {
         gap: 12px;
       }
@@ -1270,7 +1345,7 @@
       }
 
       .crafts__masonry {
-        columns: 1;
+        column-count: 1;
       }
 
       .skills-grid {
@@ -1349,18 +1424,19 @@
       </span>
     </a>
 
-    <ul class="nav__links" role="list">
-      <li><a href="#work">Work</a></li>
-      <li><a href="#crafts">Crafts</a></li>
-      <li><a href="#videos">Videos</a></li>
-      <li><a href="#about">About</a></li>
-    </ul>
+    <div class="nav__right">
+      <ul class="nav__links" role="list">
+        <li><a href="#work">Work</a></li>
+        <li><a href="#crafts">Crafts</a></li>
+        <li><a href="#videos">Videos</a></li>
+        <li><a href="#about">About</a></li>
+      </ul>
 
-    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-      <span class="icon-moon">🌙</span>
-      <span class="icon-sun">☀️</span>
-      <span class="toggle-label">Theme</span>
-    </button>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+        <span class="icon-moon">🌙</span>
+        <span class="icon-sun">☀️</span>
+      </button>
+    </div>
   </nav>
 
   <!-- ===================================================================
@@ -1375,7 +1451,7 @@
         on a <em>"String"</em>
       </h1>
 
-      <p class="hero__tagline">Code · Craft · Music</p>
+      <p class="hero__tagline">I build things, make things, and tell the story of both.</p>
 
       <p class="hero__description">
         8 years of full-stack sorcery by day. Crochet hooks, knitting
@@ -1385,12 +1461,10 @@
 
       <ul class="hero__tags" role="list">
         <li><span class="tag tag--coral">⚙️ Full-stack Dev</span></li>
-        <li><span class="tag tag--teal">🧶 Crochet &amp; Knitting</span></li>
-        <li><span class="tag tag--lavender">🎹 Piano</span></li>
-        <li><span class="tag tag--gold">🪡 Cross-stitch</span></li>
-        <li><span class="tag tag--sky">🎤 Vocalist</span></li>
+        <li><span class="tag tag--teal">🧶 Fiber Artist</span></li>
+        <li><span class="tag tag--lavender">🎵 Musician</span></li>
         <li><span class="tag tag--coral">💅 Nail Artist</span></li>
-        <li><span class="tag tag--teal">✂️ Sewing</span></li>
+        <li><span class="tag tag--sky">🎬 Video Producer</span></li>
       </ul>
 
       <div class="hero__cta">
@@ -1961,8 +2035,14 @@
         <div class="skill-block">
           <div class="skill-block__icon">🎵</div>
           <h3 class="skill-block__name">Music</h3>
-          <p class="skill-block__detail">Piano, vocals, video production &amp; editing</p>
+          <p class="skill-block__detail">Piano, vocals, singing &amp; performance</p>
           <div class="skill-block__bar"><div class="skill-block__bar-fill" style="width:88%;background:var(--color-sky)"></div></div>
+        </div>
+        <div class="skill-block">
+          <div class="skill-block__icon">🎬</div>
+          <h3 class="skill-block__name">Video Production</h3>
+          <p class="skill-block__detail">Filming, editing, post-production &amp; storytelling</p>
+          <div class="skill-block__bar"><div class="skill-block__bar-fill" style="width:82%;background:var(--color-marigold)"></div></div>
         </div>
       </div>
 
@@ -2008,17 +2088,34 @@
   <script>
     // -----------------------------------------------------------------
     // 1. SCROLL-TRIGGERED REVEALS
+    //    Elements are visible by default so content never flashes hidden.
+    //    We add .needs-reveal just before observing, so only elements
+    //    that haven't scrolled into view yet get the hidden-then-animate
+    //    treatment. Elements already in view on load skip the animation.
     // -----------------------------------------------------------------
     const revealObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) entry.target.classList.add('is-visible');
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            revealObserver.unobserve(entry.target); // animate once only
+          }
         });
       },
-      { threshold: 0.12 }
+      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
     );
 
-    document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
+    document.querySelectorAll('.reveal').forEach((el) => {
+      // Check if already in viewport — if so, skip the animation entirely
+      const rect = el.getBoundingClientRect();
+      const inView = rect.top < window.innerHeight && rect.bottom > 0;
+
+      if (!inView) {
+        el.classList.add('needs-reveal');
+      }
+
+      revealObserver.observe(el);
+    });
 
     // -----------------------------------------------------------------
     // 2. DARK MODE TOGGLE
