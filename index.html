@@ -11,6 +11,10 @@
     rel="stylesheet"
   />
 
+  <!-- Favicon: SVG with the site's logo mark — yarn ball on a music staff -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231a1a2e'/><text y='22' x='4' font-size='22'>🧶</text></svg>" />
+  <link rel="alternate icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231a1a2e'/><text y='22' x='4' font-size='22'>🧶</text></svg>" />
+
   <style>
     /* =====================================================================
        DESIGN TOKENS
@@ -50,7 +54,7 @@
     /* Light mode section backgrounds — defined on :root first so dark mode
        override below wins via cascade order (later = higher priority). */
     :root {
-      --bg-hero:    #fdf9f3;
+      --bg-hero:    #fdf9f3;  /* fallback — gradient applied in CSS */
       --bg-work:    #ffffff;
       --bg-crafts:  #f5f0ff;
       --bg-videos:  #edf5ff;
@@ -235,21 +239,22 @@
     }
 
     .nav__brand {
-      font-family: var(--font-serif);
-      font-size: 1.05rem;
-      font-weight: 700;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
       color: var(--color-ink);
       white-space: nowrap;
     }
 
+    /* "String" in coral — distinct from the big serif hero heading */
     .nav__brand-subtitle {
       font-family: var(--font-mono);
-      font-size: 0.72rem;
-      font-weight: 300;
+      font-size: 0.82rem;
+      font-weight: 500;
       font-style: italic;
       color: var(--color-coral);
-      letter-spacing: 0.08em;
-      margin-left: 4px;
+      letter-spacing: 0.04em;
     }
 
     /* Nav links */
@@ -353,6 +358,22 @@
       gap: 60px;
       position: relative;
       z-index: 1;
+      /* Light mode: warm cream with soft coral top-left & lavender bottom-right */
+      background:
+        radial-gradient(ellipse 70% 60% at 15% 10%,  rgba(255, 107, 107, 0.10) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 50% at 85% 90%,  rgba(199, 125, 255, 0.10) 0%, transparent 65%),
+        radial-gradient(ellipse 80% 70% at 50% 50%,  rgba(0, 201, 167, 0.04)   0%, transparent 80%),
+        var(--bg-hero);
+    }
+
+    [data-theme="dark"] .hero {
+      /* Dark mode: deep purple-black with rich glowing accents */
+      background:
+        radial-gradient(ellipse 65% 55% at 10% 5%,   rgba(255, 107, 107, 0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 50% at 90% 92%,  rgba(199, 125, 255, 0.20) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 75% 20%,  rgba(0, 201, 167, 0.12)   0%, transparent 55%),
+        radial-gradient(ellipse 40% 35% at 20% 80%,  rgba(72, 202, 228, 0.10)  0%, transparent 55%),
+        var(--bg-hero);
     }
 
     .hero__eyebrow {
@@ -432,6 +453,7 @@
     .tag--lavender{ background: rgba(199, 125, 255, 0.12); color: var(--color-lavender); border: 1px solid rgba(199, 125, 255, 0.25); }
     .tag--gold    { background: rgba(255, 209, 102, 0.15); color: #b8860b;               border: 1px solid rgba(255, 209, 102, 0.35); }
     .tag--sky     { background: rgba(72, 202, 228, 0.12);  color: #0077b6;               border: 1px solid rgba(72, 202, 228, 0.3); }
+    .tag--blush   { background: rgba(255, 179, 198, 0.15); color: #c2185b;               border: 1px solid rgba(255, 179, 198, 0.4); }
 
     /* CTA buttons */
     .hero__cta {
@@ -817,37 +839,49 @@
      * flow while keeping the columns intact by never having 0 visible
      * cards in a column (JS ensures at least some are always visible).
      */
+    /*
+     * True Pinterest-style masonry:
+     * - CSS columns with no fixed height — images keep natural aspect ratio
+     * - Only the first photo per card shows (extras hidden)
+     * - Cards use display:block, not inline-block, for reliable column flow
+     */
     .crafts__masonry {
-      column-count: 3;
-      column-gap: 20px;
-      max-width: 1200px;
+      column-count: 4;
+      column-gap: 14px;
+      max-width: 1400px;
       margin: 0 auto;
     }
 
     .craft-card {
-      /* break-inside prevents a card from splitting across columns */
+      display: block;        /* block, not inline-block — columns need this */
       break-inside: avoid;
-      margin-bottom: 20px;
-      border-radius: 12px;
+      margin-bottom: 14px;
+      border-radius: 10px;
       overflow: hidden;
       position: relative;
       cursor: pointer;
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      display: inline-block; /* inline-block plays nicer with columns than block */
-      width: 100%;
+      transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.28s ease;
     }
 
     .craft-card:hover {
-      transform: scale(1.02);
+      transform: scale(1.025);
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.28);
     }
 
-    /* Cap image height so no single photo dominates the layout */
+    /* Capped height keeps any single image from dominating a column */
     .craft-card img,
     .craft-card-img {
       width: 100%;
-      max-height: 320px;
+      height: auto;
+      max-height: 380px;
       display: block;
       object-fit: cover;
+    }
+
+    /* Only show first photo per card */
+    .craft-card img ~ img,
+    .craft-card .craft-card-img ~ .craft-card-img {
+      display: none;
     }
 
     /* Cards hidden by the Show More limit */
@@ -893,38 +927,56 @@
       opacity: 0.55;
     }
 
-    .craft-card__overlay {
+    /* Hover overlay — hidden by default, slides up on hover (desktop) */
+    .craft-card__overlay,
+    .craft-overlay {
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
-      padding: 24px;
-      background: linear-gradient(transparent, rgba(26, 26, 46, 0.78));
-      border-radius: 0 0 16px 16px;
+      padding: 20px 16px 16px;
+      background: linear-gradient(transparent, rgba(10, 8, 20, 0.88));
+      border-radius: 0 0 10px 10px;
       color: white;
       opacity: 0;
-      transform: translateY(4px);
-      transition: all 0.3s ease;
+      transform: translateY(6px);
+      transition: opacity 0.28s ease, transform 0.28s ease;
     }
 
-    .craft-card:hover .craft-card__overlay {
+    .craft-card:hover .craft-card__overlay,
+    .craft-card:hover .craft-overlay {
       opacity: 1;
       transform: translateY(0);
     }
 
-    .craft-card__overlay h4 {
+    .craft-card__overlay h4,
+    .craft-overlay h4 {
       font-family: var(--font-serif);
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 700;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
+      line-height: 1.3;
     }
 
-    .craft-card__overlay p {
+    .craft-card__overlay p,
+    .craft-overlay p {
       font-family: var(--font-mono);
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      opacity: 0.8;
+      opacity: 0.75;
+    }
+
+    /* Mobile: always show overlay (no hover on touch screens) */
+    @media (hover: none) {
+      .craft-card__overlay,
+      .craft-overlay {
+        opacity: 1;
+        transform: translateY(0);
+        /* Slightly smaller so it doesn't dominate the image */
+        padding: 28px 12px 10px;
+        font-size: 0.85rem;
+      }
     }
 
     /* =====================================================================
@@ -1290,7 +1342,8 @@
       }
 
       .crafts__masonry {
-        column-count: 2;
+        column-count: 3;
+        column-gap: 12px;
       }
 
       .videos__grid {
@@ -1345,7 +1398,13 @@
       }
 
       .crafts__masonry {
-        column-count: 1;
+        column-count: 2;
+        column-gap: 10px;
+      }
+
+      .craft-card img,
+      .craft-card-img {
+        height: 240px;
       }
 
       .skills-grid {
@@ -1391,6 +1450,10 @@
       .hero__title {
         font-size: 2.4rem;
       }
+
+      .crafts__masonry {
+        column-count: 1;
+      }
     }
   </style>
 </head>
@@ -1420,7 +1483,7 @@
       />
       <span class="nav__brand">
         Variations on a
-        <span class="nav__brand-subtitle">✦ String</span>
+        <span class="nav__brand-subtitle">"String"</span>
       </span>
     </a>
 
@@ -1451,7 +1514,7 @@
         on a <em>"String"</em>
       </h1>
 
-      <p class="hero__tagline">I build things, make things, and tell the story of both.</p>
+      <p class="hero__tagline">Storyteller. Problem solver. One string at a time.</p>
 
       <p class="hero__description">
         8 years of full-stack sorcery by day. Crochet hooks, knitting
@@ -1463,7 +1526,7 @@
         <li><span class="tag tag--coral">⚙️ Full-stack Dev</span></li>
         <li><span class="tag tag--teal">🧶 Fiber Artist</span></li>
         <li><span class="tag tag--lavender">🎵 Musician</span></li>
-        <li><span class="tag tag--coral">💅 Nail Artist</span></li>
+        <li><span class="tag tag--blush">💅 Nail Artist</span></li>
         <li><span class="tag tag--sky">🎬 Video Producer</span></li>
       </ul>
 
@@ -1480,53 +1543,97 @@
 
         <!-- Floating emoji bubbles -->
         <div class="hero__bubble">🧶</div>
-        <div class="hero__bubble">🎹</div>
+        <div class="hero__bubble">🎵</div>
         <div class="hero__bubble">💻</div>
-        <div class="hero__bubble">🎤</div>
+        <div class="hero__bubble">🎬</div>
         <div class="hero__bubble">🪡</div>
 
         <!-- Animated SVG logo — draws itself on page load -->
+        <!--
+          SVG logo — faithfully redrawn to match the reference PNG.
+          Coordinate system: 500 × 360 viewBox.
+          Layout:
+            Left brace:  x ≈ 52–88    Right brace: x ≈ 412–448
+            Staff lines: x 88 → 412,  y 138/158/178/198/218
+            Left yarn ball:  cx 230, cy 215, r 36  (larger, sits on staff)
+            Right yarn ball: cx 320, cy 200, r 28  (smaller, sits on staff)
+            Note beam: diagonal from (230,140) to (320,120)
+            Stems: up from top of each ball to beam
+            Trailing thread: curves from left ball down-left
+            Curl: small loop from right ball
+        -->
         <svg class="hero__logo-svg" viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg">
-          <!-- Staff lines -->
-          <line class="logo-path" style="--path-len:336;--duration:.5s;--delay:.00s" stroke-width="1.2" x1="88" y1="145" x2="412" y2="145"/>
-          <line class="logo-path" style="--path-len:336;--duration:.5s;--delay:.08s" stroke-width="1.2" x1="88" y1="165" x2="412" y2="165"/>
-          <line class="logo-path" style="--path-len:336;--duration:.5s;--delay:.16s" stroke-width="1.2" x1="88" y1="185" x2="412" y2="185"/>
-          <line class="logo-path" style="--path-len:336;--duration:.5s;--delay:.24s" stroke-width="1.2" x1="88" y1="205" x2="412" y2="205"/>
-          <line class="logo-path" style="--path-len:336;--duration:.5s;--delay:.32s" stroke-width="1.2" x1="88" y1="225" x2="412" y2="225"/>
-          <!-- Left curly brace -->
-          <path class="logo-path" style="--path-len:530;--duration:1.05s;--delay:.55s" stroke-width="5"
-            d="M106,68 C82,68 66,86 66,112 C66,132 80,143 80,165 C80,187 66,198 66,218 C66,244 82,258 106,258"/>
-          <!-- Right curly brace -->
-          <path class="logo-path" style="--path-len:530;--duration:1.05s;--delay:.72s" stroke-width="5"
-            d="M394,68 C418,68 434,86 434,112 C434,132 420,143 420,165 C420,187 434,198 434,218 C434,244 418,258 394,258"/>
-          <!-- Note beam -->
-          <line class="logo-path" style="--path-len:76;--duration:.38s;--delay:1.55s"  stroke-width="6.5" x1="256" y1="141" x2="323" y2="125"/>
-          <!-- Right stem -->
-          <line class="logo-path" style="--path-len:90;--duration:.32s;--delay:1.88s"  stroke-width="4.5" x1="323" y1="204" x2="323" y2="125"/>
-          <!-- Left stem -->
-          <line class="logo-path" style="--path-len:78;--duration:.28s;--delay:2.16s"  stroke-width="4.5" x1="256" y1="214" x2="256" y2="141"/>
-          <!-- Left yarn ball -->
-          <circle class="logo-path" style="--path-len:205;--duration:.82s;--delay:1.65s" stroke-width="2.6" cx="247" cy="218" r="33"/>
+
+          <!-- ── Staff lines (5, evenly spaced 20px, spanning brace-to-brace) ── -->
+          <line class="logo-path" style="--path-len:324;--duration:.45s;--delay:.00s" stroke-width="1.8" x1="88" y1="138" x2="412" y2="138"/>
+          <line class="logo-path" style="--path-len:324;--duration:.45s;--delay:.07s" stroke-width="1.8" x1="88" y1="158" x2="412" y2="158"/>
+          <line class="logo-path" style="--path-len:324;--duration:.45s;--delay:.14s" stroke-width="1.8" x1="88" y1="178" x2="412" y2="178"/>
+          <line class="logo-path" style="--path-len:324;--duration:.45s;--delay:.21s" stroke-width="1.8" x1="88" y1="198" x2="412" y2="198"/>
+          <line class="logo-path" style="--path-len:324;--duration:.45s;--delay:.28s" stroke-width="1.8" x1="88" y1="218" x2="412" y2="218"/>
+
+          <!-- ── Left curly brace ──
+               Shape from reference: wide top/bottom flares, deep pinch at centre.
+               Top end at (88,52), bottom at (88,268), pinch at x≈52 y=160.
+          -->
+          <path class="logo-path" style="--path-len:580;--duration:1.1s;--delay:.45s" stroke-width="6" stroke-linecap="round"
+            d="M88,52
+               C72,52 56,62 56,82
+               C56,98  68,108 68,128
+               C68,148 52,158 52,160
+               C52,162 68,172 68,192
+               C68,212 56,222 56,238
+               C56,258 72,268 88,268"/>
+
+          <!-- ── Right curly brace ── mirror of left -->
+          <path class="logo-path" style="--path-len:580;--duration:1.1s;--delay:.62s" stroke-width="6" stroke-linecap="round"
+            d="M412,52
+               C428,52 444,62 444,82
+               C444,98  432,108 432,128
+               C432,148 448,158 448,160
+               C448,162 432,172 432,192
+               C432,212 444,222 444,238
+               C444,258 428,268 412,268"/>
+
+          <!-- ── Note beam (diagonal, top of stems) ── -->
+          <line class="logo-path" style="--path-len:98;--duration:.4s;--delay:1.5s" stroke-width="7" stroke-linecap="round"
+                x1="230" y1="138" x2="320" y2="118"/>
+
+          <!-- ── Left stem (up from top of left yarn ball to beam) ── -->
+          <line class="logo-path" style="--path-len:82;--duration:.3s;--delay:1.88s" stroke-width="4" stroke-linecap="round"
+                x1="230" y1="215" x2="230" y2="138"/>
+
+          <!-- ── Right stem ── -->
+          <line class="logo-path" style="--path-len:86;--duration:.3s;--delay:2.1s" stroke-width="4" stroke-linecap="round"
+                x1="320" y1="200" x2="320" y2="118"/>
+
+          <!-- ── Left yarn ball (larger, notehead on left) ── -->
+          <circle class="logo-path" style="--path-len:226;--duration:.85s;--delay:1.6s" stroke-width="3" cx="230" cy="215" r="36"/>
           <g class="logo-wind" style="--wind-delay:2.4s">
-            <ellipse cx="247" cy="218" rx="26" ry="11" stroke-width="1.4" transform="rotate(-42 247 218)" opacity=".6"/>
-            <ellipse cx="247" cy="218" rx="11" ry="26" stroke-width="1.4" transform="rotate(8 247 218)"   opacity=".6"/>
-            <ellipse cx="247" cy="218" rx="30" ry="8"  stroke-width="1.2" transform="rotate(-72 247 218)" opacity=".42"/>
-            <ellipse cx="247" cy="218" rx="8"  ry="22" stroke-width="1.2" transform="rotate(52 247 218)"  opacity=".42"/>
+            <ellipse cx="230" cy="215" rx="30" ry="12" stroke-width="1.6" transform="rotate(-40 230 215)" opacity=".65"/>
+            <ellipse cx="230" cy="215" rx="12" ry="30" stroke-width="1.6" transform="rotate(10 230 215)"  opacity=".65"/>
+            <ellipse cx="230" cy="215" rx="34" ry="9"  stroke-width="1.3" transform="rotate(-70 230 215)" opacity=".4"/>
+            <ellipse cx="230" cy="215" rx="9"  ry="24" stroke-width="1.3" transform="rotate(55 230 215)"  opacity=".4"/>
+            <ellipse cx="230" cy="215" rx="22" ry="6"  stroke-width="1.1" transform="rotate(80 230 215)"  opacity=".28"/>
           </g>
-          <!-- Right yarn ball -->
-          <circle class="logo-path" style="--path-len:178;--duration:.75s;--delay:1.85s" stroke-width="2.6" cx="322" cy="205" r="28"/>
-          <g class="logo-wind" style="--wind-delay:2.55s">
-            <ellipse cx="322" cy="205" rx="22" ry="9"  stroke-width="1.4" transform="rotate(-42 322 205)" opacity=".6"/>
-            <ellipse cx="322" cy="205" rx="9"  ry="22" stroke-width="1.4" transform="rotate(8 322 205)"   opacity=".6"/>
-            <ellipse cx="322" cy="205" rx="25" ry="7"  stroke-width="1.2" transform="rotate(-72 322 205)" opacity=".42"/>
-            <ellipse cx="322" cy="205" rx="7"  ry="18" stroke-width="1.2" transform="rotate(52 322 205)"  opacity=".42"/>
+
+          <!-- ── Right yarn ball (slightly smaller, notehead on right) ── -->
+          <circle class="logo-path" style="--path-len:188;--duration:.75s;--delay:1.82s" stroke-width="3" cx="320" cy="200" r="30"/>
+          <g class="logo-wind" style="--wind-delay:2.58s">
+            <ellipse cx="320" cy="200" rx="24" ry="10" stroke-width="1.6" transform="rotate(-40 320 200)" opacity=".65"/>
+            <ellipse cx="320" cy="200" rx="10" ry="24" stroke-width="1.6" transform="rotate(10 320 200)"  opacity=".65"/>
+            <ellipse cx="320" cy="200" rx="28" ry="7"  stroke-width="1.3" transform="rotate(-70 320 200)" opacity=".4"/>
+            <ellipse cx="320" cy="200" rx="7"  ry="19" stroke-width="1.3" transform="rotate(55 320 200)"  opacity=".4"/>
+            <ellipse cx="320" cy="200" rx="18" ry="5"  stroke-width="1.1" transform="rotate(80 320 200)"  opacity=".28"/>
           </g>
-          <!-- Trailing thread -->
-          <path class="logo-path" style="--path-len:250;--duration:.72s;--delay:2.42s" stroke-width="1.7"
-            d="M228,243 C218,257 200,263 180,271 C162,279 145,285 128,293"/>
-          <!-- Curl loop -->
-          <path class="logo-path" style="--path-len:95;--duration:.48s;--delay:2.68s" stroke-width="1.7"
-            d="M311,226 C306,241 296,247 291,239 C286,231 291,223 299,227 C305,230 308,237 305,243"/>
+
+          <!-- ── Trailing thread from left yarn ball, curves to lower-left ── -->
+          <path class="logo-path" style="--path-len:260;--duration:.7s;--delay:2.45s" stroke-width="1.8" stroke-linecap="round"
+            d="M200,240 C188,255 172,262 152,270 C132,278 112,284 92,292"/>
+
+          <!-- ── Small curl/loop from right yarn ball ── -->
+          <path class="logo-path" style="--path-len:100;--duration:.45s;--delay:2.72s" stroke-width="1.8" stroke-linecap="round"
+            d="M308,224 C302,240 292,246 288,238 C284,230 290,222 298,226 C304,229 307,238 304,244"/>
+
         </svg>
       </div>
     </div>
@@ -1710,12 +1817,12 @@
       <button class="filter-btn" data-filter="sewing">✂️ Sewing</button>
     </div>
 
-    <div class="crafts-masonry" id="craftsGrid">
+    <div class="crafts__masonry" id="craftsGrid">
 
       <!-- CROCHET -->
       <div class="craft-card" data-cat="crochet">
-        <img src="https://i.imgur.com/JWV2oJh.jpg" alt="halloween-table-runner-1" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
-        <img src="https://i.imgur.com/cAzvOoI.jpg" alt="halloween-table-runner-2" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
+        <img src="https://i.imgur.com/JWV2oJh.jpg" alt="halloween-table-runner-1" class="craft-card-img" />
+        <img src="https://i.imgur.com/cAzvOoI.jpg" alt="halloween-table-runner-2" class="craft-card-img" />
         <div class="craft-overlay">
           <h4>Halloween Table Runner</h4>
           <p>Crochet · Completed October 30th, 2022</p>
@@ -1723,7 +1830,7 @@
       </div>
 
       <div class="craft-card" data-cat="cross-stitch">
-        <img src="https://i.imgur.com/vhYNy6W.jpg" alt="baby-birth-announcement-bears-1" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
+        <img src="https://i.imgur.com/vhYNy6W.jpg" alt="baby-birth-announcement-bears-1" class="craft-card-img" />
         <div class="craft-overlay">
           <h4>Baby Birth Announcement — Bears</h4>
           <p>Cross-stitch · Completed May 22nd, 2019</p>
@@ -1731,7 +1838,7 @@
       </div>
 
       <div class="craft-card" data-cat="crochet">
-        <img src="https://i.imgur.com/x6tfjo8.jpg" alt="baby-blanket-poro-lovey-1" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
+        <img src="https://i.imgur.com/x6tfjo8.jpg" alt="baby-blanket-poro-lovey-1" class="craft-card-img" />
         <div class="craft-overlay">
           <h4>Baby Blanket &amp; Matching Poro Lovey</h4>
           <p>Crochet · Completed September 21st, 2022</p>
@@ -1739,7 +1846,7 @@
       </div>
 
       <div class="craft-card" data-cat="crochet">
-        <img src="https://i.imgur.com/f9h8e2a.jpg" alt="baby-blanket-dnd-space-1" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
+        <img src="https://i.imgur.com/f9h8e2a.jpg" alt="baby-blanket-dnd-space-1" class="craft-card-img" />
         <div class="craft-overlay">
           <h4>Baby Blanket — D&amp;D &amp; Space Themed</h4>
           <p>Crochet · Completed June 23rd, 2021</p>
@@ -1747,7 +1854,7 @@
       </div>
 
       <div class="craft-card" data-cat="cross-stitch">
-        <img src="https://i.imgur.com/epMqafF.jpg" alt="wedding-announcement-doves-heart-wreath-1" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
+        <img src="https://i.imgur.com/epMqafF.jpg" alt="wedding-announcement-doves-heart-wreath-1" class="craft-card-img" />
         <div class="craft-overlay">
           <h4>Wedding Announcement — Doves + Heart Wreath</h4>
           <p>Cross-stitch · Completed September 4th, 2018</p>
@@ -1755,7 +1862,7 @@
       </div>
 
       <div class="craft-card" data-cat="crochet">
-        <img src="https://i.imgur.com/nXHZIzU.jpg" alt="fancy-burp-cloths-1" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
+        <img src="https://i.imgur.com/nXHZIzU.jpg" alt="fancy-burp-cloths-1" class="craft-card-img" />
         <div class="craft-overlay">
           <h4>Fancy Burp Cloths</h4>
           <p>Crochet · Completed August 23rd, 2019</p>
@@ -1763,7 +1870,7 @@
       </div>
 
       <div class="craft-card" data-cat="knitting">
-        <img src="https://i.imgur.com/5VZlR5e.jpg" alt="slouchy-hat-2" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
+        <img src="https://i.imgur.com/5VZlR5e.jpg" alt="slouchy-hat-2" class="craft-card-img" />
         <div class="craft-overlay">
           <h4>Slouchy Hat</h4>
           <p>Knitting · Completed May 9th, 2019</p>
@@ -1771,7 +1878,7 @@
       </div>
 
       <div class="craft-card" data-cat="crochet">
-        <img src="https://i.imgur.com/7BmogOa.jpg" alt="baby-blanket-1" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
+        <img src="https://i.imgur.com/7BmogOa.jpg" alt="baby-blanket-1" class="craft-card-img" />
         <div class="craft-overlay">
           <h4>Baby Blanket</h4>
           <p>Crochet · Completed February 14th, 2019</p>
@@ -1779,9 +1886,9 @@
       </div>
 
       <div class="craft-card" data-cat="crochet">
-        <img src="https://i.imgur.com/9Idv1Fe.jpg" alt="dragonscale-dice-bags-1" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
-        <img src="https://i.imgur.com/6ZxdnN9.jpg" alt="dragonscale-dice-bags-2" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
-        <img src="https://i.imgur.com/I6y6h7E.jpg" alt="dragonscale-dice-bags-3" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
+        <img src="https://i.imgur.com/9Idv1Fe.jpg" alt="dragonscale-dice-bags-1" class="craft-card-img" />
+        <img src="https://i.imgur.com/6ZxdnN9.jpg" alt="dragonscale-dice-bags-2" class="craft-card-img" />
+        <img src="https://i.imgur.com/I6y6h7E.jpg" alt="dragonscale-dice-bags-3" class="craft-card-img" />
         <div class="craft-overlay">
           <h4>Dragonscale Dice Bags</h4>
           <p>Crochet · Completed August 29th, 2018</p>
@@ -1789,7 +1896,7 @@
       </div>
 
       <div class="craft-card" data-cat="cross-stitch">
-        <img src="https://i.imgur.com/wyslChN.jpg" alt="wedding-announcement-old-english-1" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
+        <img src="https://i.imgur.com/wyslChN.jpg" alt="wedding-announcement-old-english-1" class="craft-card-img" />
         <div class="craft-overlay">
           <h4>Wedding Announcement — Old English Blessing</h4>
           <p>Cross-stitch · Completed August 29th, 2018</p>
@@ -1797,7 +1904,7 @@
       </div>
 
       <div class="craft-card" data-cat="cross-stitch">
-        <img src="https://i.imgur.com/gRj2nVV.jpg" alt="wedding-announcement-doves-bells-1" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
+        <img src="https://i.imgur.com/gRj2nVV.jpg" alt="wedding-announcement-doves-bells-1" class="craft-card-img" />
         <div class="craft-overlay">
           <h4>Wedding Announcement — Doves &amp; Bells</h4>
           <p>Cross-stitch · Completed October 20th, 2017</p>
@@ -1805,8 +1912,8 @@
       </div>
 
       <div class="craft-card" data-cat="crochet">
-        <img src="https://i.imgur.com/gKIzzXX.jpg" alt="bookmarks-gamer-friends-1" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
-        <img src="https://i.imgur.com/CnfAHdM.jpg" alt="bookmarks-gamer-friends-2" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
+        <img src="https://i.imgur.com/gKIzzXX.jpg" alt="bookmarks-gamer-friends-1" class="craft-card-img" />
+        <img src="https://i.imgur.com/CnfAHdM.jpg" alt="bookmarks-gamer-friends-2" class="craft-card-img" />
         <div class="craft-overlay">
           <h4>Bookmarks for Gamer Friends</h4>
           <p>Crochet · Completed August 18th, 2016</p>
@@ -1814,7 +1921,7 @@
       </div>
 
       <div class="craft-card" data-cat="cross-stitch">
-        <img src="https://i.imgur.com/2cn0D2D.jpg" alt="han-solo-quote-1" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
+        <img src="https://i.imgur.com/2cn0D2D.jpg" alt="han-solo-quote-1" class="craft-card-img" />
         <div class="craft-overlay">
           <h4>Han Solo + Quote</h4>
           <p>Cross-stitch · Completed February 22nd, 2016</p>
@@ -1822,7 +1929,7 @@
       </div>
 
       <div class="craft-card" data-cat="cross-stitch">
-        <img src="https://i.imgur.com/9zOqgBP.jpg" alt="may-cthulu-devour-1" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
+        <img src="https://i.imgur.com/9zOqgBP.jpg" alt="may-cthulu-devour-1" class="craft-card-img" />
         <div class="craft-overlay">
           <h4>May Cthulu Devour This House Last</h4>
           <p>Cross-stitch · Completed February 5th, 2016</p>
@@ -1830,7 +1937,7 @@
       </div>
 
       <div class="craft-card" data-cat="cross-stitch">
-        <img src="https://i.imgur.com/25CqlQV.jpg" alt="katara-bookmark-1" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
+        <img src="https://i.imgur.com/25CqlQV.jpg" alt="katara-bookmark-1" class="craft-card-img" />
         <div class="craft-overlay">
           <h4>Katara Bookmark</h4>
           <p>Cross-stitch · Completed December 30th, 2015</p>
@@ -1838,7 +1945,7 @@
       </div>
 
       <div class="craft-card" data-cat="cross-stitch">
-        <img src="https://i.imgur.com/g40zM8g.jpg" alt="dark-side-bookmark-1" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
+        <img src="https://i.imgur.com/g40zM8g.jpg" alt="dark-side-bookmark-1" class="craft-card-img" />
         <div class="craft-overlay">
           <h4>Dark Side Bookmark</h4>
           <p>Cross-stitch · Completed December 28th, 2015</p>
@@ -1846,7 +1953,7 @@
       </div>
 
       <div class="craft-card" data-cat="cross-stitch">
-        <img src="https://i.imgur.com/VgpgINl.jpg" alt="gift-for-my-dad-1" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
+        <img src="https://i.imgur.com/VgpgINl.jpg" alt="gift-for-my-dad-1" class="craft-card-img" />
         <div class="craft-overlay">
           <h4>Gift for my Dad</h4>
           <p>Cross-stitch · Completed December 21st, 2015</p>
@@ -1854,7 +1961,7 @@
       </div>
 
       <div class="craft-card" data-cat="cross-stitch">
-        <img src="https://i.imgur.com/vF8RBIk.jpg" alt="the-guardian-teresa-wentzler-1" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
+        <img src="https://i.imgur.com/vF8RBIk.jpg" alt="the-guardian-teresa-wentzler-1" class="craft-card-img" />
         <div class="craft-overlay">
           <h4>The Guardian by Teresa Wentzler</h4>
           <p>Cross-stitch · Completed December 6th, 2015</p>
@@ -1862,7 +1969,7 @@
       </div>
 
       <div class="craft-card" data-cat="cross-stitch">
-        <img src="https://i.imgur.com/1QAjVyM.jpg" alt="wedding-announcement-zelda-link-1" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
+        <img src="https://i.imgur.com/1QAjVyM.jpg" alt="wedding-announcement-zelda-link-1" class="craft-card-img" />
         <div class="craft-overlay">
           <h4>Wedding Announcement — Zelda + Link</h4>
           <p>Cross-stitch · Completed September 1st, 2015</p>
@@ -1870,7 +1977,7 @@
       </div>
 
       <div class="craft-card" data-cat="sewing">
-        <img src="https://i.imgur.com/u4AR118.jpg" alt="captain-hook-costume-1" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
+        <img src="https://i.imgur.com/u4AR118.jpg" alt="captain-hook-costume-1" class="craft-card-img" />
         <div class="craft-overlay">
           <h4>Captain Hook Costume</h4>
           <p>Sewing · Completed October 31st, 2014</p>
@@ -1878,7 +1985,7 @@
       </div>
 
       <div class="craft-card" data-cat="knitting">
-        <img src="https://i.imgur.com/fCIg9sy.jpg" alt="stark-sigil-scarf-1" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
+        <img src="https://i.imgur.com/fCIg9sy.jpg" alt="stark-sigil-scarf-1" class="craft-card-img" />
         <div class="craft-overlay">
           <h4>Stark Sigil Scarf</h4>
           <p>Knitting · Completed 2014</p>
@@ -1886,8 +1993,8 @@
       </div>
 
       <div class="craft-card" data-cat="crochet">
-        <img src="https://i.imgur.com/MaNLOfe.jpg" alt="viking-hat-1" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
-        <img src="https://i.imgur.com/MRCfizx.jpg" alt="viking-hat-2" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
+        <img src="https://i.imgur.com/MaNLOfe.jpg" alt="viking-hat-1" class="craft-card-img" />
+        <img src="https://i.imgur.com/MRCfizx.jpg" alt="viking-hat-2" class="craft-card-img" />
         <div class="craft-overlay">
           <h4>Viking Hat</h4>
           <p>Crochet · Completed February 18th, 2014</p>
@@ -1895,8 +2002,8 @@
       </div>
 
       <div class="craft-card" data-cat="crochet">
-        <img src="https://i.imgur.com/KfREV4w.jpg" alt="baby-blanket-soccer-1" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
-        <img src="https://i.imgur.com/HBAUfun.jpg" alt="baby-blanket-soccer-2" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
+        <img src="https://i.imgur.com/KfREV4w.jpg" alt="baby-blanket-soccer-1" class="craft-card-img" />
+        <img src="https://i.imgur.com/HBAUfun.jpg" alt="baby-blanket-soccer-2" class="craft-card-img" />
         <div class="craft-overlay">
           <h4>Baby Blanket — Soccer</h4>
           <p>Crochet · Completed April 15th, 2013</p>
@@ -1904,8 +2011,8 @@
       </div>
 
       <div class="craft-card" data-cat="sewing">
-        <img src="https://i.imgur.com/80975KV.jpg" alt="jedi-tunic-1" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
-        <img src="https://i.imgur.com/oN4hP01.jpg" alt="jedi-tunic-2" class="craft-card-img" style="width:100%;display:block;object-fit:cover;" />
+        <img src="https://i.imgur.com/80975KV.jpg" alt="jedi-tunic-1" class="craft-card-img" />
+        <img src="https://i.imgur.com/oN4hP01.jpg" alt="jedi-tunic-2" class="craft-card-img" />
         <div class="craft-overlay">
           <h4>Jedi Tunic</h4>
           <p>Sewing · Completed October 3rd, 2012</p>
@@ -2147,7 +2254,7 @@
     //    Only the first INITIAL_VISIBLE matching cards show by default;
     //    the "Show all" button reveals the rest.
     // -----------------------------------------------------------------
-    const INITIAL_VISIBLE = 6;
+    const INITIAL_VISIBLE = 12;
 
     const allCraftCards  = Array.from(document.querySelectorAll('.craft-card'));
     const showMoreBtn    = document.getElementById('show-more-btn');
