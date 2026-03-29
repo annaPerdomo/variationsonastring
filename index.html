@@ -1369,24 +1369,79 @@
       :root {
         --section-padding-y: 70px;
         --section-padding-x: 20px;
+        --nav-height: 64px;
       }
 
-      /* Nav: hide text labels on very small screens, keep logo */
+      /* Nav: keep brand, links, and toggle on one line */
       .nav__brand-subtitle {
-        display: none;
+        display: block;
+      }
+
+      .nav {
+        height: var(--nav-height);
+        min-height: 0;
+        padding: 0 16px;
+        align-items: center;
+        border-bottom: none;
+      }
+
+      .nav__logo {
+        gap: 8px;
+      }
+
+      .nav__logo-img {
+        width: 34px;
+        height: 34px;
+      }
+
+      .nav__brand {
+        font-size: 0.7rem;
+        white-space: normal;
+        text-align: center;
+        line-height: 1.1;
+        max-width: 95px;
+        display: inline-block;
+      }
+
+      .nav__brand-subtitle {
+        display: block;
+        margin-top: 0;
       }
 
       .nav__right {
-        gap: 14px;
+        flex: 1 1 auto;
+        gap: 8px;
+        justify-content: flex-end;
+        min-width: 0;
+        align-items: center;
       }
 
       .nav__links {
-        gap: 12px;
+        display: flex;
+        gap: 8px;
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+
+      .nav__links::-webkit-scrollbar {
+        display: none;
       }
 
       .nav__links a {
-        font-size: 0.65rem;
-        letter-spacing: 0.04em;
+        font-size: 0.58rem;
+        letter-spacing: 0.02em;
+        padding-bottom: 0;
+        border-bottom: none;
+        white-space: nowrap;
+      }
+
+      .theme-toggle {
+        flex: 0 0 auto;
+        padding: 5px 8px;
       }
 
       .hero__title {
