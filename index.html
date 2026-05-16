@@ -11,9 +11,11 @@
     rel="stylesheet"
   />
 
-  <!-- Favicon: SVG with the site's logo mark — yarn ball on a music staff -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231a1a2e'/><text y='22' x='4' font-size='22'>🧶</text></svg>" />
-  <link rel="alternate icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231a1a2e'/><text y='22' x='4' font-size='22'>🧶</text></svg>" />
+  <!-- Favicon: simplified "Woven Score" mark — code braces { } framing a
+       staff with a single coral eighth note (yarn-ball wraps dropped at this
+       size, per the design's 32px simplified spec). -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231a1a2e'/><g transform='translate(-0.7,4.2) scale(0.167)'><g fill='none' stroke='%23fdf9f3' stroke-linecap='round' stroke-linejoin='round' stroke-width='7'><path d='M44 18 C34 18 26 28 26 40 L26 58 C26 66 20 72 12 72 C20 72 26 78 26 86 L26 100 C26 114 34 124 44 124'/><path d='M156 18 C166 18 174 28 174 40 L174 58 C174 66 180 72 188 72 C180 72 174 78 174 86 L174 100 C174 114 166 124 156 124'/></g><g stroke='%23fdf9f3' stroke-width='2' opacity='0.30'><line x1='48' y1='34' x2='152' y2='34'/><line x1='48' y1='52' x2='152' y2='52'/><line x1='48' y1='70' x2='152' y2='70'/><line x1='48' y1='88' x2='152' y2='88'/><line x1='48' y1='106' x2='152' y2='106'/></g><path d='M110 82 L110 24 C112 30 118 42 124 50 C128 56 130 60 128 64' fill='none' stroke='%23ff6b6b' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/><ellipse cx='100' cy='88' rx='12' ry='8' fill='%23ff6b6b' transform='rotate(-20 100 88)'/></g></svg>" />
+  <link rel="alternate icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231a1a2e'/><g transform='translate(-0.7,4.2) scale(0.167)'><g fill='none' stroke='%23fdf9f3' stroke-linecap='round' stroke-linejoin='round' stroke-width='7'><path d='M44 18 C34 18 26 28 26 40 L26 58 C26 66 20 72 12 72 C20 72 26 78 26 86 L26 100 C26 114 34 124 44 124'/><path d='M156 18 C166 18 174 28 174 40 L174 58 C174 66 180 72 188 72 C180 72 174 78 174 86 L174 100 C174 114 166 124 156 124'/></g><g stroke='%23fdf9f3' stroke-width='2' opacity='0.30'><line x1='48' y1='34' x2='152' y2='34'/><line x1='48' y1='52' x2='152' y2='52'/><line x1='48' y1='70' x2='152' y2='70'/><line x1='48' y1='88' x2='152' y2='88'/><line x1='48' y1='106' x2='152' y2='106'/></g><path d='M110 82 L110 24 C112 30 118 42 124 50 C128 56 130 60 128 64' fill='none' stroke='%23ff6b6b' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/><ellipse cx='100' cy='88' rx='12' ry='8' fill='%23ff6b6b' transform='rotate(-20 100 88)'/></g></svg>" />
 
   <style>
     /* =====================================================================
@@ -39,6 +41,17 @@
       --color-nav:        rgba(253, 249, 243, 0.94);  /* light: warm semi-transparent */
       --color-border:     rgba(26, 26, 46, 0.08);
       --color-text-muted: rgba(26, 26, 46, 0.55);
+
+      /* Accent colors used as TEXT need WCAG-AA contrast on the light cream
+         surface — the bright brand hues above only pass on dark mode. These
+         are darkened variants reused for text; dark mode resets them below. */
+      --accent-teal-text:     #00897b;
+      --accent-lavender-text: #7b2cbf;
+      --accent-coral-text:    #d62828;
+
+      /* Hero eyebrow: muted ink in light mode (teal clashed with the
+         warm blush hero); dark mode resets it to teal below. */
+      --hero-eyebrow: var(--color-text-muted);
 
       /* Typography */
       --font-serif: 'Playfair Display', serif;
@@ -74,6 +87,12 @@
       --color-nav:        rgba(20, 17, 30, 0.96);  /* dark: warm purple-black, matches hero family */
       --color-border:     rgba(240, 236, 228, 0.1);
       --color-text-muted: rgba(240, 236, 228, 0.45);
+
+      /* On dark surfaces the bright brand hues already pass — reset to them */
+      --accent-teal-text:     var(--color-teal);
+      --accent-lavender-text: var(--color-lavender);
+      --accent-coral-text:    var(--color-coral);
+      --hero-eyebrow:         var(--accent-teal-text);
 
       --bg-hero:    #0f0d16;
       --bg-work:    #1a2535;
@@ -128,6 +147,16 @@
       50%       { transform: translateY(-14px); }
     }
 
+    /* Looser drift for the hero bubbles — moves on both axes with a
+       slight tilt so each icon reads as independently buoyant. */
+    @keyframes drift {
+      0%   { transform: translate(0, 0) rotate(0deg); }
+      30%  { transform: translate(3px, calc(var(--float-amp, 12px) * -1)) rotate(2deg); }
+      55%  { transform: translate(-2px, calc(var(--float-amp, 12px) * -0.55)) rotate(-1.5deg); }
+      80%  { transform: translate(-3px, calc(var(--float-amp, 12px) * -0.85)) rotate(1deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
@@ -156,6 +185,18 @@
     /* SVG logo draw animations */
     @keyframes draw-stroke { to { stroke-dashoffset: 0; } }
     @keyframes fade-in     { to { opacity: 1; } }
+
+    /* Soft glow behind hero logo — calm, breathing */
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 0.7; transform: scale(1); }
+      50%      { opacity: 1;   transform: scale(1.06); }
+    }
+
+    /* Bubble entrance: fade + tiny pop */
+    @keyframes bubble-pop {
+      0%   { opacity: 0; transform: scale(0.5); }
+      100% { opacity: 1; transform: scale(1); }
+    }
 
     /* =====================================================================
        SCROLL-TRIGGERED FADE-IN UTILITY
@@ -234,9 +275,25 @@
     .nav__logo-img {
       width: 46px;
       height: 46px;
-      object-fit: cover;
-      border-radius: 10px;
+      flex-shrink: 0;
     }
+
+    /* Light mode: airy cream tile with a faint border so the mark reads as
+       an icon without the heavy dark block. Dark mode keeps the dark tile. */
+    .nav__logo-bg {
+      fill: #fdf9f3;
+      stroke: rgba(26, 26, 46, 0.14);
+      stroke-width: 1;
+    }
+    .nav__logo-stroke { stroke: #1a1a2e; }
+    .nav__logo-wrap   { stroke: rgba(26, 26, 46, 0.30); }
+
+    [data-theme="dark"] .nav__logo-bg {
+      fill: #2a2840;
+      stroke: none;
+    }
+    [data-theme="dark"] .nav__logo-stroke { stroke: #fdf9f3; }
+    [data-theme="dark"] .nav__logo-wrap   { stroke: rgba(255, 255, 255, 0.34); }
 
     .nav__brand {
       font-family: var(--font-mono);
@@ -279,6 +336,52 @@
 
     .nav__links a:hover {
       border-bottom-color: var(--color-coral);
+    }
+
+    /* Hamburger — desktop hides it; the mobile media query reveals it */
+    .nav__toggle {
+      display: none;
+      flex: 0 0 auto;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      border: 1.5px solid var(--color-border);
+      border-radius: 10px;
+      background: none;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .nav__toggle-bar {
+      display: block;
+      width: 20px;
+      height: 2px;
+      border-radius: 2px;
+      background: var(--color-ink);
+      transition: transform 0.28s ease, opacity 0.2s ease;
+    }
+
+    /* Bars morph into an X while the menu is open */
+    .nav.is-menu-open .nav__toggle-bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav.is-menu-open .nav__toggle-bar:nth-child(2) { opacity: 0; }
+    .nav.is-menu-open .nav__toggle-bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .nav__scrim {
+      position: fixed;
+      inset: var(--nav-height) 0 0;
+      background: rgba(10, 8, 20, 0.45);
+      backdrop-filter: blur(2px);
+      z-index: 90;
+      border: none;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .nav.is-menu-open .nav__scrim {
+      opacity: 1;
     }
 
     /* =====================================================================
@@ -382,7 +485,7 @@
       font-weight: 400;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--color-teal);
+      color: var(--hero-eyebrow);
       margin-bottom: 20px;
       display: flex;
       align-items: center;
@@ -393,7 +496,7 @@
       content: '';
       width: 32px;
       height: 2px;
-      background: var(--color-teal);
+      background: var(--hero-eyebrow);
       flex-shrink: 0;
     }
 
@@ -416,7 +519,7 @@
       font-size: clamp(1.4rem, 2.5vw, 2rem);
       font-weight: 700;
       font-style: italic;
-      color: var(--color-lavender);
+      color: var(--accent-lavender-text);
       margin-bottom: 28px;
     }
 
@@ -424,7 +527,7 @@
       font-size: 1.05rem;
       line-height: 1.75;
       opacity: 0.75;
-      max-width: 480px;
+      max-width: 640px;
       margin-bottom: 40px;
     }
 
@@ -448,9 +551,9 @@
       gap: 6px;
     }
 
-    .tag--coral   { background: rgba(255, 107, 107, 0.12); color: var(--color-coral);    border: 1px solid rgba(255, 107, 107, 0.25); }
-    .tag--teal    { background: rgba(0, 201, 167, 0.12);   color: var(--color-teal);     border: 1px solid rgba(0, 201, 167, 0.25); }
-    .tag--lavender{ background: rgba(199, 125, 255, 0.12); color: var(--color-lavender); border: 1px solid rgba(199, 125, 255, 0.25); }
+    .tag--coral   { background: rgba(255, 107, 107, 0.12); color: var(--accent-coral-text);    border: 1px solid rgba(255, 107, 107, 0.25); }
+    .tag--teal    { background: rgba(0, 201, 167, 0.12);   color: var(--accent-teal-text);     border: 1px solid rgba(0, 201, 167, 0.25); }
+    .tag--lavender{ background: rgba(199, 125, 255, 0.12); color: var(--accent-lavender-text); border: 1px solid rgba(199, 125, 255, 0.25); }
     .tag--gold    { background: rgba(255, 209, 102, 0.15); color: #b8860b;               border: 1px solid rgba(255, 209, 102, 0.35); }
     .tag--sky     { background: rgba(72, 202, 228, 0.12);  color: #0077b6;               border: 1px solid rgba(72, 202, 228, 0.3); }
     .tag--blush   { background: rgba(255, 179, 198, 0.15); color: #c2185b;               border: 1px solid rgba(255, 179, 198, 0.4); }
@@ -557,6 +660,10 @@
       animation: spin 30s linear infinite reverse;
     }
 
+    [data-theme="dark"] .hero__logo-ring {
+      border-color: rgba(240, 236, 228, 0.10);
+    }
+
     .hero__logo-svg {
       position: relative;
       width: 300px;
@@ -575,32 +682,42 @@
       animation: draw-stroke var(--duration, 1s) cubic-bezier(0.4, 0, 0.2, 1) var(--delay, 0s) both;
     }
 
-    .logo-wind {
-      fill: none;
-      stroke: var(--color-ink);
-      stroke-linecap: round;
+    /* Note-head fill: invisible until the strand "winds" it into being */
+    .yarn-fill {
       opacity: 0;
-      animation: fade-in 0.3s ease var(--wind-delay, 2.4s) both;
+      animation: fade-in 0.45s ease var(--fill-delay, 0.95s) forwards;
     }
 
-    /* Floating emoji bubbles */
+    /* Floating emoji bubbles — three pillars: code, music, craft.
+       Appear after the SVG logo finishes drawing, then float gently. */
     .hero__bubble {
       position: absolute;
       border-radius: 50%;
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 52px;
-      height: 52px;
-      animation: float 4s ease-in-out infinite;
+      width: 56px;
+      height: 56px;
+      box-shadow: 0 8px 22px -8px rgba(0, 0, 0, 0.28);
+      opacity: 0;
+      animation:
+        bubble-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) calc(var(--bubble-delay, 0s) + 3.5s) forwards,
+        drift var(--float-dur, 5s) ease-in-out infinite var(--float-delay, 4.1s);
     }
 
-    .hero__bubble:nth-child(1) { top: 10%;    left: 0;     background: var(--color-coral);    animation-delay: -1s; }
-    .hero__bubble:nth-child(2) { top: 20%;    right: -10px;background: var(--color-teal);     animation-delay: -2.5s; }
-    .hero__bubble:nth-child(3) { bottom: 18%; left: -10px; background: var(--color-marigold); animation-delay: -0.5s; }
-    .hero__bubble:nth-child(4) { bottom: 8%;  right: 5%;   background: var(--color-lavender); animation-delay: -3s; }
-    .hero__bubble:nth-child(5) { top: 50%;    right: -20px;background: var(--color-sky);      width: 38px; height: 38px; font-size: 1.1rem; animation-delay: -1.8s; }
+    [data-theme="dark"] .hero__bubble {
+      box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.55);
+    }
+
+    .hero__bubble--code  { top: 18%;    right: 8px; background: var(--color-sky);
+      --float-dur: 6.8s; --float-delay: 4.2s; --float-amp: 13px; }
+    .hero__bubble--music { bottom: 14%; right: 6%;    background: var(--color-lavender);
+      --float-dur: 5.2s; --float-delay: 5.1s; --float-amp: 10px; }
+    .hero__bubble--craft { bottom: 22%; left: -14px;  background: var(--color-marigold);
+      --float-dur: 7.6s; --float-delay: 4.6s; --float-amp: 16px; }
+    .hero__bubble--video { top: 16%;    left: 4%;     background: var(--color-teal);
+      --float-dur: 4.4s; --float-delay: 5.5s; --float-amp: 12px; }
 
     /* =====================================================================
        MARQUEE STRIP
@@ -648,50 +765,143 @@
     ===================================================================== */
 
     .work {
-      background: var(--bg-work);
+      /* Gentle base wash so no part of the section reads as an empty void —
+         a soft lavender glow centred behind the header ties it together */
+      background:
+        radial-gradient(90% 55% at 50% 16%, rgba(199, 125, 255, 0.10), transparent 70%),
+        var(--bg-work);
+      overflow: hidden;
+    }
+
+    /* Two large, very soft color blobs slowly drifting behind the content */
+    .work::before,
+    .work::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.32;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .work::before {
+      width: 680px; height: 680px;
+      top: -60px; left: 4%;
+      background: radial-gradient(circle, rgba(255, 107, 107, 0.55), rgba(255, 209, 102, 0.35) 45%, transparent 70%);
+      animation: aurora-drift-a 19s ease-in-out infinite alternate;
+    }
+
+    .work::after {
+      width: 720px; height: 720px;
+      bottom: -120px; right: 2%;
+      background: radial-gradient(circle, rgba(72, 202, 228, 0.5), rgba(199, 125, 255, 0.4) 45%, transparent 70%);
+      animation: aurora-drift-b 24s ease-in-out infinite alternate;
+    }
+
+    /* Keep all section content above the aurora */
+    .work > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes aurora-drift-a {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(50px, 30px) scale(1.08); }
+    }
+
+    @keyframes aurora-drift-b {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(-45px, -30px) scale(1.06); }
     }
 
     .work__grid {
-      /* Fixed 3-column grid keeps cards the same size and centers the last row */
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      /* Flex wrap keeps every card the same size and centers any
+         partially-filled last row instead of leaving an empty slot */
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
       gap: 28px;
       max-width: 1100px;
       margin: 0 auto;
     }
 
-    .work-card {
-      background: var(--color-surface);
-      border-radius: 16px;
-      overflow: hidden;
-      border: 1px solid var(--color-border);
-      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
-      position: relative;
+    /* Per-card accent is set inline on each card (--card-accent /
+       --card-accent-rgb) so it stays correct across the two separate
+       grids — drives strip, glow, icon, pills, link and hover shadow. */
+
+    /* Sub-group label: a quiet mono caption with a fading rule, so the
+       Experience / Projects split reads clearly and no row feels orphaned */
+    .work__group + .work__group { margin-top: 72px; }
+
+    .work__group-label {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      max-width: 1100px;
+      margin: 0 auto 34px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--color-ink);
+      opacity: 0.5;
     }
 
-    /* Subtle color accent strip along the top of each card */
+    .work__group-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--color-border), transparent);
+    }
+
+    .work-card {
+      /* 3 per row at max width; the last row stays centered via the grid */
+      flex: 1 1 320px;
+      max-width: 348px;
+      /* Accent-tinted surface + a soft glow blooming from the top-left */
+      background:
+        radial-gradient(120% 90% at 0% 0%, rgba(var(--card-accent-rgb), 0.14), transparent 60%),
+        linear-gradient(180deg, rgba(var(--card-accent-rgb), 0.06), transparent 45%),
+        var(--color-surface);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(var(--card-accent-rgb), 0.22);
+      /* Uses the standalone rotate/translate props so the scroll-reveal's
+         `transform: ... !important` can't clobber the hover lift. */
+      transition: rotate 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  translate 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  box-shadow 0.35s ease, border-color 0.35s ease;
+      position: relative;
+      /* Resting shadow so cards lift off the background */
+      box-shadow: 0 2px 16px rgba(26, 26, 46, 0.07);
+    }
+
+    /* Glowing color accent strip along the top of each card */
     .work-card::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0;
-      height: 3px;
+      height: 4px;
       border-radius: 16px 16px 0 0;
+      background: linear-gradient(90deg,
+        var(--card-accent),
+        rgba(var(--card-accent-rgb), 0.55));
+      box-shadow: 0 0 18px rgba(var(--card-accent-rgb), 0.55);
+      /* Lets the accent strip "draw" itself in from the left on reveal */
+      transform-origin: left center;
     }
-
-    .work-card:nth-child(1)::before { background: var(--color-coral); }
-    .work-card:nth-child(2)::before { background: var(--color-teal); }
-    .work-card:nth-child(3)::before { background: var(--color-lavender); }
-    .work-card:nth-child(4)::before { background: var(--color-marigold); }
-    .work-card:nth-child(5)::before { background: var(--color-sky); }
 
     .work-card:hover {
-      transform: translateY(-8px) rotate(-0.5deg);
-      box-shadow: 0 24px 60px rgba(26, 26, 46, 0.16);
-    }
-
-    /* In light mode, add a resting shadow so white cards lift off white bg */
-    .work-card {
-      box-shadow: 0 2px 16px rgba(26, 26, 46, 0.07);
+      /* Clean vertical lift on hover — no tilt, for a sleeker feel */
+      translate: 0 -6px;
+      rotate: 0deg;
+      z-index: 2;
+      border-color: rgba(var(--card-accent-rgb), 0.5);
+      box-shadow:
+        0 24px 60px rgba(var(--card-accent-rgb), 0.28),
+        0 8px 24px rgba(26, 26, 46, 0.12);
     }
 
     .work-card__header {
@@ -699,25 +909,42 @@
       position: relative;
     }
 
-    .work-card__accent {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 100px;
-      height: 100px;
-      border-radius: 0 16px 0 100%;
-      opacity: 0.18;
-    }
-
     .work-card__icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
+      width: 46px;
+      height: 46px;
+      border-radius: 13px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.5rem;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
+      /* Accent-tinted chip with a hairline ring and a soft inner highlight —
+         reads as a crafted glyph rather than a flat colored square */
+      color: var(--card-accent);
+      background:
+        linear-gradient(160deg, rgba(var(--card-accent-rgb), 0.16), rgba(var(--card-accent-rgb), 0.07));
+      border: 1px solid rgba(var(--card-accent-rgb), 0.24);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.10),
+        0 4px 12px rgba(var(--card-accent-rgb), 0.14);
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  box-shadow 0.35s ease;
+    }
+
+    .work-card:hover .work-card__icon {
+      transform: translateY(-2px);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        0 8px 20px rgba(var(--card-accent-rgb), 0.28);
+    }
+
+    .work-card__icon svg {
+      width: 21px;
+      height: 21px;
+      stroke: currentColor;
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
     }
 
     .work-card__role {
@@ -738,6 +965,11 @@
       line-height: 1.25;
       color: var(--color-ink);
       margin-bottom: 0;
+      transition: color 0.3s ease;
+    }
+
+    .work-card:hover .work-card__title {
+      color: var(--card-accent);
     }
 
     .work-card__body {
@@ -772,25 +1004,199 @@
       opacity: 0.8;
     }
 
+    /* Inside work cards, tint pills with the card's accent */
+    .work-card .stack-pill {
+      background: rgba(var(--card-accent-rgb), 0.1);
+      border-color: rgba(var(--card-accent-rgb), 0.35);
+      color: var(--card-accent);
+      opacity: 1;
+    }
+
     .work-card__link {
       font-family: var(--font-mono);
       font-size: 0.75rem;
       font-weight: 500;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--color-ink);
+      color: var(--card-accent);
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 8px;
       padding-bottom: 2px;
-      border-bottom: 1.5px solid currentColor;
-      transition: color 0.2s ease, gap 0.2s ease;
+      border-bottom: 1.5px solid rgba(var(--card-accent-rgb), 0.4);
+      transition: color 0.2s ease, gap 0.2s ease, border-color 0.2s ease;
     }
 
     .work-card__link:hover {
-      color: var(--color-coral);
+      color: var(--card-accent);
+      border-bottom-color: var(--card-accent);
       gap: 14px;
+    }
+
+    /* Row holding the live-site link plus an optional source link */
+    .work-card__links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px 24px;
+    }
+
+    /* Secondary "source" link — quieter than the primary live link,
+       leads with a GitHub mark, and warms to the card accent on hover */
+    .work-card__link--git {
+      border-bottom: none;
+      color: var(--color-ink);
+      opacity: 0.55;
+    }
+
+    .work-card__link--git:hover {
+      color: var(--card-accent);
+      border-bottom-color: transparent;
+      opacity: 1;
+      gap: 8px;
+    }
+
+    .work-card__link svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    /* =====================================================================
+       DELIGHTFUL CARD ENTRANCE
+       Each card springs up + settles when it scrolls into view, then its
+       insides cascade in: strip draws across, icon pops, copy rises, the
+       tech pills bounce in one-by-one, and a light sheen sweeps over once.
+       Driven by the existing .needs-reveal / .is-visible observer.
+    ===================================================================== */
+
+    /* Card container: springy overshoot instead of a flat fade-up.
+       Uses `transform` only (hover uses translate/rotate), so the lift
+       on hover still composes cleanly after the entrance settles. */
+    .work-card.reveal {
+      /* Keep the base card's hover transitions (rotate/translate/shadow/
+         border) intact while adding the springy entrance transform. */
+      transition: opacity 0.7s ease,
+                  transform 0.85s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  rotate 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  translate 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  box-shadow 0.35s ease, border-color 0.35s ease;
+    }
+
+    .work-card.reveal.needs-reveal {
+      opacity: 0;
+      transform: translateY(56px) scale(0.9) rotate(-2.5deg);
+    }
+
+    /* One-time light sheen that sweeps diagonally across the card */
+    .work-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      z-index: 3;
+      background: linear-gradient(115deg,
+        transparent 40%,
+        rgba(255, 255, 255, 0.07) 49%,
+        transparent 60%);
+      opacity: 0;
+    }
+
+    /* Children rest in their normal spot; the cascade only plays on reveal */
+    .work-card.reveal.is-visible::before {
+      animation: strip-draw 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.1s backwards;
+    }
+
+    .work-card.reveal.is-visible::after {
+      animation: card-sheen 1.1s ease 0.35s backwards;
+    }
+
+    .work-card.reveal.is-visible .work-card__icon {
+      animation: icon-pop 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) 0.18s backwards;
+    }
+
+    .work-card.reveal.is-visible .work-card__title {
+      animation: copy-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.26s backwards;
+    }
+
+    .work-card.reveal.is-visible .work-card__role {
+      animation: copy-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.22s backwards;
+    }
+
+    .work-card.reveal.is-visible .work-card__description {
+      animation: copy-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.34s backwards;
+    }
+
+    .work-card.reveal.is-visible .work-card__link {
+      animation: copy-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.6s backwards;
+    }
+
+    /* Tech pills bounce in one after another */
+    .work-card.reveal.is-visible .stack-pill {
+      animation: pill-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+    }
+    .work-card.reveal.is-visible .stack-pill:nth-child(1) { animation-delay: 0.40s; }
+    .work-card.reveal.is-visible .stack-pill:nth-child(2) { animation-delay: 0.46s; }
+    .work-card.reveal.is-visible .stack-pill:nth-child(3) { animation-delay: 0.52s; }
+    .work-card.reveal.is-visible .stack-pill:nth-child(4) { animation-delay: 0.58s; }
+    .work-card.reveal.is-visible .stack-pill:nth-child(5) { animation-delay: 0.64s; }
+
+    @keyframes strip-draw {
+      from { transform: scaleX(0); }
+      to   { transform: scaleX(1); }
+    }
+
+    @keyframes card-sheen {
+      0%   { opacity: 0; transform: translateX(-55%); }
+      40%  { opacity: 0.55; }
+      100% { opacity: 0; transform: translateX(55%); }
+    }
+
+    @keyframes icon-pop {
+      0%   { opacity: 0; transform: scale(0.3) rotate(-30deg); }
+      55%  { opacity: 1; transform: scale(1.15) rotate(7deg); }
+      75%  { transform: scale(0.96) rotate(-2deg); }
+      100% { opacity: 1; transform: none; }
+    }
+
+    @keyframes copy-rise {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    @keyframes pill-in {
+      0%   { opacity: 0; transform: translateY(10px) scale(0.7); }
+      70%  { transform: translateY(0) scale(1.08); }
+      100% { opacity: 1; transform: none; }
+    }
+
+    /* Respect users who prefer reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .work::before,
+      .work::after { animation: none; }
+
+      .social-link:hover,
+      .social-link:focus-visible { transform: none; }
+
+      .work-card.reveal {
+        transition: opacity 0.4s ease;
+      }
+      .work-card.reveal.needs-reveal {
+        transform: none;
+      }
+      .work-card.reveal.is-visible::before,
+      .work-card.reveal.is-visible::after,
+      .work-card.reveal.is-visible .work-card__icon,
+      .work-card.reveal.is-visible .work-card__role,
+      .work-card.reveal.is-visible .work-card__title,
+      .work-card.reveal.is-visible .work-card__description,
+      .work-card.reveal.is-visible .work-card__link,
+      .work-card.reveal.is-visible .stack-pill {
+        animation: none;
+      }
+      .work-card::after { display: none; }
     }
 
     /* =====================================================================
@@ -798,7 +1204,42 @@
     ===================================================================== */
 
     .crafts {
-      background: var(--bg-crafts);
+      /* Keep the lavender base, add the same drifting color bursts the
+         Work section uses so the section doesn't read as a flat panel */
+      background:
+        radial-gradient(90% 55% at 50% 14%, rgba(199, 125, 255, 0.10), transparent 70%),
+        var(--bg-crafts);
+      overflow: hidden;
+    }
+
+    .crafts::before,
+    .crafts::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.32;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .crafts::before {
+      width: 680px; height: 680px;
+      top: -80px; left: 2%;
+      background: radial-gradient(circle, rgba(199, 125, 255, 0.5), rgba(255, 179, 198, 0.38) 45%, transparent 70%);
+      animation: aurora-drift-a 21s ease-in-out infinite alternate;
+    }
+
+    .crafts::after {
+      width: 720px; height: 720px;
+      bottom: -140px; right: 3%;
+      background: radial-gradient(circle, rgba(72, 202, 228, 0.45), rgba(255, 209, 102, 0.32) 45%, transparent 70%);
+      animation: aurora-drift-b 26s ease-in-out infinite alternate;
+    }
+
+    .crafts > * {
+      position: relative;
+      z-index: 1;
     }
 
     .crafts__filters {
@@ -984,7 +1425,41 @@
     ===================================================================== */
 
     .videos {
-      background: var(--bg-videos);
+      /* Keep the sky-blue base, layer in the drifting color bursts */
+      background:
+        radial-gradient(90% 55% at 50% 14%, rgba(72, 202, 228, 0.10), transparent 70%),
+        var(--bg-videos);
+      overflow: hidden;
+    }
+
+    .videos::before,
+    .videos::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.32;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .videos::before {
+      width: 700px; height: 700px;
+      top: -90px; left: 3%;
+      background: radial-gradient(circle, rgba(72, 202, 228, 0.5), rgba(0, 201, 167, 0.34) 45%, transparent 70%);
+      animation: aurora-drift-b 23s ease-in-out infinite alternate;
+    }
+
+    .videos::after {
+      width: 720px; height: 720px;
+      bottom: -130px; right: 2%;
+      background: radial-gradient(circle, rgba(199, 125, 255, 0.42), rgba(255, 107, 107, 0.3) 45%, transparent 70%);
+      animation: aurora-drift-a 27s ease-in-out infinite alternate;
+    }
+
+    .videos > * {
+      position: relative;
+      z-index: 1;
     }
 
     .videos__grid {
@@ -1031,9 +1506,43 @@
     ===================================================================== */
 
     .about {
-      background: var(--bg-about);
+      /* Dark base kept; richer color bursts (the section is always dark,
+         so the blobs get a touch more presence to glow through) */
+      background:
+        radial-gradient(90% 55% at 50% 14%, rgba(199, 125, 255, 0.14), transparent 70%),
+        var(--bg-about);
       color: var(--color-on-dark);
       overflow: hidden;
+    }
+
+    .about::before,
+    .about::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.4;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .about::before {
+      width: 700px; height: 700px;
+      top: -100px; left: 2%;
+      background: radial-gradient(circle, rgba(255, 107, 107, 0.45), rgba(199, 125, 255, 0.38) 45%, transparent 70%);
+      animation: aurora-drift-a 22s ease-in-out infinite alternate;
+    }
+
+    .about::after {
+      width: 740px; height: 740px;
+      bottom: -150px; right: 2%;
+      background: radial-gradient(circle, rgba(72, 202, 228, 0.4), rgba(0, 201, 167, 0.34) 45%, transparent 70%);
+      animation: aurora-drift-b 25s ease-in-out infinite alternate;
+    }
+
+    .about > * {
+      position: relative;
+      z-index: 1;
     }
 
     .about__grid {
@@ -1194,47 +1703,53 @@
       opacity: 0.55;
     }
 
-    /* Decorative blobs */
-    .about__blob {
-      position: absolute;
-      border-radius: 50%;
-      pointer-events: none;
-    }
-
-    .about__blob--1 {
-      top: -80px;
-      right: -80px;
-      width: 320px;
-      height: 320px;
-      background: var(--color-coral);
-      opacity: 0.15;
-    }
-
-    .about__blob--2 {
-      bottom: -60px;
-      left: 60px;
-      width: 200px;
-      height: 200px;
-      background: var(--color-teal);
-      opacity: 0.18;
-    }
-
     /* =====================================================================
        FOOTER
     ===================================================================== */
 
     .footer {
-      background: var(--color-ink);
-      color: var(--color-paper);
-      border-top: 1px solid var(--color-border);
-      padding: 36px var(--section-padding-x);
+      background: var(--bg-about);
+      color: var(--color-on-dark);
+      border-top: 1px solid color-mix(in srgb, var(--color-on-dark) 12%, transparent);
+      padding: 28px var(--section-padding-x);
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 16px;
+      gap: 20px;
       position: relative;
       z-index: 1;
+    }
+
+    .footer__socials {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .social-link {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--color-on-dark);
+      border: 1px solid color-mix(in srgb, var(--color-on-dark) 28%, transparent);
+      transition: color 0.22s ease, border-color 0.22s ease,
+                  background 0.22s ease, transform 0.22s ease;
+    }
+
+    .social-link svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .social-link:hover,
+    .social-link:focus-visible {
+      color: var(--color-coral);
+      border-color: var(--color-coral);
+      transform: translateY(-2px);
+      outline: none;
     }
 
     .footer__brand {
@@ -1254,8 +1769,16 @@
 
     .footer__heart {
       color: var(--color-coral);
-      animation: pulse 1.5s ease-in-out infinite;
       display: inline-block;
+      animation: heartbeat 1.2s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      14% { transform: scale(1.2); }
+      28% { transform: scale(1); }
+      42% { transform: scale(1.15); }
+      56% { transform: scale(1); }
     }
 
     /* Theme toggle pill — sits after the nav links */
@@ -1337,8 +1860,9 @@
         display: none;
       }
 
-      .work__grid {
-        grid-template-columns: repeat(2, 1fr);
+      .work__grid,
+      .work__group-label {
+        max-width: 760px;
       }
 
       .crafts__masonry {
@@ -1358,6 +1882,7 @@
       .footer {
         flex-direction: column;
         text-align: center;
+        gap: 16px;
       }
     }
 
@@ -1372,21 +1897,18 @@
         --nav-height: 64px;
       }
 
-      /* Nav: keep brand, links, and toggle on one line */
-      .nav__brand-subtitle {
-        display: block;
-      }
-
+      /* Nav: brand + theme toggle + hamburger on one line; links drop down */
       .nav {
         height: var(--nav-height);
         min-height: 0;
         padding: 0 16px;
         align-items: center;
-        border-bottom: none;
+        border-bottom: 1px solid var(--color-border);
       }
 
       .nav__logo {
-        gap: 8px;
+        gap: 9px;
+        min-width: 0;
       }
 
       .nav__logo-img {
@@ -1395,12 +1917,10 @@
       }
 
       .nav__brand {
-        font-size: 0.7rem;
+        font-size: 0.74rem;
         white-space: normal;
-        text-align: center;
-        line-height: 1.1;
-        max-width: 95px;
-        display: inline-block;
+        line-height: 1.2;
+        max-width: 130px;
       }
 
       .nav__brand-subtitle {
@@ -1409,39 +1929,67 @@
       }
 
       .nav__right {
-        flex: 1 1 auto;
-        gap: 8px;
+        flex: 0 0 auto;
+        gap: 10px;
         justify-content: flex-end;
-        min-width: 0;
         align-items: center;
       }
 
-      .nav__links {
+      .nav__toggle {
         display: flex;
-        gap: 8px;
-        flex: 1 1 auto;
-        min-width: 0;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-      }
-
-      .nav__links::-webkit-scrollbar {
-        display: none;
-      }
-
-      .nav__links a {
-        font-size: 0.58rem;
-        letter-spacing: 0.02em;
-        padding-bottom: 0;
-        border-bottom: none;
-        white-space: nowrap;
       }
 
       .theme-toggle {
         flex: 0 0 auto;
-        padding: 5px 8px;
+        padding: 8px 12px;
+      }
+
+      /* Links become a full-width panel that drops from under the bar */
+      .nav__links {
+        position: fixed;
+        top: var(--nav-height);
+        left: 0;
+        right: 0;
+        z-index: 95;
+        flex-direction: column;
+        gap: 0;
+        background: var(--color-nav);
+        border-bottom: 1px solid var(--color-border);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+        padding: 8px 0 14px;
+        /* Hidden until the hamburger opens it */
+        transform: translateY(-12px);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+                    opacity 0.22s ease, visibility 0.28s;
+      }
+
+      .nav.is-menu-open .nav__links {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+
+      .nav__links li {
+        width: 100%;
+      }
+
+      .nav__links a {
+        display: block;
+        font-size: 0.95rem;
+        letter-spacing: 0.06em;
+        padding: 16px 24px;
+        border-bottom: none;
+        white-space: nowrap;
+      }
+
+      .nav__links a:hover,
+      .nav__links a:active {
+        background: rgba(255, 107, 107, 0.08);
+        border-bottom-color: transparent;
       }
 
       .hero__title {
@@ -1452,8 +2000,52 @@
         font-size: 1.2rem;
       }
 
-      .work__grid {
-        grid-template-columns: 1fr;
+      .work__grid,
+      .work__group-label {
+        max-width: 420px;
+      }
+
+      .work-card {
+        max-width: none;
+      }
+
+      /* Tighter card padding so copy isn't squeezed into a narrow column */
+      .work-card__header {
+        padding: 26px 22px 0;
+      }
+
+      .work-card__body {
+        padding: 16px 22px 26px;
+      }
+
+      /* Section headers: less dead space above the content on phones */
+      .section__header {
+        margin-bottom: 44px;
+      }
+
+      .section__subtitle {
+        font-size: 0.95rem;
+      }
+
+      /* Hero: full-bleed stacked buttons are easier to tap one-handed */
+      .hero {
+        padding-top: calc(var(--nav-height) + 28px);
+        padding-bottom: 56px;
+        gap: 36px;
+      }
+
+      .hero__description {
+        font-size: 1rem;
+      }
+
+      .hero__cta {
+        width: 100%;
+      }
+
+      .hero__cta .btn {
+        flex: 1 1 100%;
+        text-align: center;
+        padding: 16px 24px;
       }
 
       .crafts__masonry {
@@ -1502,8 +2094,8 @@
     ===================================================================== */
 
     @media (max-width: 380px) {
-      .nav__links {
-        display: none;
+      .nav__brand {
+        font-size: 0.66rem;
       }
 
       .hero__title {
@@ -1535,11 +2127,38 @@
   =================================================================== -->
   <nav class="nav" id="site-nav">
     <a href="#hero" class="nav__logo" aria-label="Variations on a String — home">
-      <img
-        src="data:image/png;base64,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VtfUtG/a+WQh35ImoKqoiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAtmHQ4zqTONEra+tlElytDjbqo97uADq3HzksLdz3kFaz1cPwalweLjmdqJ+1mGmqGjfvBkaf6Qg9nwkGLsmx3G8xhiHWU1S+gneB2seC9m59BY7+UqRrZl00qGOt6OGTh7Wl0AgmYSOYLZ2HcenbcfOVrNQEREBERAREQEREBERAREQEREBERAREQEREG1Lo0VsVfoJhVRC5rmi0wxcv3UY4HflaVUbwisEkestqmc1wZLZY+EkcjtLID/8A70qwfQPvLLp0faCkB3fbK2opH8+zd3WD8kgWDeEdxaSsxLHctp6YuNtqX0lTIO6OUAs39Acwj75BRxERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQFbfwa0LzlmYVAB4GUNOwnbvdI4j/hKqQr6eDtxKe1ab3XLKnl7t1YZTt2/vUPE3i+dznj71BJPTEmbD0ccuc4/Gp4mfOZox+lawlsF8IPkhtOi9PYYnsbLe7hHG9p7TFF9scR3/GEfP0+la+kBERAREQEREBERAREQEREBERAREQEREBERBZroAahx45qHVYZcJeCiyEN8Xc5+zWVMYcQPW9pLfSQ0K72oWLWzNcNumLXiPio7hAYnkDymH5L2+YtIBHpAWo2iqqiirIayjnkgqIJGyRSxu4XMc07hwI7CCFsk6KetVHqliTaK5TQw5Rbowysg49jUMAAE7R5ie0DsPoIQUB1YwO9acZvXYte4yJYHcUEwGzaiE/Ekb6CO7uO4PMLE1tW1p0lxTVaw+5+QUxirId/FLhCB19OfQT2tPe08vyFUW1X6MupeFXCU260z5Pa9yYqu2wukfw78uOIbuadvNuPSUEJIv3qqOspJnQ1VLPBKwlrmSRlrmkdoIPYvwPI7FAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQERBz7EBF+9JR1dXOyClpZ55pHBrI4oy5ziewADmSpx0i6LmouaVkc18oZsVtId9tmr4S2dw238iE7En0u4R69tkGA6HabXbVHPqPHbcx7KYOEtwqgOVNACOJ3r7gO8kd262k4pYrdjON27H7TF1NBb6dlPA07b8LQACT3k9pPnKxvRzTDFtLMb9xsbpncUpDqusl2M1S8dheR3Dc7Ach85UadL7XKHTjHTjuPzxS5Rco3NbwyAmgiI261w7Q47+SPWewbEK3dOjUOLMdVxY7dMyW2Y8x1MHN+XUOIMp39BDW/enzqvi7SPfJI6SRznvcSXOcdySe8ldUBERAREQEREBERAREQEREBERAREQEREBERAXpYzfbxjV8pb3YbhPb7jSv44Z4XbOaf6CPODyPevNRBebQrpeWa50lPZtTd7dc9+EXSGL9jTel7W84z6gR6laKx3e1322xXKzXKkuNFKPtc9NK2RjvPsQSFp3XqY9kV/x6pFTYb1cLXMDvx0lQ+Ik+nhI3Qbeay2W6tO9ZQUlQfPLC1/9IVS/CD4Rhtuwq15XQ22jt99kuTKTip2CPxiExyOdxNbyJaWt8rtG+3eFXej6QmstJCIo8+ujmjsMoZI76XNJWH5xm2V5vcY7hld9rLtURN4I3Tv5MHma0ch8wQY8iIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgK8vg/MOxGt02uOSVVooK68uuUlM+aeISOijaxha1vFuG78RPLbffn2BUaWS4LnuY4NUzVGJ5DXWl0+3XNgf5Em3ZxNO4O3pCDbPR223UXOjoKWnPnihaz+gL8b/erRj9skud7udJbaKL489TMI2D0Ek9pWsqt6QestXC6KTProxrhseq4Iz9LWgqPr5e7zfas1d6u1dcpzv8AbKqd0rvpcSguRrx0vaKlp5LLpaDU1ZLmy3eoh+1R/wCiY7457ebgAOXI91NL5dblfLvVXe71s1bX1UhknnmdxOe495K+JEBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREH/2Q=="
-        alt="Variations on a String logo"
-        class="nav__logo-img"
-      />
+      <!-- "Woven Score" mark: code braces { } framing a staff with one coral
+           eighth note whose head is a wound yarn ball (cross-hatch wraps). -->
+      <svg class="nav__logo-img" viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <clipPath id="navYarn">
+            <ellipse cx="100" cy="88" rx="13" ry="9" transform="rotate(-20 100 88)"/>
+          </clipPath>
+        </defs>
+        <rect class="nav__logo-bg" width="46" height="46" rx="10"/>
+        <g transform="translate(1.5,7.7) scale(0.215)">
+          <g class="nav__logo-stroke" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="5">
+            <path d="M44 18 C34 18 26 28 26 40 L26 58 C26 66 20 72 12 72 C20 72 26 78 26 86 L26 100 C26 114 34 124 44 124"/>
+            <path d="M156 18 C166 18 174 28 174 40 L174 58 C174 66 180 72 188 72 C180 72 174 78 174 86 L174 100 C174 114 166 124 156 124"/>
+          </g>
+          <g class="nav__logo-stroke" stroke-width="1.5" opacity="0.28">
+            <line x1="48" y1="34" x2="152" y2="34"/>
+            <line x1="48" y1="52" x2="152" y2="52"/>
+            <line x1="48" y1="70" x2="152" y2="70"/>
+            <line x1="48" y1="88" x2="152" y2="88"/>
+            <line x1="48" y1="106" x2="152" y2="106"/>
+          </g>
+          <path d="M110 82 L110 24 C112 30 118 42 124 50 C128 56 130 60 128 64"
+                fill="none" stroke="#ff6b6b" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <ellipse cx="100" cy="88" rx="12" ry="8" fill="#ff6b6b" transform="rotate(-20 100 88)"/>
+          <g class="nav__logo-wrap" clip-path="url(#navYarn)" stroke-width="1.3" fill="none">
+            <path d="M86 94 Q100 85 114 82"/>
+            <path d="M87 98 Q100 90 113 86"/>
+            <path d="M88 80 Q100 91 112 97"/>
+            <path d="M92 78 Q100 87 108 94"/>
+          </g>
+        </g>
+      </svg>
       <span class="nav__brand">
         Variations on a
         <span class="nav__brand-subtitle">"String"</span>
@@ -1547,7 +2166,7 @@
     </a>
 
     <div class="nav__right">
-      <ul class="nav__links" role="list">
+      <ul class="nav__links" id="nav-links" role="list">
         <li><a href="#work">Work</a></li>
         <li><a href="#crafts">Crafts</a></li>
         <li><a href="#videos">Videos</a></li>
@@ -1558,7 +2177,18 @@
         <span class="icon-moon">🌙</span>
         <span class="icon-sun">☀️</span>
       </button>
+
+      <!-- Mobile only: opens the nav links as a full-width drop panel -->
+      <button class="nav__toggle" id="nav-toggle" aria-label="Open menu"
+              aria-expanded="false" aria-controls="nav-links">
+        <span class="nav__toggle-bar"></span>
+        <span class="nav__toggle-bar"></span>
+        <span class="nav__toggle-bar"></span>
+      </button>
     </div>
+
+    <!-- Tap-anywhere backdrop that closes the open mobile menu -->
+    <div class="nav__scrim" id="nav-scrim" hidden></div>
   </nav>
 
   <!-- ===================================================================
@@ -1576,9 +2206,10 @@
       <p class="hero__tagline">Storyteller. Problem solver. One string at a time.</p>
 
       <p class="hero__description">
-        8 years of full-stack sorcery by day. Crochet hooks, knitting
-        needles, cross-stitch, piano keys, and vocal warm-ups by night.
-        One person, infinite strings to pull.
+        I've always loved making things — the patience, precision, and creativity
+        my hobbies taught me are exactly what make me a strong engineer. I've spent the
+        last <span class="years-coding">8</span> years building software the same way I make
+        everything: like a story worth finishing.
       </p>
 
       <ul class="hero__tags" role="list">
@@ -1600,98 +2231,64 @@
         <div class="hero__logo-glow"></div>
         <div class="hero__logo-ring"></div>
 
-        <!-- Floating emoji bubbles -->
-        <div class="hero__bubble">🧶</div>
-        <div class="hero__bubble">🎵</div>
-        <div class="hero__bubble">💻</div>
-        <div class="hero__bubble">🎬</div>
-        <div class="hero__bubble">🪡</div>
+        <!-- Three-pillar bubbles — code, music, craft — appear after the
+             logo finishes drawing, like the variations the storyteller
+             pulls from the central thread. -->
+        <div class="hero__bubble hero__bubble--code"  style="--bubble-delay:0s">💻</div>
+        <div class="hero__bubble hero__bubble--music" style="--bubble-delay:0.18s">🎵</div>
+        <div class="hero__bubble hero__bubble--craft" style="--bubble-delay:0.36s">🧶</div>
+        <div class="hero__bubble hero__bubble--video" style="--bubble-delay:0.54s">🎥</div>
 
-        <!-- Animated SVG logo — draws itself on page load -->
-        <!--
-          SVG logo — faithfully redrawn to match the reference PNG.
-          Coordinate system: 500 × 360 viewBox.
-          Layout:
-            Left brace:  x ≈ 52–88    Right brace: x ≈ 412–448
-            Staff lines: x 88 → 412,  y 138/158/178/198/218
-            Left yarn ball:  cx 230, cy 215, r 36  (larger, sits on staff)
-            Right yarn ball: cx 320, cy 200, r 28  (smaller, sits on staff)
-            Note beam: diagonal from (230,140) to (320,120)
-            Stems: up from top of each ball to beam
-            Trailing thread: curves from left ball down-left
-            Curl: small loop from right ball
+        <!-- Animated "Woven Score" mark — draws itself like a strand being
+             pulled through, telling a small story:
+             1. The blank page (5 staff lines)
+             2. The note head winds into a solid coral yarn ball
+             3. Cross-hatch wraps lace over the ball
+             4. One coral strand rises as the stem + eighth-note flag
+             5. Code braces { } sweep in last, bracketing the score
+
+             ViewBox 200 × 140 (the refined Woven Score proportions). Layout:
+               Braces:      left x≈12–44,  right x≈156–188
+               Staff lines: x 48 → 152,  y 34/52/70/88/106
+               Note head:   (100, 88)  rx12 ry8, tilted −20°
         -->
-        <svg class="hero__logo-svg" viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg">
+        <svg class="hero__logo-svg" viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg">
 
-          <!-- ── Staff lines (5, evenly spaced 20px, spanning brace-to-brace) ── -->
-          <line class="logo-path" style="--path-len:324;--duration:.45s;--delay:.00s" stroke-width="1.8" x1="88" y1="138" x2="412" y2="138"/>
-          <line class="logo-path" style="--path-len:324;--duration:.45s;--delay:.07s" stroke-width="1.8" x1="88" y1="158" x2="412" y2="158"/>
-          <line class="logo-path" style="--path-len:324;--duration:.45s;--delay:.14s" stroke-width="1.8" x1="88" y1="178" x2="412" y2="178"/>
-          <line class="logo-path" style="--path-len:324;--duration:.45s;--delay:.21s" stroke-width="1.8" x1="88" y1="198" x2="412" y2="198"/>
-          <line class="logo-path" style="--path-len:324;--duration:.45s;--delay:.28s" stroke-width="1.8" x1="88" y1="218" x2="412" y2="218"/>
+          <defs>
+            <clipPath id="heroYarn">
+              <ellipse cx="100" cy="88" rx="13" ry="9" transform="rotate(-20 100 88)"/>
+            </clipPath>
+          </defs>
 
-          <!-- ── Left curly brace ──
-               Shape from reference: wide top/bottom flares, deep pinch at centre.
-               Top end at (88,52), bottom at (88,268), pinch at x≈52 y=160.
-          -->
-          <path class="logo-path" style="--path-len:580;--duration:1.1s;--delay:.45s" stroke-width="6" stroke-linecap="round"
-            d="M88,52
-               C72,52 56,62 56,82
-               C56,98  68,108 68,128
-               C68,148 52,158 52,160
-               C52,162 68,172 68,192
-               C68,212 56,222 56,238
-               C56,258 72,268 88,268"/>
+          <!-- ── 1. The page: 5 staff lines, fast stagger ── -->
+          <line class="logo-path" style="--path-len:104;--duration:.5s;--delay:.00s;stroke-opacity:.28" stroke-width="1.5" x1="48" y1="34" x2="152" y2="34"/>
+          <line class="logo-path" style="--path-len:104;--duration:.5s;--delay:.06s;stroke-opacity:.28" stroke-width="1.5" x1="48" y1="52" x2="152" y2="52"/>
+          <line class="logo-path" style="--path-len:104;--duration:.5s;--delay:.12s;stroke-opacity:.28" stroke-width="1.5" x1="48" y1="70" x2="152" y2="70"/>
+          <line class="logo-path" style="--path-len:104;--duration:.5s;--delay:.18s;stroke-opacity:.28" stroke-width="1.5" x1="48" y1="88" x2="152" y2="88"/>
+          <line class="logo-path" style="--path-len:104;--duration:.5s;--delay:.24s;stroke-opacity:.28" stroke-width="1.5" x1="48" y1="106" x2="152" y2="106"/>
 
-          <!-- ── Right curly brace ── mirror of left -->
-          <path class="logo-path" style="--path-len:580;--duration:1.1s;--delay:.62s" stroke-width="6" stroke-linecap="round"
-            d="M412,52
-               C428,52 444,62 444,82
-               C444,98  432,108 432,128
-               C432,148 448,158 448,160
-               C448,162 432,172 432,192
-               C432,212 444,222 444,238
-               C444,258 428,268 412,268"/>
+          <!-- ── 2. The note head winds itself into being — solid coral yarn ball ── -->
+          <ellipse class="yarn-fill" style="--fill-delay:.95s" cx="100" cy="88" rx="12" ry="8"
+            fill="var(--color-coral)" transform="rotate(-20 100 88)"/>
 
-          <!-- ── Note beam (diagonal, top of stems) ── -->
-          <line class="logo-path" style="--path-len:98;--duration:.4s;--delay:1.5s" stroke-width="7" stroke-linecap="round"
-                x1="230" y1="138" x2="320" y2="118"/>
-
-          <!-- ── Left stem (up from top of left yarn ball to beam) ── -->
-          <line class="logo-path" style="--path-len:82;--duration:.3s;--delay:1.88s" stroke-width="4" stroke-linecap="round"
-                x1="230" y1="215" x2="230" y2="138"/>
-
-          <!-- ── Right stem ── -->
-          <line class="logo-path" style="--path-len:86;--duration:.3s;--delay:2.1s" stroke-width="4" stroke-linecap="round"
-                x1="320" y1="200" x2="320" y2="118"/>
-
-          <!-- ── Left yarn ball (larger, notehead on left) ── -->
-          <circle class="logo-path" style="--path-len:226;--duration:.85s;--delay:1.6s" stroke-width="3" cx="230" cy="215" r="36"/>
-          <g class="logo-wind" style="--wind-delay:2.4s">
-            <ellipse cx="230" cy="215" rx="30" ry="12" stroke-width="1.6" transform="rotate(-40 230 215)" opacity=".65"/>
-            <ellipse cx="230" cy="215" rx="12" ry="30" stroke-width="1.6" transform="rotate(10 230 215)"  opacity=".65"/>
-            <ellipse cx="230" cy="215" rx="34" ry="9"  stroke-width="1.3" transform="rotate(-70 230 215)" opacity=".4"/>
-            <ellipse cx="230" cy="215" rx="9"  ry="24" stroke-width="1.3" transform="rotate(55 230 215)"  opacity=".4"/>
-            <ellipse cx="230" cy="215" rx="22" ry="6"  stroke-width="1.1" transform="rotate(80 230 215)"  opacity=".28"/>
+          <!-- ── 3. Cross-hatch wraps lace over the ball (clipped to the head) ── -->
+          <g clip-path="url(#heroYarn)">
+            <path class="logo-path" style="--path-len:40;--duration:.3s;--delay:1.15s;stroke:rgba(255,255,255,0.55)" stroke-width="1.3" d="M86 94 Q100 85 114 82"/>
+            <path class="logo-path" style="--path-len:40;--duration:.3s;--delay:1.23s;stroke:rgba(255,255,255,0.55)" stroke-width="1.3" d="M87 98 Q100 90 113 86"/>
+            <path class="logo-path" style="--path-len:40;--duration:.3s;--delay:1.31s;stroke:rgba(255,255,255,0.55)" stroke-width="1.3" d="M88 80 Q100 91 112 97"/>
+            <path class="logo-path" style="--path-len:40;--duration:.3s;--delay:1.39s;stroke:rgba(255,255,255,0.55)" stroke-width="1.3" d="M92 78 Q100 87 108 94"/>
           </g>
 
-          <!-- ── Right yarn ball (slightly smaller, notehead on right) ── -->
-          <circle class="logo-path" style="--path-len:188;--duration:.75s;--delay:1.82s" stroke-width="3" cx="320" cy="200" r="30"/>
-          <g class="logo-wind" style="--wind-delay:2.58s">
-            <ellipse cx="320" cy="200" rx="24" ry="10" stroke-width="1.6" transform="rotate(-40 320 200)" opacity=".65"/>
-            <ellipse cx="320" cy="200" rx="10" ry="24" stroke-width="1.6" transform="rotate(10 320 200)"  opacity=".65"/>
-            <ellipse cx="320" cy="200" rx="28" ry="7"  stroke-width="1.3" transform="rotate(-70 320 200)" opacity=".4"/>
-            <ellipse cx="320" cy="200" rx="7"  ry="19" stroke-width="1.3" transform="rotate(55 320 200)"  opacity=".4"/>
-            <ellipse cx="320" cy="200" rx="18" ry="5"  stroke-width="1.1" transform="rotate(80 320 200)"  opacity=".28"/>
-          </g>
+          <!-- ── 4. One coral strand rises: stem + eighth-note flag ── -->
+          <path class="logo-path" style="--path-len:120;--duration:.7s;--delay:1.55s;stroke:var(--color-coral)" stroke-width="3.2"
+            d="M110 82 L110 24 C112 30 118 42 124 50 C128 56 130 60 128 64"/>
 
-          <!-- ── Trailing thread from left yarn ball, curves to lower-left ── -->
-          <path class="logo-path" style="--path-len:260;--duration:.7s;--delay:2.45s" stroke-width="1.8" stroke-linecap="round"
-            d="M200,240 C188,255 172,262 152,270 C132,278 112,284 92,292"/>
+          <!-- ── 5. Code braces { } wrap the score LAST ── -->
+          <path class="logo-path" style="--path-len:170;--duration:.9s;--delay:2.20s" stroke-width="4.5"
+            d="M44 18 C34 18 26 28 26 40 L26 58 C26 66 20 72 12 72 C20 72 26 78 26 86 L26 100 C26 114 34 124 44 124"/>
 
-          <!-- ── Small curl/loop from right yarn ball ── -->
-          <path class="logo-path" style="--path-len:100;--duration:.45s;--delay:2.72s" stroke-width="1.8" stroke-linecap="round"
-            d="M308,224 C302,240 292,246 288,238 C284,230 290,222 298,226 C304,229 307,238 304,244"/>
+          <path class="logo-path" style="--path-len:170;--duration:.9s;--delay:2.40s" stroke-width="4.5"
+            d="M156 18 C166 18 174 28 174 40 L174 58 C174 66 180 72 188 72 C180 72 174 78 174 86 L174 100 C174 114 166 124 156 124"/>
 
         </svg>
       </div>
@@ -1734,16 +2331,145 @@
     <div class="section__header reveal">
       <span class="section__eyebrow">01 — Work</span>
       <h2 class="section__title">Things I've <em>Built</em></h2>
-      <p class="section__subtitle">8 years of shipping full-stack applications — from scrappy MVPs to scalable platforms.</p>
+      <p class="section__subtitle"><span class="years-coding">8</span> years of shipping full-stack applications — from scrappy MVPs to scalable platforms — plus the things I build on my own time.</p>
     </div>
 
-    <div class="work__grid">
+    <div class="work__group">
+      <p class="work__group-label">Projects</p>
+      <div class="work__grid">
 
-      <article class="work-card reveal delay-1">
+      <article class="work-card reveal delay-1" style="--card-accent: var(--color-sky); --card-accent-rgb: 72, 202, 228;">
         <div class="work-card__header">
-          <div class="work-card__accent" style="background:var(--color-coral)"></div>
-          <div class="work-card__icon" style="background:rgba(255,107,107,0.12)">🎓</div>
-          <p class="work-card__role">Senior Software Engineer · Encoura · 2022–present</p>
+          <div class="work-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><rect x="9" y="2.5" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0"/><path d="M12 17.5V21"/><path d="M8.5 21h7"/></svg>
+          </div>
+          <p class="work-card__role">Personal Project · 2026</p>
+          <h3 class="work-card__title">Karaoq</h3>
+        </div>
+        <div class="work-card__body">
+          <p class="work-card__description">
+            A browser-based karaoke queue manager powered by YouTube. A host spins up
+            a room and shares a 5-character code; singers join from any device, search
+            for songs, queue them, and watch their spot in real time — no apps, no DJ software.
+          </p>
+          <ul class="work-card__stack" role="list">
+            <li class="stack-pill">Next.js</li>
+            <li class="stack-pill">TypeScript</li>
+            <li class="stack-pill">MongoDB</li>
+            <li class="stack-pill">YouTube API</li>
+            <li class="stack-pill">Vercel</li>
+          </ul>
+          <div class="work-card__links">
+            <a href="https://karaoq.live" target="_blank" rel="noopener" class="work-card__link">Visit Karaoq →</a>
+            <a href="https://github.com/annaPerdomo/karaoq" target="_blank" rel="noopener" class="work-card__link work-card__link--git" aria-label="Karaoq source on GitHub">
+              <svg viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.79 2.73 1.27 3.4.97.1-.76.4-1.27.73-1.56-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.2-3.1-.12-.29-.52-1.46.1-3.05 0 0 .98-.31 3.2 1.18a11.1 11.1 0 0 1 5.83 0c2.22-1.5 3.2-1.18 3.2-1.18.63 1.59.23 2.76.11 3.05.75.81 1.2 1.84 1.2 3.1 0 4.43-2.7 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.2.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
+              Source
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <article class="work-card reveal delay-2" style="--card-accent: var(--color-lavender); --card-accent-rgb: 199, 125, 255;">
+        <div class="work-card__header">
+          <div class="work-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><g><path d="M12 12C9.6 8.6 9.4 5.8 11 4.4 11.5 3.9 12.5 3.9 13 4.4 14.6 5.8 14.4 8.6 12 12Z"/><path d="M12 12C9.6 8.6 9.4 5.8 11 4.4 11.5 3.9 12.5 3.9 13 4.4 14.6 5.8 14.4 8.6 12 12Z" transform="rotate(72 12 12)"/><path d="M12 12C9.6 8.6 9.4 5.8 11 4.4 11.5 3.9 12.5 3.9 13 4.4 14.6 5.8 14.4 8.6 12 12Z" transform="rotate(144 12 12)"/><path d="M12 12C9.6 8.6 9.4 5.8 11 4.4 11.5 3.9 12.5 3.9 13 4.4 14.6 5.8 14.4 8.6 12 12Z" transform="rotate(216 12 12)"/><path d="M12 12C9.6 8.6 9.4 5.8 11 4.4 11.5 3.9 12.5 3.9 13 4.4 14.6 5.8 14.4 8.6 12 12Z" transform="rotate(288 12 12)"/></g><circle cx="12" cy="12" r="1.5"/></svg>
+          </div>
+          <p class="work-card__role">Personal Project · 2026</p>
+          <h3 class="work-card__title">Kannanao</h3>
+        </div>
+        <div class="work-card__body">
+          <p class="work-card__description">
+            An AI-powered Japanese flashcard studio. Paste words or upload a PDF and
+            Gemini generates readings, meanings and example sentences. Four practice
+            modes, group learning with invite codes and leaderboards, plus XP, streaks
+            and a cosmetic shop.
+          </p>
+          <ul class="work-card__stack" role="list">
+            <li class="stack-pill">Next.js</li>
+            <li class="stack-pill">React 19</li>
+            <li class="stack-pill">Supabase</li>
+            <li class="stack-pill">Gemini API</li>
+            <li class="stack-pill">MUI</li>
+          </ul>
+          <div class="work-card__links">
+            <a href="https://kannanao.com" target="_blank" rel="noopener" class="work-card__link">Visit Kannanao →</a>
+            <a href="https://github.com/annaPerdomo/kannanao" target="_blank" rel="noopener" class="work-card__link work-card__link--git" aria-label="Kannanao source on GitHub">
+              <svg viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.79 2.73 1.27 3.4.97.1-.76.4-1.27.73-1.56-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.2-3.1-.12-.29-.52-1.46.1-3.05 0 0 .98-.31 3.2 1.18a11.1 11.1 0 0 1 5.83 0c2.22-1.5 3.2-1.18 3.2-1.18.63 1.59.23 2.76.11 3.05.75.81 1.2 1.84 1.2 3.1 0 4.43-2.7 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.2.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
+              Source
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <article class="work-card reveal delay-3" style="--card-accent: var(--color-marigold); --card-accent-rgb: 255, 209, 102;">
+        <div class="work-card__header">
+          <div class="work-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M5 8h12v6a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5Z"/><path d="M17 9h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8 2.5V5"/><path d="M12 2.5V5"/></svg>
+          </div>
+          <p class="work-card__role">Personal Project · 2026</p>
+          <h3 class="work-card__title">Brewhouse LP</h3>
+        </div>
+        <div class="work-card__body">
+          <p class="work-card__description">
+            A fully responsive landing page built for a local coffee shop as a
+            design and development exercise. Clean layout, warm aesthetic, deployed live.
+          </p>
+          <ul class="work-card__stack" role="list">
+            <li class="stack-pill">React</li>
+            <li class="stack-pill">Next.js</li>
+            <li class="stack-pill">CSS</li>
+            <li class="stack-pill">Vercel</li>
+          </ul>
+          <div class="work-card__links">
+            <a href="https://brewhouselp.vercel.app/" target="_blank" rel="noopener" class="work-card__link">View Live Site →</a>
+            <a href="https://github.com/annaPerdomo/BrewHouseLP" target="_blank" rel="noopener" class="work-card__link work-card__link--git" aria-label="Brewhouse LP source on GitHub">
+              <svg viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.79 2.73 1.27 3.4.97.1-.76.4-1.27.73-1.56-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.2-3.1-.12-.29-.52-1.46.1-3.05 0 0 .98-.31 3.2 1.18a11.1 11.1 0 0 1 5.83 0c2.22-1.5 3.2-1.18 3.2-1.18.63 1.59.23 2.76.11 3.05.75.81 1.2 1.84 1.2 3.1 0 4.43-2.7 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.2.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
+              Source
+            </a>
+          </div>
+        </div>
+      </article>
+
+      </div>
+    </div>
+
+    <div class="work__group">
+      <p class="work__group-label">Experience</p>
+      <div class="work__grid">
+
+      <article class="work-card reveal delay-1" style="--card-accent: var(--color-sky); --card-accent-rgb: 72, 202, 228;">
+        <div class="work-card__header">
+          <div class="work-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M2 9 12 4.5 22 9 12 13.5Z"/><path d="M6 11v4.2c0 1.5 2.7 2.6 6 2.6s6-1.1 6-2.6V11"/><path d="M22 9v5.2"/><circle cx="22" cy="15.6" r="0.9" fill="currentColor" stroke="none"/></svg>
+          </div>
+          <p class="work-card__role">Software Development Manager · ReUp Education · 2025–present</p>
+          <h3 class="work-card__title">ReUp Education</h3>
+        </div>
+        <div class="work-card__body">
+          <p class="work-card__description">
+            Joined as a Senior Frontend React Engineer building responsive web apps that
+            help colleges re-engage and graduate the millions of adults who've stopped out —
+            then promoted to Software Development Manager within 10 months. I now lead and
+            mentor the engineering team, own technical design and delivery, and partner with
+            product to ship features that widen access to higher education.
+          </p>
+          <ul class="work-card__stack" role="list">
+            <li class="stack-pill">React</li>
+            <li class="stack-pill">TypeScript</li>
+            <li class="stack-pill">GraphQL</li>
+            <li class="stack-pill">Node.js</li>
+            <li class="stack-pill">AWS</li>
+          </ul>
+          <a href="https://reupeducation.com/" target="_blank" rel="noopener" class="work-card__link">Visit ReUp →</a>
+        </div>
+      </article>
+
+      <article class="work-card reveal delay-2" style="--card-accent: var(--color-coral); --card-accent-rgb: 255, 107, 107;">
+        <div class="work-card__header">
+          <div class="work-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M3 3v15a3 3 0 0 0 3 3h15"/><path d="M7.5 15.5 11 11l3 2.5 5-6.5"/><circle cx="19" cy="7" r="0.6" fill="currentColor" stroke="none"/></svg>
+          </div>
+          <p class="work-card__role">Senior Software Engineer · Encoura · 2022–2025</p>
           <h3 class="work-card__title">MyEncoura</h3>
         </div>
         <div class="work-card__body">
@@ -1763,10 +2489,11 @@
         </div>
       </article>
 
-      <article class="work-card reveal delay-2">
+      <article class="work-card reveal delay-2" style="--card-accent: var(--color-teal); --card-accent-rgb: 0, 201, 167;">
         <div class="work-card__header">
-          <div class="work-card__accent" style="background:var(--color-teal)"></div>
-          <div class="work-card__icon" style="background:rgba(0,201,167,0.12)">📬</div>
+          <div class="work-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7.5 7.4 5.1a1 1 0 0 0 1.2 0L20 7.5"/></svg>
+          </div>
           <p class="work-card__role">Frontend Engineer · Nextradata · 2021–present</p>
           <h3 class="work-card__title">Variablink</h3>
         </div>
@@ -1786,10 +2513,11 @@
         </div>
       </article>
 
-      <article class="work-card reveal delay-3">
+      <article class="work-card reveal delay-3" style="--card-accent: var(--color-lavender); --card-accent-rgb: 199, 125, 255;">
         <div class="work-card__header">
-          <div class="work-card__accent" style="background:var(--color-lavender)"></div>
-          <div class="work-card__icon" style="background:rgba(199,125,255,0.12)">✉️</div>
+          <div class="work-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M21 4 3 11l7 2.6L12.5 21Z"/><path d="M21 4 10 13.6"/></svg>
+          </div>
           <p class="work-card__role">Frontend Engineer · Nextradata · 2021–present</p>
           <h3 class="work-card__title">Novamail</h3>
         </div>
@@ -1809,10 +2537,11 @@
         </div>
       </article>
 
-      <article class="work-card reveal delay-4">
+      <article class="work-card reveal delay-4" style="--card-accent: var(--color-marigold); --card-accent-rgb: 255, 209, 102;">
         <div class="work-card__header">
-          <div class="work-card__accent" style="background:var(--color-marigold)"></div>
-          <div class="work-card__icon" style="background:rgba(255,209,102,0.15)">💼</div>
+          <div class="work-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M8.5 7V5.5A2.5 2.5 0 0 1 11 3h2a2.5 2.5 0 0 1 2.5 2.5V7"/><path d="M3 13h18"/><path d="M11 13h2"/></svg>
+          </div>
           <p class="work-card__role">Full-Stack Engineer · 2018–2021</p>
           <h3 class="work-card__title">JobFit</h3>
         </div>
@@ -1833,28 +2562,7 @@
         </div>
       </article>
 
-      <article class="work-card reveal delay-5">
-        <div class="work-card__header">
-          <div class="work-card__accent" style="background:var(--color-sky)"></div>
-          <div class="work-card__icon" style="background:rgba(72,202,228,0.12)">☕</div>
-          <p class="work-card__role">Personal Project</p>
-          <h3 class="work-card__title">Brewhouse LP</h3>
-        </div>
-        <div class="work-card__body">
-          <p class="work-card__description">
-            A fully responsive landing page built for a local coffee shop as a
-            design and development exercise. Clean layout, warm aesthetic, deployed live.
-          </p>
-          <ul class="work-card__stack" role="list">
-            <li class="stack-pill">React</li>
-            <li class="stack-pill">Next.js</li>
-            <li class="stack-pill">CSS</li>
-            <li class="stack-pill">Vercel</li>
-          </ul>
-          <a href="https://brewhouselp.vercel.app/" target="_blank" rel="noopener" class="work-card__link">View Live Site →</a>
-        </div>
-      </article>
-
+      </div>
     </div>
   </section>
 
@@ -2131,9 +2839,6 @@
        ABOUT
   =================================================================== -->
   <section id="about" class="section about">
-    <div class="about__blob about__blob--1"></div>
-    <div class="about__blob about__blob--2"></div>
-
     <div class="about__grid">
 
       <div class="reveal">
@@ -2143,8 +2848,9 @@
           many <em>strings</em>.
         </h2>
         <p class="about__text">
-          I'm Anna — a Senior Software Engineer based in Southern California with 8+
-          years building front-end-heavy SaaS applications. I specialize in React,
+          I'm Anna — a Senior Software Engineer based in Southern California with
+          <span class="years-coding">8</span>+ years building front-end-heavy SaaS
+          applications. I specialize in React,
           TypeScript, and Material UI, and I love turning complex UX requirements into
           pixel-perfect, accessible interfaces.
         </p>
@@ -2158,13 +2864,6 @@
           every stitch, every note is a variation on a theme.
         </p>
 
-        <nav class="about__links" aria-label="Contact links">
-          <a href="mailto:variationsonastring@gmail.com" class="about__link">✉ Email</a>
-          <a href="https://github.com/annaPerdomo" target="_blank" rel="noopener" class="about__link">⌨ GitHub</a>
-          <a href="https://www.linkedin.com/in/anna-perdomo/" target="_blank" rel="noopener" class="about__link">💼 LinkedIn</a>
-          <a href="https://www.instagram.com/variationsonastring" target="_blank" rel="noopener" class="about__link">📷 Instagram</a>
-          <a href="https://www.youtube.com/@annaperdomo9160" target="_blank" rel="noopener" class="about__link">▶ YouTube</a>
-        </nav>
       </div>
 
       <div class="skills-grid reveal delay-2">
@@ -2239,8 +2938,27 @@
   =================================================================== -->
   <footer class="footer">
     <span class="footer__brand">Variations on a "String"</span>
+
+    <nav class="footer__socials" aria-label="Find me online">
+      <a class="social-link" href="https://www.linkedin.com/in/anna-perdomo/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.4c0-1.3 0-2.95-1.8-2.95s-2.07 1.4-2.07 2.85V21H9z"/></svg>
+      </a>
+      <a class="social-link" href="https://github.com/annaPerdomo" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1.5a10.5 10.5 0 0 0-3.32 20.46c.53.1.72-.23.72-.5l-.01-1.8c-2.92.64-3.54-1.25-3.54-1.25-.48-1.22-1.17-1.54-1.17-1.54-.95-.65.07-.64.07-.64 1.06.08 1.61 1.09 1.61 1.09.94 1.6 2.46 1.14 3.06.87.1-.68.37-1.14.67-1.4-2.33-.27-4.78-1.17-4.78-5.2 0-1.15.41-2.08 1.08-2.82-.11-.27-.47-1.34.1-2.8 0 0 .88-.28 2.88 1.07a10 10 0 0 1 5.24 0c2-1.35 2.88-1.07 2.88-1.07.57 1.46.21 2.53.1 2.8.67.74 1.08 1.67 1.08 2.82 0 4.04-2.46 4.93-4.8 5.19.38.33.71.97.71 1.96l-.01 2.9c0 .28.19.61.73.5A10.5 10.5 0 0 0 12 1.5z"/></svg>
+      </a>
+      <a class="social-link" href="https://www.instagram.com/variationsonastring/" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a class="social-link" href="https://www.youtube.com/@annaperdomo9160" target="_blank" rel="noopener" aria-label="YouTube">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9.5v5l4.5-2.5z" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a class="social-link" href="mailto:variationsonastring@gmail.com" aria-label="Email">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6 8.5-6"/></svg>
+      </a>
+    </nav>
+
     <span class="footer__copy">
-      Built with <span class="footer__heart">♥</span> and a lot of string — © 2025
+      Built with <span class="footer__heart">&#9829;</span> — © <span class="footer-year">2025</span>
     </span>
   </footer>
 
@@ -2253,6 +2971,17 @@
   =================================================================== -->
   <script>
     // -----------------------------------------------------------------
+    // 0. DYNAMIC YEARS OF EXPERIENCE (started coding in 2018)
+    // -----------------------------------------------------------------
+    const currentYear = new Date().getFullYear();
+    document.querySelectorAll('.years-coding').forEach((el) => {
+      el.textContent = currentYear - 2018;
+    });
+    document.querySelectorAll('.footer-year').forEach((el) => {
+      el.textContent = currentYear;
+    });
+
+    // -----------------------------------------------------------------
     // 1. SCROLL-TRIGGERED REVEALS
     //    Elements are visible by default so content never flashes hidden.
     //    We add .needs-reveal just before observing, so only elements
@@ -2262,9 +2991,18 @@
     const revealObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
+          // Work/project cards replay their entrance every time they
+          // scroll into view (up OR down). Everything else animates once.
+          const replays = entry.target.classList.contains('work-card');
+
           if (entry.isIntersecting) {
             entry.target.classList.add('is-visible');
-            revealObserver.unobserve(entry.target); // animate once only
+            if (!replays) {
+              revealObserver.unobserve(entry.target); // animate once only
+            }
+          } else if (replays) {
+            // Reset so the spring + cascade fire again on re-entry
+            entry.target.classList.remove('is-visible');
           }
         });
       },
@@ -2272,11 +3010,14 @@
     );
 
     document.querySelectorAll('.reveal').forEach((el) => {
-      // Check if already in viewport — if so, skip the animation entirely
+      const replays = el.classList.contains('work-card');
+
+      // Check if already in viewport — if so, skip the initial animation.
+      // Work cards always opt in so they can re-hide and replay on scroll.
       const rect = el.getBoundingClientRect();
       const inView = rect.top < window.innerHeight && rect.bottom > 0;
 
-      if (!inView) {
+      if (replays || !inView) {
         el.classList.add('needs-reveal');
       }
 
@@ -2386,6 +3127,46 @@
     window.addEventListener('scroll', () => {
       nav.classList.toggle('scrolled', window.scrollY > 60);
     }, { passive: true });
+
+    // -----------------------------------------------------------------
+    // 5. MOBILE NAV — hamburger drop panel
+    //    Opens the nav links as a full-width panel on phones, with a
+    //    tap-anywhere scrim. Closes on link tap, scrim tap, Escape, or
+    //    when the viewport grows back to the desktop layout.
+    // -----------------------------------------------------------------
+    const navToggle = document.getElementById('nav-toggle');
+    const navScrim  = document.getElementById('nav-scrim');
+    const navLinks  = document.getElementById('nav-links');
+
+    function setMenu(open) {
+      nav.classList.toggle('is-menu-open', open);
+      navToggle.setAttribute('aria-expanded', String(open));
+      navToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      navScrim.hidden = !open;
+    }
+
+    navToggle.addEventListener('click', () => {
+      setMenu(!nav.classList.contains('is-menu-open'));
+    });
+
+    navScrim.addEventListener('click', () => setMenu(false));
+
+    navLinks.addEventListener('click', (e) => {
+      if (e.target.closest('a')) setMenu(false);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && nav.classList.contains('is-menu-open')) {
+        setMenu(false);
+        navToggle.focus();
+      }
+    });
+
+    // If the menu is open and the screen widens past the mobile breakpoint,
+    // reset state so the desktop layout never inherits the open panel.
+    window.matchMedia('(min-width: 601px)').addEventListener('change', (e) => {
+      if (e.matches) setMenu(false);
+    });
   </script>
 
 </body>
