@@ -687,7 +687,6 @@
       position: relative;
       width: 300px;
       height: 300px;
-      animation: float 6s ease-in-out infinite;
     }
 
     /* SVG path drawing classes */
@@ -836,12 +835,14 @@
 
     .work__grid {
       /* Flex wrap keeps every card the same size and centers any
-         partially-filled last row instead of leaving an empty slot */
+         partially-filled last row instead of leaving an empty slot.
+         Wide enough that a 4-card (Projects) or 5-card (Experience)
+         group sits on a single row on laptop/desktop. */
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 28px;
-      max-width: 1100px;
+      max-width: 1560px;
       margin: 0 auto;
     }
 
@@ -876,9 +877,15 @@
     }
 
     .work-card {
-      /* 3 per row at max width; the last row stays centered via the grid */
-      flex: 1 1 320px;
-      max-width: 348px;
+      /* Cards flex down so a whole group fits one row on wide screens,
+         then wrap (and stay centered) as the viewport narrows */
+      flex: 1 1 260px;
+      max-width: 360px;
+      /* Column layout + a baseline height so a card that's alone on its
+         row (or has short copy) keeps the same presence as a full row */
+      display: flex;
+      flex-direction: column;
+      min-height: 432px;
       /* Accent-tinted surface + a soft glow blooming from the top-left */
       background:
         radial-gradient(120% 90% at 0% 0%, rgba(var(--card-accent-rgb), 0.14), transparent 60%),
@@ -993,6 +1000,9 @@
 
     .work-card__body {
       padding: 20px 32px 32px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
     }
 
     .work-card__description {
@@ -1059,6 +1069,9 @@
       flex-wrap: wrap;
       align-items: center;
       gap: 12px 24px;
+      /* Pin the CTA row to the bottom so it lines up across cards
+         regardless of how long each description runs */
+      margin-top: auto;
     }
 
     /* Secondary "source" link — quieter than the primary live link,
@@ -1674,17 +1687,21 @@
       letter-spacing: 0.03em;
     }
 
-    .skill-block__bar {
-      margin-top: 12px;
-      height: 3px;
-      background: var(--color-on-dark-faint);
-      border-radius: 2px;
-      overflow: hidden;
+    .skill-since {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      color: var(--color-on-dark-muted);
     }
-
-    .skill-block__bar-fill {
-      height: 100%;
-      border-radius: 2px;
+    .skill-since__dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex: none;
     }
 
     /* Fun facts row */
@@ -2379,7 +2396,7 @@
             <li class="stack-pill">Vercel</li>
           </ul>
           <div class="work-card__links">
-            <a href="https://karaoq.live" target="_blank" rel="noopener" class="work-card__link">Visit Karaoq →</a>
+            <a href="https://karaoq.live" target="_blank" rel="noopener" class="work-card__link">Visit Live Site →</a>
             <a href="https://github.com/annaPerdomo/karaoq" target="_blank" rel="noopener" class="work-card__link work-card__link--git" aria-label="Karaoq source on GitHub">
               <svg viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.79 2.73 1.27 3.4.97.1-.76.4-1.27.73-1.56-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.2-3.1-.12-.29-.52-1.46.1-3.05 0 0 .98-.31 3.2 1.18a11.1 11.1 0 0 1 5.83 0c2.22-1.5 3.2-1.18 3.2-1.18.63 1.59.23 2.76.11 3.05.75.81 1.2 1.84 1.2 3.1 0 4.43-2.7 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.2.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
               Source
@@ -2411,7 +2428,7 @@
             <li class="stack-pill">MUI</li>
           </ul>
           <div class="work-card__links">
-            <a href="https://kannanao.com" target="_blank" rel="noopener" class="work-card__link">Visit Kannanao →</a>
+            <a href="https://kannanao.com" target="_blank" rel="noopener" class="work-card__link">Visit Live Site →</a>
             <a href="https://github.com/annaPerdomo/kannanao" target="_blank" rel="noopener" class="work-card__link work-card__link--git" aria-label="Kannanao source on GitHub">
               <svg viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.79 2.73 1.27 3.4.97.1-.76.4-1.27.73-1.56-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.2-3.1-.12-.29-.52-1.46.1-3.05 0 0 .98-.31 3.2 1.18a11.1 11.1 0 0 1 5.83 0c2.22-1.5 3.2-1.18 3.2-1.18.63 1.59.23 2.76.11 3.05.75.81 1.2 1.84 1.2 3.1 0 4.43-2.7 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.2.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
               Source
@@ -2425,7 +2442,7 @@
           <div class="work-card__icon" aria-hidden="true">
             <svg viewBox="0 0 24 24"><path d="M5 8h12v6a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5Z"/><path d="M17 9h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8 2.5V5"/><path d="M12 2.5V5"/></svg>
           </div>
-          <p class="work-card__role">Personal Project · 2026</p>
+          <p class="work-card__role">Personal Project · 2023</p>
           <h3 class="work-card__title">Brewhouse LP</h3>
         </div>
         <div class="work-card__body">
@@ -2440,10 +2457,42 @@
             <li class="stack-pill">Vercel</li>
           </ul>
           <div class="work-card__links">
-            <a href="https://brewhouselp.vercel.app/" target="_blank" rel="noopener" class="work-card__link">View Live Site →</a>
+            <a href="https://brewhouselp.vercel.app/" target="_blank" rel="noopener" class="work-card__link">Visit Live Site →</a>
             <a href="https://github.com/annaPerdomo/BrewHouseLP" target="_blank" rel="noopener" class="work-card__link work-card__link--git" aria-label="Brewhouse LP source on GitHub">
               <svg viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.79 2.73 1.27 3.4.97.1-.76.4-1.27.73-1.56-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.2-3.1-.12-.29-.52-1.46.1-3.05 0 0 .98-.31 3.2 1.18a11.1 11.1 0 0 1 5.83 0c2.22-1.5 3.2-1.18 3.2-1.18.63 1.59.23 2.76.11 3.05.75.81 1.2 1.84 1.2 3.1 0 4.43-2.7 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.2.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
               Source
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <article class="work-card reveal delay-4" style="--card-accent: var(--color-teal); --card-accent-rgb: 0, 201, 167;">
+        <div class="work-card__header">
+          <div class="work-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M8 4h8v3.5a4 4 0 0 1-8 0Z"/><path d="M8 5H5.5a2.5 2.5 0 0 0 0 5H8.5"/><path d="M16 5h2.5a2.5 2.5 0 0 1 0 5H15.5"/><path d="M12 11.5V15"/><path d="M9 20h6l-.5-5h-5Z"/></svg>
+          </div>
+          <p class="work-card__role">🏆 1st Place · All-Women Global Virtual Hackathon · 2021</p>
+          <h3 class="work-card__title">Let's Disco</h3>
+        </div>
+        <div class="work-card__body">
+          <p class="work-card__description">
+            1st-place winner at the 2021 All-Women Global Virtual Hackathon hosted by
+            The Expat Woman. Let's Disco is a SaaS platform that connects refugee women
+            with remote ESL teachers — letting women managing childcare, limited
+            transportation, or tight budgets learn English safely from home on a
+            flexible schedule.
+          </p>
+          <ul class="work-card__stack" role="list">
+            <li class="stack-pill">SaaS</li>
+            <li class="stack-pill">Figma</li>
+            <li class="stack-pill">Product Design</li>
+            <li class="stack-pill">Social Impact</li>
+          </ul>
+          <div class="work-card__links">
+            <a href="https://www.figma.com/proto/v1BPv0c7is2hrtlVCA5Hws/Let-s-Disco?node-id=351-3240&p=f&t=irWQFticGs4BrAK6-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener" class="work-card__link">View Figma Prototype →</a>
+            <a href="https://www.youtube.com/watch?v=wpBDWXHUG5c" target="_blank" rel="noopener" class="work-card__link work-card__link--git" aria-label="Let's Disco promo video on YouTube">
+              <svg viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M23 12c0-2.4-.3-4.1-.5-5-.3-1-1-1.7-2-2C18.7 4.5 12 4.5 12 4.5s-6.7 0-8.5.5c-1 .3-1.7 1-2 2-.2.9-.5 2.6-.5 5s.3 4.1.5 5c.3 1 1 1.7 2 2 1.8.5 8.5.5 8.5.5s6.7 0 8.5-.5c1-.3 1.7-1 2-2 .2-.9.5-2.6.5-5ZM10 15.5v-7l6 3.5Z"/></svg>
+              Promo Video
             </a>
           </div>
         </div>
@@ -2479,7 +2528,7 @@
             <li class="stack-pill">Node.js</li>
             <li class="stack-pill">AWS</li>
           </ul>
-          <a href="https://reupeducation.com/" target="_blank" rel="noopener" class="work-card__link">Visit ReUp →</a>
+          <a href="https://reupeducation.com/" target="_blank" rel="noopener" class="work-card__link">Visit Platform →</a>
         </div>
       </article>
 
@@ -2504,7 +2553,7 @@
             <li class="stack-pill">GraphQL</li>
             <li class="stack-pill">Next.js</li>
           </ul>
-          <a href="https://www.encoura.org/encoura-platform/" target="_blank" rel="noopener" class="work-card__link">View Platform →</a>
+          <a href="https://www.encoura.org/encoura-platform/" target="_blank" rel="noopener" class="work-card__link">Visit Platform →</a>
         </div>
       </article>
 
@@ -2528,7 +2577,7 @@
             <li class="stack-pill">Node.js</li>
             <li class="stack-pill">CSS</li>
           </ul>
-          <a href="https://www.nextradata.com/" target="_blank" rel="noopener" class="work-card__link">View Site →</a>
+          <a href="https://www.nextradata.com/" target="_blank" rel="noopener" class="work-card__link">Visit Platform →</a>
         </div>
       </article>
 
@@ -2552,7 +2601,7 @@
             <li class="stack-pill">Node.js</li>
             <li class="stack-pill">CSS</li>
           </ul>
-          <a href="https://go.novamail.app/" target="_blank" rel="noopener" class="work-card__link">View App →</a>
+          <a href="https://go.novamail.app/" target="_blank" rel="noopener" class="work-card__link">Visit Live Site →</a>
         </div>
       </article>
 
@@ -2577,7 +2626,7 @@
             <li class="stack-pill">Node.js</li>
             <li class="stack-pill">MySQL</li>
           </ul>
-          <a href="https://getjobfit.ai/" target="_blank" rel="noopener" class="work-card__link">View Site →</a>
+          <a href="https://getjobfit.ai/" target="_blank" rel="noopener" class="work-card__link">Visit Live Site →</a>
         </div>
       </article>
 
@@ -2890,44 +2939,39 @@
           <div class="skill-block__icon">⚛️</div>
           <h3 class="skill-block__name">Front-end</h3>
           <p class="skill-block__detail">React, TypeScript, Material UI, Next.js, Redux</p>
-          <div class="skill-block__bar"><div class="skill-block__bar-fill" style="width:97%;background:var(--color-coral)"></div></div>
+          <div class="skill-since"><span class="skill-since__dot" style="background:var(--color-coral)"></span><span class="skill-since__text" data-since="2018"></span></div>
         </div>
         <div class="skill-block">
           <div class="skill-block__icon">🗄️</div>
           <h3 class="skill-block__name">Back-end</h3>
           <p class="skill-block__detail">Node.js, Express, GraphQL, MySQL, MongoDB</p>
-          <div class="skill-block__bar"><div class="skill-block__bar-fill" style="width:85%;background:var(--color-teal)"></div></div>
-        </div>
-        <div class="skill-block">
-          <div class="skill-block__icon">🛠️</div>
-          <h3 class="skill-block__name">Tooling</h3>
-          <p class="skill-block__detail">webpack, Firebase, Twilio, Mixpanel, Figma</p>
-          <div class="skill-block__bar"><div class="skill-block__bar-fill" style="width:88%;background:var(--color-lavender)"></div></div>
+          <div class="skill-since"><span class="skill-since__dot" style="background:var(--color-teal)"></span><span class="skill-since__text" data-since="2018"></span></div>
         </div>
         <div class="skill-block">
           <div class="skill-block__icon">🎓</div>
           <h3 class="skill-block__name">Education</h3>
           <p class="skill-block__detail">Hack Reactor — Advanced JS · CSUF — B.A. Japanese</p>
-          <div class="skill-block__bar"><div class="skill-block__bar-fill" style="width:100%;background:var(--color-marigold)"></div></div>
+          <div class="skill-since"><span class="skill-since__dot" style="background:var(--color-marigold)"></span>2003 – 2011</div>
         </div>
         <div class="skill-block">
           <div class="skill-block__icon">🧶</div>
           <h3 class="skill-block__name">Fiber Arts</h3>
           <p class="skill-block__detail">Crochet, knitting, cross-stitch, sewing, nail art</p>
-          <div class="skill-block__bar"><div class="skill-block__bar-fill" style="width:99%;background:var(--color-blush)"></div></div>
+          <div class="skill-since"><span class="skill-since__dot" style="background:var(--color-blush)"></span><span class="skill-since__text" data-since="1997"></span></div>
         </div>
         <div class="skill-block">
           <div class="skill-block__icon">🎵</div>
           <h3 class="skill-block__name">Music</h3>
           <p class="skill-block__detail">Piano, vocals, singing &amp; performance</p>
-          <div class="skill-block__bar"><div class="skill-block__bar-fill" style="width:88%;background:var(--color-sky)"></div></div>
+          <div class="skill-since"><span class="skill-since__dot" style="background:var(--color-sky)"></span><span class="skill-since__text" data-since="2004"></span></div>
         </div>
         <div class="skill-block">
           <div class="skill-block__icon">🎬</div>
           <h3 class="skill-block__name">Video Production</h3>
           <p class="skill-block__detail">Filming, editing, post-production &amp; storytelling</p>
-          <div class="skill-block__bar"><div class="skill-block__bar-fill" style="width:82%;background:var(--color-marigold)"></div></div>
+          <div class="skill-since"><span class="skill-since__dot" style="background:var(--color-marigold)"></span><span class="skill-since__text" data-since="2004"></span></div>
         </div>
+
       </div>
 
       <div class="about__stats reveal delay-3">
@@ -2998,6 +3042,11 @@
     });
     document.querySelectorAll('.footer-year').forEach((el) => {
       el.textContent = currentYear;
+    });
+    document.querySelectorAll('.skill-since__text[data-since]').forEach((el) => {
+      const since = Number(el.dataset.since);
+      const years = currentYear - since;
+      el.textContent = `since ${since} · ${years} yr${years === 1 ? '' : 's'}`;
     });
 
     // -----------------------------------------------------------------
