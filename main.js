@@ -6,7 +6,7 @@
  *   0. Derived stats (years coding, SaaS shipped)
  *   1. Scroll-triggered reveal animations
  *   2. Dark-mode toggle (initial theme is set pre-paint in <head>)
- *   3. Craft gallery filter + show more/fewer
+ *   3. Handmade gallery filter + show more/fewer
  *   4. Nav shadow on scroll
  *   5. Mobile nav drop panel
  *   6. Footer greeting
@@ -94,33 +94,33 @@ themeToggle.addEventListener('click', () => {
 });
 
 // -----------------------------------------------------------------
-// 3. CRAFT GALLERY — FILTER + SHOW MORE / SHOW FEWER
+// 3. HANDMADE GALLERY — FILTER + SHOW MORE / SHOW FEWER
 //    Filtering hides non-matching cards entirely.
 //    Only the first INITIAL_VISIBLE matching cards show by default;
 //    the "Show all" button reveals the rest.
 // -----------------------------------------------------------------
 const INITIAL_VISIBLE = 12;
 
-const allCraftCards  = Array.from(document.querySelectorAll('.craft-card'));
+const allHandmadeCards  = Array.from(document.querySelectorAll('.handmade-card'));
 const showMoreBtn    = document.getElementById('show-more-btn');
-const hiddenCountEl  = document.getElementById('crafts-hidden-count');
-const craftsFooter   = document.getElementById('crafts-footer');
+const hiddenCountEl  = document.getElementById('handmade-hidden-count');
+const handmadeFooter   = document.getElementById('handmade-footer');
 
 let currentFilter = 'all';
 let isExpanded    = false;
 
 function getMatchingCards() {
-  return allCraftCards.filter((card) =>
+  return allHandmadeCards.filter((card) =>
     currentFilter === 'all' || card.dataset.cat === currentFilter
   );
 }
 
-function renderCraftCards() {
+function renderHandmadeCards() {
   const matching = getMatchingCards();
   const limit    = isExpanded ? matching.length : INITIAL_VISIBLE;
   const hidden   = Math.max(0, matching.length - limit);
 
-  allCraftCards.forEach((card) => {
+  allHandmadeCards.forEach((card) => {
     const matches      = currentFilter === 'all' || card.dataset.cat === currentFilter;
     const withinLimit  = matches && matching.indexOf(card) < limit;
 
@@ -130,15 +130,15 @@ function renderCraftCards() {
 
   // Update the show-more button text
   if (hidden > 0) {
-    showMoreBtn.textContent = 'Show all crafts ';
+    showMoreBtn.textContent = 'Show all ';
     hiddenCountEl.textContent = '(+' + hidden + ' more)';
     showMoreBtn.appendChild(hiddenCountEl);
-    craftsFooter.style.display = 'block';
+    handmadeFooter.style.display = 'block';
   } else if (isExpanded && matching.length > INITIAL_VISIBLE) {
     showMoreBtn.textContent = 'Show fewer';
-    craftsFooter.style.display = 'block';
+    handmadeFooter.style.display = 'block';
   } else {
-    craftsFooter.style.display = 'none';
+    handmadeFooter.style.display = 'none';
   }
 
   showMoreBtn.setAttribute('aria-expanded', String(isExpanded));
@@ -152,17 +152,17 @@ document.querySelectorAll('.filter-btn').forEach((btn) => {
     document.querySelectorAll('.filter-btn').forEach((b) => b.classList.remove('is-active'));
     btn.classList.add('is-active');
 
-    renderCraftCards();
+    renderHandmadeCards();
   });
 });
 
 showMoreBtn.addEventListener('click', () => {
   isExpanded = !isExpanded;
-  renderCraftCards();
+  renderHandmadeCards();
 });
 
 // Initial render on page load
-renderCraftCards();
+renderHandmadeCards();
 
 // -----------------------------------------------------------------
 // 4. NAV SHADOW ON SCROLL

@@ -13,7 +13,7 @@ maintain.
 | ------------ | -------------------------------------------------------------- |
 | `index.html` | Markup and content only.                                       |
 | `styles.css` | All styles. Design tokens (color, type, spacing) live at the top under `:root`; light/dark themes are driven by a `data-theme` attribute. |
-| `main.js`    | Progressive enhancement: scroll reveals, dark-mode toggle, craft-gallery filter, nav, mobile menu. Loaded as a deferred ES module. |
+| `main.js`    | Progressive enhancement: scroll reveals, dark-mode toggle, handmade-gallery filter, nav, mobile menu. Loaded as a deferred ES module. |
 | `og-image.jpg`, `logo.png` | Social preview image and brand mark. |
 | `vercel.json` | Zero-build deploy config (serves the repo root as static). |
 
