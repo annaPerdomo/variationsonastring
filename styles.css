@@ -800,13 +800,15 @@ img {
 .work__grid {
   /* Flex wrap keeps every card the same size and centers any
      partially-filled last row instead of leaving an empty slot.
-     Wide enough that a 4-card (Projects) or 5-card (Experience)
-     group sits on a single row on laptop/desktop. */
+     Capped narrow enough that cards settle into a roomy 3-up
+     layout on laptop/desktop — wider columns so the rich copy in
+     each card has room to breathe instead of stacking into tall,
+     scrunched ribbons. */
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 28px;
-  max-width: 1560px;
+  gap: 32px;
+  max-width: 1160px;
   margin: 0 auto;
 }
 
@@ -841,9 +843,10 @@ img {
 }
 
 .work-card {
-  /* Cards flex down so a whole group fits one row on wide screens,
-     then wrap (and stay centered) as the viewport narrows */
-  flex: 1 1 260px;
+  /* Wide flex-basis so cards settle 3-up on desktop (a 4th won't fit
+     the capped grid) and each reaches its full width — roomy columns
+     that let the copy breathe — then wrap, centered, as it narrows */
+  flex: 1 1 320px;
   max-width: 360px;
   /* Column layout + a baseline height so a card that's alone on its
      row (or has short copy) keeps the same presence as a full row */
