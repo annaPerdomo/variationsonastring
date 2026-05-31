@@ -2,5 +2,16 @@
   "buildCommand": null,
   "outputDirectory": ".",
   "installCommand": null,
-  "framework": null
+  "framework": null,
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/cnuic-gloves", "destination": "/#handmade", "permanent": true },
+    { "source": "/meet-zeus-and-ananke", "destination": "/#handmade", "permanent": true },
+    { "source": "/a-stocking-full-of-snow", "destination": "/#handmade", "permanent": true },
+    { "source": "/sock-monkey-mittens", "destination": "/#handmade", "permanent": true },
+    { "source": "/muriel", "destination": "/#handmade", "permanent": true },
+    { "source": "/here-be-dragons", "destination": "/#handmade", "permanent": true },
+    { "source": "/store", "destination": "/#handmade", "permanent": true }
+  ]
 }
