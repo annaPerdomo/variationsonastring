@@ -4,7 +4,7 @@
 
 ### Storyteller. Problem solver. One string at a time.
 
-My developer portfolio — a fast, dependency-free site built with vanilla **HTML, CSS, and JavaScript**. No framework, no build step, no runtime: the browser loads three static files directly. It showcases my engineering work, a handmade-goods gallery, and video projects, with a polished light/dark theme.
+My developer portfolio — a fast, dependency-free site built with vanilla **HTML, CSS, and JavaScript**. No framework, no build step, no runtime: the browser loads three static files directly. It showcases my engineering work alongside my creative work as an artisan, musician, and video editor — all in a polished light/dark theme.
 
 [![Live Site](https://img.shields.io/badge/Visit-variationsonastring.com-7C3AED?style=for-the-badge&logo=vercel&logoColor=white)](https://www.variationsonastring.com)
 
@@ -23,7 +23,7 @@ My developer portfolio — a fast, dependency-free site built with vanilla **HTM
 | ------------ | -------------------------------------------------------------- |
 | `index.html` | Markup and content only.                                       |
 | `styles.css` | All styles. Design tokens (color, type, spacing) live at the top under `:root`; light/dark themes are driven by a `data-theme` attribute. |
-| `main.js`    | Progressive enhancement: scroll reveals, dark-mode toggle, handmade-gallery filter, nav, mobile menu. Loaded as a deferred ES module. |
+| `main.js`    | Progressive enhancement: scroll reveals, dark-mode toggle, creative-work gallery filter, nav, mobile menu. Loaded as a deferred ES module. |
 | `og-image.jpg`, `logo.png` | Social preview image and brand mark. |
 | `vercel.json` | Zero-build deploy config (serves the repo root as static). |
 
