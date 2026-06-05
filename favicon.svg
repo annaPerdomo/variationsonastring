@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- "Woven Score" mark, favicon variant: bold code braces { } framing a
+       single coral eighth note. Staff lines dropped for legibility at small
+       sizes; matches favicon.ico / the PNG icons. -->
+  <rect width="200" height="200" rx="44" fill="#1a1a2e"/>
+  <g transform="translate(8.5,38) scale(0.82)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <g stroke="#fdf9f3" stroke-width="11">
+      <path d="M44 18 C34 18 26 28 26 40 L26 58 C26 66 20 72 12 72 C20 72 26 78 26 86 L26 100 C26 114 34 124 44 124"/>
+      <path d="M156 18 C166 18 174 28 174 40 L174 58 C174 66 180 72 188 72 C180 72 174 78 174 86 L174 100 C174 114 166 124 156 124"/>
+    </g>
+    <path d="M110 82 L110 24 C112 30 118 42 124 50 C128 56 130 60 128 64" stroke="#ff6b6b" stroke-width="7"/>
+    <ellipse cx="100" cy="88" rx="15" ry="11" fill="#ff6b6b" stroke="none" transform="rotate(-20 100 88)"/>
+  </g>
+</svg>

@@ -79,11 +79,17 @@
     rel="stylesheet"
   />
 
-  <!-- Favicon: simplified "Woven Score" mark — code braces { } framing a
-       staff with a single coral eighth note (yarn-ball wraps dropped at this
-       size, per the design's 32px simplified spec). -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231a1a2e'/><g transform='translate(-0.7,4.2) scale(0.167)'><g fill='none' stroke='%23fdf9f3' stroke-linecap='round' stroke-linejoin='round' stroke-width='7'><path d='M44 18 C34 18 26 28 26 40 L26 58 C26 66 20 72 12 72 C20 72 26 78 26 86 L26 100 C26 114 34 124 44 124'/><path d='M156 18 C166 18 174 28 174 40 L174 58 C174 66 180 72 188 72 C180 72 174 78 174 86 L174 100 C174 114 166 124 156 124'/></g><g stroke='%23fdf9f3' stroke-width='2' opacity='0.30'><line x1='48' y1='34' x2='152' y2='34'/><line x1='48' y1='52' x2='152' y2='52'/><line x1='48' y1='70' x2='152' y2='70'/><line x1='48' y1='88' x2='152' y2='88'/><line x1='48' y1='106' x2='152' y2='106'/></g><path d='M110 82 L110 24 C112 30 118 42 124 50 C128 56 130 60 128 64' fill='none' stroke='%23ff6b6b' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/><ellipse cx='100' cy='88' rx='12' ry='8' fill='%23ff6b6b' transform='rotate(-20 100 88)'/></g></svg>" />
-  <link rel="alternate icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231a1a2e'/><g transform='translate(-0.7,4.2) scale(0.167)'><g fill='none' stroke='%23fdf9f3' stroke-linecap='round' stroke-linejoin='round' stroke-width='7'><path d='M44 18 C34 18 26 28 26 40 L26 58 C26 66 20 72 12 72 C20 72 26 78 26 86 L26 100 C26 114 34 124 44 124'/><path d='M156 18 C166 18 174 28 174 40 L174 58 C174 66 180 72 188 72 C180 72 174 78 174 86 L174 100 C174 114 166 124 156 124'/></g><g stroke='%23fdf9f3' stroke-width='2' opacity='0.30'><line x1='48' y1='34' x2='152' y2='34'/><line x1='48' y1='52' x2='152' y2='52'/><line x1='48' y1='70' x2='152' y2='70'/><line x1='48' y1='88' x2='152' y2='88'/><line x1='48' y1='106' x2='152' y2='106'/></g><path d='M110 82 L110 24 C112 30 118 42 124 50 C128 56 130 60 128 64' fill='none' stroke='%23ff6b6b' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/><ellipse cx='100' cy='88' rx='12' ry='8' fill='%23ff6b6b' transform='rotate(-20 100 88)'/></g></svg>" />
+  <!-- Favicon: bold "Woven Score" mark — code braces { } framing a single
+       coral eighth note. Real files at known paths so the icon resolves
+       everywhere (browser tabs, bookmarks, Vercel/GitHub dashboards, link
+       crawlers, iOS home screen), not just in tabs that parse this HTML.
+       Staff lines dropped & strokes thickened for legibility at small sizes. -->
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
 
   <!-- Apply the saved/OS color theme before first paint so the page
        never flashes the wrong palette (FOUC). Kept inline and
