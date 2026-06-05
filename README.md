@@ -1,11 +1,21 @@
-# variationsonastring.com
+<div align="center">
 
-Personal portfolio for Anna Mendez Perdomo — full-stack developer & maker of things.
+# Variations on a String
 
-A single-page site built as plain, dependency-free HTML/CSS/JS. No build
-step, no framework, no runtime: the browser loads three static files
-directly. This keeps the site fast, easy to host anywhere, and trivial to
-maintain.
+### Storyteller. Problem solver. One string at a time.
+
+My developer portfolio — a fast, dependency-free site built with vanilla **HTML, CSS, and JavaScript**. No framework, no build step, no runtime: the browser loads three static files directly. It showcases my engineering work, a handmade-goods gallery, and video projects, with a polished light/dark theme.
+
+[![Live Site](https://img.shields.io/badge/Visit-variationsonastring.com-7C3AED?style=for-the-badge&logo=vercel&logoColor=white)](https://www.variationsonastring.com)
+
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat&logo=vercel&logoColor=white)
+
+<img src="docs/screenshot.png" alt="variationsonastring.com — developer portfolio" width="100%" />
+
+</div>
 
 ## Project structure
 
