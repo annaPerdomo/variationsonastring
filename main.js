@@ -9,7 +9,12 @@
  *   3. Handmade gallery filter + show more/fewer
  *   4. Nav shadow on scroll
  *   5. Mobile nav drop panel
- *   6. Footer greeting
+ *   7. Proof-band count-up numbers
+ *   8. Case-study inline SVG charts + tooltips
+ *   9. Screenshot galleries + lightbox
+ *  10. Demo video autoplay-in-view
+ *  12. Lightbox media types (image / MP4 / YouTube)
+ *  14. Case toggle — opens/closes a case study's detail panel
  */
 
 // -----------------------------------------------------------------
@@ -26,12 +31,6 @@ document.querySelectorAll('.skill-since__text[data-since]').forEach((el) => {
   const since = Number(el.dataset.since);
   const years = currentYear - since;
   el.textContent = `since ${since} · ${years} yr${years === 1 ? '' : 's'}`;
-});
-// SaaS platforms shipped = work cards tagged with data-saas
-// (every shipped SaaS in Experience + live personal SaaS projects)
-const saasShipped = document.querySelectorAll('.work-card[data-saas]').length;
-document.querySelectorAll('.saas-shipped').forEach((el) => {
-  el.textContent = saasShipped;
 });
 
 // -----------------------------------------------------------------
@@ -273,41 +272,335 @@ window.matchMedia('(min-width: 601px)').addEventListener('change', (e) => {
 });
 
 // -----------------------------------------------------------------
-// 6. "SAY HELLO" → FOOTER GREETING PULSE
-//    On click, let the smooth scroll travel to the footer, then play
-//    a brief grow-and-settle so it lands with a little wave.
+// 7. PROOF BAND — count-up numbers when they scroll into view
+//    Targets: [data-count]. Optional data-decimals, data-sep (thousands).
 // -----------------------------------------------------------------
-const greetBtn = document.querySelector('a[href="#connect"]');
-const footerEl = document.getElementById('connect');
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-if (greetBtn && footerEl) {
-  let greetArmed = false;
-
-  // Strip the class only when the LAST staggered circle finishes —
-  // animationend bubbles, so an earlier circle's event would
-  // otherwise cut the later ones off mid-animation.
-  footerEl.addEventListener('animationend', (e) => {
-    const links = footerEl.querySelectorAll('.social-link');
-    if (e.target === links[links.length - 1]) {
-      footerEl.classList.remove('footer--greet');
-    }
-  });
-
-  // Fire the pulse the moment the footer scrolls into view *after*
-  // a click — robust regardless of how long the smooth scroll takes.
-  const greetObserver = new IntersectionObserver((entries) => {
-    if (greetArmed && entries[0].isIntersecting) {
-      greetArmed = false;
-      footerEl.classList.remove('footer--greet');
-      // Reflow so the animation restarts if it played recently.
-      void footerEl.offsetWidth;
-      footerEl.classList.add('footer--greet');
-    }
-  }, { threshold: 0.4 });
-
-  greetObserver.observe(footerEl);
-
-  greetBtn.addEventListener('click', () => {
-    greetArmed = true;
-  });
+function formatCount(value, decimals, sep) {
+  const fixed = value.toFixed(decimals);
+  if (!sep) return fixed;
+  const [int, frac] = fixed.split('.');
+  const grouped = int.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return frac ? `${grouped}.${frac}` : grouped;
 }
+
+function countUp(el) {
+  const target   = Number(el.dataset.count);
+  const decimals = Number(el.dataset.decimals || 0);
+  const sep      = 'sep' in el.dataset;
+  if (reduceMotion || !Number.isFinite(target)) {
+    el.textContent = formatCount(target, decimals, sep);
+    return;
+  }
+  const duration = 1400;
+  const start = performance.now();
+  const tick = (now) => {
+    const t = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - t, 3);
+    el.textContent = formatCount(target * eased, decimals, sep);
+    if (t < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
+const countObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    countUp(entry.target);
+    countObserver.unobserve(entry.target);
+  });
+}, { threshold: 0.6 });
+
+document.querySelectorAll('[data-count]').forEach((el) => countObserver.observe(el));
+
+// -----------------------------------------------------------------
+// 8. CASE-STUDY CHARTS — tiny inline-SVG bar charts, no library.
+//    Contract with the markup: .chart__plot carries data-chart="hbar|vbar"
+//    and a JSON data-series of [label, value] pairs, one series per chart.
+// -----------------------------------------------------------------
+const SVG_NS = 'http://www.w3.org/2000/svg';
+const tip = document.getElementById('chart-tip');
+
+function svgEl(name, attrs = {}) {
+  const el = document.createElementNS(SVG_NS, name);
+  Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v));
+  return el;
+}
+
+function bindTip(mark, label, valueText) {
+  if (!tip) return;
+  const show = (e) => {
+    tip.innerHTML = `<b>${label}</b> · ${valueText}`;
+    tip.hidden = false;
+    move(e);
+  };
+  const move = (e) => {
+    const p = e.touches ? e.touches[0] : e;
+    tip.style.left = `${p.clientX}px`;
+    tip.style.top  = `${p.clientY}px`;
+  };
+  const hide = () => { tip.hidden = true; };
+  mark.addEventListener('mouseenter', show);
+  mark.addEventListener('mousemove', move);
+  mark.addEventListener('mouseleave', hide);
+  mark.addEventListener('touchstart', show, { passive: true });
+  mark.addEventListener('touchend', hide);
+}
+
+// Rows labelled "Everywhere else" render muted — it's a remainder, not a
+// category.
+function drawHBar(plot, series) {
+  const rowH = 30, labelW = 118, valueW = 44, barH = 12;
+  const width = 480;
+  const height = series.length * rowH;
+  const max = Math.max(...series.map(([, v]) => v));
+  const svg = svgEl('svg', { viewBox: `0 0 ${width} ${height}`, role: 'img', 'aria-hidden': 'true' });
+  const trackW = width - labelW - valueW;
+
+  series.forEach(([label, value], i) => {
+    const y = i * rowH + (rowH - barH) / 2;
+    const isOther = /else|other/i.test(label);
+    const lbl = svgEl('text', { x: 0, y: y + barH / 2 + 4, class: isOther ? 'lbl lbl--muted' : 'lbl' });
+    lbl.textContent = label;
+    svg.appendChild(lbl);
+
+    svg.appendChild(svgEl('rect', { x: labelW, y, width: trackW, height: barH, rx: 4, class: 'bar-track' }));
+
+    const w = Math.max(6, (value / max) * trackW);
+    const bar = svgEl('rect', { x: labelW, y, width: w, height: barH, rx: 4, class: isOther ? 'bar bar--muted' : 'bar', style: `--i:${i}` });
+    svg.appendChild(bar);
+
+    const val = svgEl('text', { x: width, y: y + barH / 2 + 4, 'text-anchor': 'end', class: 'val' });
+    val.textContent = `${value}%`;
+    svg.appendChild(val);
+
+    // Oversized invisible hit target so the tooltip is easy to reach
+    const hit = svgEl('rect', { x: 0, y: i * rowH, width, height: rowH, fill: 'transparent' });
+    bindTip(hit, label, `${value}% of visitors`);
+    svg.appendChild(hit);
+  });
+  plot.appendChild(svg);
+}
+
+function drawVBar(plot, series) {
+  const width = 480, height = 200, padB = 26, padT = 18, gap = 14;
+  const max = Math.max(...series.map(([, v]) => v));
+  const niceMax = Math.ceil(max / 50) * 50;
+  const plotH = height - padB - padT;
+  const colW = width / series.length;
+  const barW = colW - gap;
+  const svg = svgEl('svg', { viewBox: `0 0 ${width} ${height}`, role: 'img', 'aria-hidden': 'true' });
+
+  for (let g = 1; g <= 4; g++) {
+    const y = padT + plotH - (plotH * g) / 4;
+    svg.appendChild(svgEl('line', { x1: 0, x2: width, y1: y, y2: y, class: 'grid-line' }));
+    const t = svgEl('text', { x: width, y: y - 4, 'text-anchor': 'end', class: 'lbl--muted' });
+    t.textContent = Math.round((niceMax * g) / 4);
+    svg.appendChild(t);
+  }
+  const baseY = padT + plotH;
+  svg.appendChild(svgEl('line', { x1: 0, x2: width, y1: baseY, y2: baseY, class: 'grid-line' }));
+
+  series.forEach(([label, value], i) => {
+    const h = (value / niceMax) * plotH;
+    const x = i * colW + gap / 2;
+    const y = baseY - h;
+    const isPeak = value === max;
+    const isLast = i === series.length - 1;
+
+    // Rounded top only: draw as a path so the baseline stays square
+    const r = Math.min(4, barW / 2, h);
+    const d = `M${x},${baseY} V${y + r} Q${x},${y} ${x + r},${y} H${x + barW - r} Q${x + barW},${y} ${x + barW},${y + r} V${baseY} Z`;
+    const bar = svgEl('path', { d, class: isPeak ? 'bar bar--peak' : 'bar', style: `--i:${i}` });
+    svg.appendChild(bar);
+
+    if (isPeak || isLast) {
+      const val = svgEl('text', { x: x + barW / 2, y: y - 6, 'text-anchor': 'middle', class: 'val' });
+      val.textContent = value;
+      svg.appendChild(val);
+    }
+
+    const lbl = svgEl('text', { x: x + barW / 2, y: height - 8, 'text-anchor': 'middle', class: 'lbl lbl--muted' });
+    lbl.textContent = label;
+    svg.appendChild(lbl);
+
+    const hit = svgEl('rect', { x: i * colW, y: 0, width: colW, height, fill: 'transparent' });
+    bindTip(hit, `${label} 2026`, `${value} commits`);
+    svg.appendChild(hit);
+  });
+  plot.appendChild(svg);
+}
+
+document.querySelectorAll('.chart__plot[data-chart]').forEach((plot) => {
+  let series;
+  try { series = JSON.parse(plot.dataset.series); } catch { return; }
+  if (plot.dataset.chart === 'hbar') drawHBar(plot, series);
+  else if (plot.dataset.chart === 'vbar') drawVBar(plot, series);
+});
+
+// Grow the bars the first time each chart scrolls into view
+const chartObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    entry.target.classList.add('is-drawn');
+    chartObserver.unobserve(entry.target);
+  });
+}, { threshold: 0.35 });
+document.querySelectorAll('.chart__plot[data-chart]').forEach((plot) => {
+  // A frame to paint the collapsed state, so the transition has a start.
+  requestAnimationFrame(() => chartObserver.observe(plot));
+});
+
+// -----------------------------------------------------------------
+// 9. SCREENSHOT GALLERIES + LIGHTBOX
+//    Each case study has a .gallery of thumbnail buttons carrying
+//    data-full / data-caption. One shared <dialog> shows them with
+//    prev/next inside the same case study's set.
+// -----------------------------------------------------------------
+const lightbox   = document.getElementById('lightbox');
+const lbImg      = document.getElementById('lightbox-img');
+const lbCaption  = document.getElementById('lightbox-caption');
+let lbSet = [];
+let lbIndex = 0;
+
+let showLightboxItem = function (i) {
+  lbIndex = (i + lbSet.length) % lbSet.length;
+  const btn = lbSet[lbIndex];
+  lbImg.src = btn.dataset.full;
+  lbImg.alt = btn.dataset.caption || '';
+  lbCaption.textContent = btn.dataset.caption || '';
+  [lbIndex + 1, lbIndex - 1].forEach((n) => {
+    const b = lbSet[(n + lbSet.length) % lbSet.length];
+    if (b) { const im = new Image(); im.src = b.dataset.full; }
+  });
+};
+
+if (lightbox && typeof lightbox.showModal === 'function') {
+  document.querySelectorAll('.gallery').forEach((gal) => {
+    const thumbs = Array.from(gal.querySelectorAll('.gallery__thumb'));
+    thumbs.forEach((btn, i) => {
+      btn.addEventListener('click', () => {
+        lbSet = thumbs;
+        showLightboxItem(i);
+        lightbox.showModal();
+      });
+    });
+  });
+
+  lightbox.querySelector('[data-lb-close]').addEventListener('click', () => lightbox.close());
+  lightbox.querySelector('[data-lb-prev]').addEventListener('click', () => showLightboxItem(lbIndex - 1));
+  lightbox.querySelector('[data-lb-next]').addEventListener('click', () => showLightboxItem(lbIndex + 1));
+
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) lightbox.close();
+  });
+  lightbox.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') showLightboxItem(lbIndex + 1);
+    if (e.key === 'ArrowLeft')  showLightboxItem(lbIndex - 1);
+  });
+  lightbox.addEventListener('close', () => { lbImg.removeAttribute('src'); });
+}
+
+document.querySelectorAll('.case').forEach((c) => {
+  const main = c.querySelector('.shot--desktop img');
+  const first = c.querySelector('.gallery__thumb');
+  if (main && first) {
+    main.style.cursor = 'zoom-in';
+    main.addEventListener('click', () => first.click());
+  }
+});
+
+// -----------------------------------------------------------------
+// 10. DEMO VIDEO — only download + play while it's on screen
+// -----------------------------------------------------------------
+const demoVideos = document.querySelectorAll('.shot__video');
+if (demoVideos.length && !reduceMotion) {
+  const vidObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const v = entry.target;
+      if (entry.isIntersecting) {
+        if (v.preload === 'none') v.preload = 'auto';
+        v.play().catch(() => {});
+      } else {
+        v.pause();
+      }
+    });
+  }, { threshold: 0.4 });
+  demoVideos.forEach((v) => vidObserver.observe(v));
+}
+
+// -----------------------------------------------------------------
+// 12. LIGHTBOX MEDIA TYPES — images, local MP4s, and YouTube embeds
+//     Overrides showLightboxItem so a gallery can mix all three.
+//     Videos only load when opened; leaving the item stops playback.
+// -----------------------------------------------------------------
+const lbVideo = document.getElementById('lightbox-video');
+const lbEmbed = document.getElementById('lightbox-embed');
+
+function lightboxStopMedia() {
+  if (lbVideo) { lbVideo.pause(); lbVideo.removeAttribute('src'); lbVideo.load(); lbVideo.hidden = true; }
+  if (lbEmbed) { lbEmbed.innerHTML = ''; lbEmbed.hidden = true; }
+  if (lbImg)   { lbImg.hidden = true; }
+}
+
+if (lightbox && lbVideo && lbEmbed) {
+  // Replace the image-only renderer defined in section 9
+  showLightboxItem = function (i) {
+    lbIndex = (i + lbSet.length) % lbSet.length;
+    const btn = lbSet[lbIndex];
+    lightboxStopMedia();
+    lbCaption.textContent = btn.dataset.caption || '';
+
+    if (btn.dataset.youtube) {
+      const id = btn.dataset.youtube;
+      const f = document.createElement('iframe');
+      f.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`;
+      f.title = btn.dataset.caption || 'Demo video';
+      f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      f.allowFullscreen = true;
+      lbEmbed.appendChild(f);
+      lbEmbed.hidden = false;
+    } else if (btn.dataset.video) {
+      lbVideo.poster = btn.dataset.poster || '';
+      lbVideo.src = btn.dataset.video;
+      lbVideo.hidden = false;
+      lbVideo.play().catch(() => {});
+    } else {
+      lbImg.src = btn.dataset.full;
+      lbImg.alt = btn.dataset.caption || '';
+      lbImg.hidden = false;
+      [lbIndex + 1, lbIndex - 1].forEach((n) => {
+        const b = lbSet[(n + lbSet.length) % lbSet.length];
+        if (b && b.dataset.full) { const im = new Image(); im.src = b.dataset.full; }
+      });
+    }
+  };
+  lightbox.addEventListener('close', lightboxStopMedia);
+}
+
+// -----------------------------------------------------------------
+// 14. CASE TOGGLE — button in the body opens the detail panel.
+//     Charts must be (re)drawn on open: they measure zero while hidden.
+// -----------------------------------------------------------------
+document.querySelectorAll('.case__toggle').forEach((btn) => {
+  const panel = document.getElementById(btn.getAttribute('aria-controls'));
+  if (!panel) return;
+  const setOpen = (open) => {
+    btn.setAttribute('aria-expanded', String(open));
+    panel.hidden = !open;
+    if (open) {
+      panel.querySelectorAll('.chart__plot[data-chart]').forEach((plot) => {
+        plot.classList.remove('is-drawn');
+        requestAnimationFrame(() => requestAnimationFrame(() => plot.classList.add('is-drawn')));
+      });
+    }
+  };
+  btn.addEventListener('click', () => setOpen(btn.getAttribute('aria-expanded') !== 'true'));
+  panel.querySelectorAll('[data-collapse]').forEach((c) => {
+    c.addEventListener('click', () => {
+      setOpen(false);
+      btn.closest('.case').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    });
+  });
+});
