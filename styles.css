@@ -52,8 +52,7 @@
   --bg-handmade:  #f5f0ff;
   --bg-videos:  #edf5ff;
   --bg-about:   #fdf6f0;
-  --bg-footer:  #1a1a2e;   /* the footer stays dark in both themes */
-  /* Text that lives on always-dark surfaces (marquee, footer, CTA card) */
+  /* Each slab below repoints these per theme; in light mode they land on ink. */
   --color-on-dark:       #f0ece4;
   --color-on-dark-muted: rgba(240, 236, 228, 0.6);
   --color-on-dark-faint: rgba(240, 236, 228, 0.12);
@@ -1771,9 +1770,7 @@ img {
 ===================================================================== */
 
 .footer {
-  background: var(--bg-footer);
   color: var(--color-on-dark);
-  border-top: 1px solid color-mix(in srgb, var(--color-on-dark) 12%, transparent);
   padding: 28px var(--section-padding-x);
   display: flex;
   align-items: center;
@@ -2319,7 +2316,6 @@ img {
   color: var(--color-on-dark);
   padding: 56px var(--section-padding-x) 40px;
 }
-[data-theme="dark"] .proof { background-color: #0f0d16; }
 
 .proof__grid {
   display: grid;
@@ -3682,8 +3678,8 @@ img {
 
 /* =====================================================================
    ABOUT — theme-aware instead of always-dark
-   Light mode repoints the --color-on-dark* tokens; the CTA card and the
-   footer re-pin them because those two stay dark in both themes.
+   Light mode repoints the --color-on-dark* tokens. The CTA card nested
+   inside gets its own ground in the light-mode surfaces block below.
 ===================================================================== */
 .about {
   --color-on-dark:       var(--color-ink);
@@ -3699,11 +3695,6 @@ img {
   --color-on-dark-faint: rgba(240, 236, 228, 0.12);
   --about-card:          rgba(255, 255, 255, 0.06);
   --about-card-hover:    rgba(255, 255, 255, 0.08);
-}
-.about .cta-card {
-  --color-on-dark:       #f0ece4;
-  --color-on-dark-muted: rgba(240, 236, 228, 0.6);
-  --color-on-dark-faint: rgba(240, 236, 228, 0.12);
 }
 .about__eyebrow { color: var(--accent-coral-text); }
 [data-theme="dark"] .about__eyebrow { color: var(--color-marigold); }
@@ -3758,10 +3749,161 @@ img {
 .nav__hire-link { padding: 6px 13px; }
 .theme-toggle { padding: 5px 12px; font-size: 0.9rem; }
 
-/* The footer stays dark in both themes, so it re-pins the tokens. */
-.footer {
+
+/* =====================================================================
+   LIGHT-MODE SECTION SURFACES
+   Four slabs authored as always-dark get their own light hue here; the
+   [data-theme="dark"] rule under each one restores what shipped before.
+===================================================================== */
+
+/* ── Proof band — apricot ──────────────────────────────────────── */
+.proof {
+  --color-on-dark:       var(--color-ink);
+  --color-on-dark-muted: rgba(26, 26, 46, 0.72);
+  --color-on-dark-faint: rgba(26, 26, 46, 0.14);
+  --color-sky:      #0e7490;
+  --color-teal:     #00695c;
+  --color-lavender: #7b2cbf;
+  --color-marigold: #8f5700;
+  background:
+    radial-gradient(70% 130% at 8% 0%, rgba(255, 138, 101, 0.18), transparent 62%),
+    radial-gradient(62% 130% at 92% 100%, rgba(255, 190, 92, 0.18), transparent 62%),
+    #ffeadb;
+  color: var(--color-ink);
+}
+/* The inherited 0.7 fade would drop the muted ink under 4.5:1 here. */
+.proof__source { opacity: 1; }
+
+[data-theme="dark"] .proof {
   --color-on-dark:       #f0ece4;
   --color-on-dark-muted: rgba(240, 236, 228, 0.6);
   --color-on-dark-faint: rgba(240, 236, 228, 0.12);
+  --color-sky:      #48cae4;
+  --color-teal:     #00c9a7;
+  --color-lavender: #c77dff;
+  --color-marigold: #ffd166;
+  background:
+    radial-gradient(60% 120% at 10% 0%, rgba(255, 107, 107, 0.16), transparent 60%),
+    radial-gradient(50% 120% at 90% 100%, rgba(72, 202, 228, 0.16), transparent 60%),
+    #0f0d16;
   color: var(--color-on-dark);
 }
+[data-theme="dark"] .proof__source { opacity: 0.7; }
+
+/* ── Marquee — mint to aqua ────────────────────────────────────── */
+.marquee {
+  /* The dots take their fill from these vars via inline styles in index.html. */
+  --color-coral:    #d62828;
+  --color-teal:     #00695c;
+  --color-lavender: #7b2cbf;
+  --color-marigold: #8f5700;
+  --color-sky:      #0e7490;
+  --color-blush:    #c9436a;
+  --color-mint:     #2f8f63;
+  background: linear-gradient(90deg, #dff3e8 0%, #d3edf2 100%);
+  color: var(--color-ink);
+  border-block: 1px solid rgba(26, 26, 46, 0.08);
+}
+[data-theme="dark"] .marquee {
+  --color-coral:    #ff6b6b;
+  --color-teal:     #00c9a7;
+  --color-lavender: #c77dff;
+  --color-marigold: #ffd166;
+  --color-sky:      #48cae4;
+  --color-blush:    #ffb3c6;
+  --color-mint:     #b7e4c7;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  border-block: 1px solid transparent;
+}
+
+/* ── CTA card — periwinkle ─────────────────────────────────────── */
+.about .cta-card {
+  --color-on-dark:       var(--color-ink);
+  --color-on-dark-muted: rgba(26, 26, 46, 0.72);
+  --color-on-dark-faint: rgba(26, 26, 46, 0.14);
+  background:
+    radial-gradient(85% 70% at 100% 0%, rgba(199, 125, 255, 0.22), transparent 62%),
+    linear-gradient(150deg, #efe6ff 0%, #e2e9ff 100%);
+  color: var(--color-ink);
+  border: 1px solid rgba(26, 26, 46, 0.08);
+  box-shadow: 0 30px 60px -30px rgba(60, 40, 110, 0.4);
+}
+/* Raw coral is 3.4:1 on the periwinkle ground; this variant clears 5:1. */
+.about .cta-card__eyebrow { color: #b21e1e; }
+.about .cta-card .btn--ghost {
+  color: var(--color-ink);
+  border-color: rgba(26, 26, 46, 0.55);
+}
+.about .cta-card .btn--ghost:hover {
+  background: var(--color-marigold);
+  border-color: var(--color-marigold);
+  color: #1a1a2e;
+}
+
+[data-theme="dark"] .about .cta-card {
+  --color-on-dark:       #f0ece4;
+  --color-on-dark-muted: rgba(240, 236, 228, 0.6);
+  --color-on-dark-faint: rgba(240, 236, 228, 0.12);
+  background:
+    radial-gradient(90% 70% at 100% 0%, rgba(255, 107, 107, 0.3), transparent 60%),
+    radial-gradient(70% 70% at 0% 100%, rgba(72, 202, 228, 0.25), transparent 60%),
+    #1a1a2e;
+  color: var(--color-on-dark);
+  border: none;
+  box-shadow: 0 30px 60px -25px rgba(26, 26, 46, 0.6);
+}
+[data-theme="dark"] .about .cta-card__eyebrow { color: var(--color-coral); }
+[data-theme="dark"] .about .cta-card .btn--ghost {
+  color: var(--color-on-dark);
+  border-color: rgba(240, 236, 228, 0.35);
+}
+[data-theme="dark"] .about .cta-card .btn--ghost:hover {
+  background: rgba(240, 236, 228, 0.1);
+  border-color: var(--color-on-dark);
+  color: var(--color-on-dark);
+}
+
+/* ── Footer — rose ─────────────────────────────────────────────── */
+.footer {
+  --color-on-dark:       var(--color-ink);
+  --color-on-dark-muted: rgba(26, 26, 46, 0.72);
+  --color-on-dark-faint: rgba(26, 26, 46, 0.14);
+  background: linear-gradient(100deg, #f9dde5 0%, #f1e0f0 100%);
+  color: var(--color-ink);
+  border-top: 1px solid rgba(26, 26, 46, 0.1);
+}
+.footer .social-link { border-color: rgba(26, 26, 46, 0.6); }
+.footer .social-link:hover,
+.footer .social-link:focus-visible {
+  color: var(--accent-coral-text);
+  border-color: var(--accent-coral-text);
+}
+.footer__copy {
+  color: rgba(26, 26, 46, 0.75);
+  opacity: 1;
+}
+/* #d62828 is 3.9:1 on the rose ground; this variant clears 5.7:1. */
+.footer__heart { color: #a81b1b; }
+
+[data-theme="dark"] .footer {
+  --color-on-dark:       #f0ece4;
+  --color-on-dark-muted: rgba(240, 236, 228, 0.6);
+  --color-on-dark-faint: rgba(240, 236, 228, 0.12);
+  background: var(--bg-footer);
+  color: var(--color-on-dark);
+  border-top: 1px solid rgba(240, 236, 228, 0.12);
+}
+[data-theme="dark"] .footer .social-link {
+  border-color: rgba(240, 236, 228, 0.28);
+}
+[data-theme="dark"] .footer .social-link:hover,
+[data-theme="dark"] .footer .social-link:focus-visible {
+  color: var(--color-coral);
+  border-color: var(--color-coral);
+}
+[data-theme="dark"] .footer__copy {
+  color: inherit;
+  opacity: 0.45;
+}
+[data-theme="dark"] .footer__heart { color: var(--color-coral); }
