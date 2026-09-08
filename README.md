@@ -4,7 +4,7 @@
 
 ### Storyteller. Problem solver. One string at a time.
 
-My developer portfolio — a fast, dependency-free site built with vanilla **HTML, CSS, and JavaScript**. No framework, no build step, no runtime: the browser loads three static files directly. It showcases my engineering work alongside my creative work as an artisan, musician, and video editor — all in a polished light/dark theme.
+My developer portfolio and contract-work landing page — a fast, dependency-free site built with vanilla **HTML, CSS, and JavaScript**. No framework, no build step, no runtime: the browser loads three static files directly. It leads with five data-backed builds (KaraoQ, Ballet Folklórico Mi Herencia, SEJSCC, Tangodachi, Intermezzo), each with a screenshot/video gallery, a lightbox, and a detail panel that opens under its toggle and widens past the media column, then my experience, my creative work as an artisan, musician, and video editor, and an About section that closes the page with who I am and the kind of work I take on — all in a polished light/dark theme.
 
 [![Live Site](https://img.shields.io/badge/Visit-variationsonastring.com-7C3AED?style=for-the-badge&logo=vercel&logoColor=white)](https://www.variationsonastring.com)
 
@@ -23,7 +23,10 @@ My developer portfolio — a fast, dependency-free site built with vanilla **HTM
 | ------------ | -------------------------------------------------------------- |
 | `index.html` | Markup and content only.                                       |
 | `styles.css` | All styles. Design tokens (color, type, spacing) live at the top under `:root`; light/dark themes are driven by a `data-theme` attribute. |
-| `main.js`    | Progressive enhancement: scroll reveals, dark-mode toggle, creative-work gallery filter, nav, mobile menu. Loaded as a deferred ES module. |
+| `main.js`    | Progressive enhancement: scroll reveals, dark-mode toggle, handmade gallery (from `data/crafts.json`), nav, mobile menu, proof-band count-ups, and the inline-SVG case-study charts (no chart library). Loaded as a deferred ES module. |
+| `images/projects/` | WebP screenshots (and the KaraoQ hero demo loop) used in the case-study frames and galleries (captured Sept 2026). Gallery thumbnails and the lightbox share the same file. |
+| `videos/` | Web-sized MP4 demos (720p, H.264, click-to-play) plus WebP posters: the BFMH hero film (shot and edited by Anna), Event Manager tour and La Chona walkthrough, the KaraoQ promo, and the Tangodachi overview. YouTube demos are embedded via youtube-nocookie from the lightbox instead of being hosted here. |
+| `project-icons/` | Real favicons/app icons of each project. |
 | `og-image.jpg`, `logo.png` | Social preview image and brand mark. |
 | `vercel.json` | Zero-build deploy config (serves the repo root as static). |
 
@@ -46,6 +49,15 @@ python3 -m http.server 8000
 Hosted as a static site (Vercel / GitHub Pages). There is no build
 command — every file in the repo root is served as-is. Pushing to `main`
 publishes.
+
+## Keeping the numbers honest
+
+The proof band and case-study stat tiles are hard-coded snapshots (Vercel
+Analytics, Vercel Usage, Formspree, and each repo's test suite), labelled
+with the date they were taken. When you refresh them, update the
+"30 days ending …" line in the proof band too. Chart data lives inline on
+each `.chart__plot` element as a `data-series` JSON array, with a
+visually-hidden `<table>` beside it for screen readers.
 
 ## Conventions
 
