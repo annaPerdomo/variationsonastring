@@ -1,0 +1,56 @@
+backend:
+  name: github
+  repo: annaPerdomo/variationsonastring
+  branch: main
+  # OAuth relay: deploy the sveltia-cms-auth Cloudflare Worker, then put its URL here.
+  base_url: REPLACE_WITH_YOUR_AUTH_WORKER_URL
+
+media_folder: "images/crafts"
+public_folder: "/images/crafts"
+
+publish_mode: simple
+
+collections:
+  - name: crafts
+    label: "Handmade Crafts"
+    description: "Anna's handmade gallery. Add a craft, upload its photo(s), publish — the site redeploys automatically."
+    files:
+      - name: gallery
+        label: "Craft Gallery"
+        file: "data/crafts.json"
+        format: json
+        # New entries land at the top, matching the site's newest-first order.
+        fields:
+          - name: items
+            label: "Crafts"
+            label_singular: "Craft"
+            widget: list
+            summary: "{{fields.title}} — {{fields.category}}"
+            fields:
+              - { name: title, label: "Title", widget: string }
+              - name: category
+                label: "Category"
+                widget: select
+                options: ["crochet", "knitting", "cross-stitch", "sewing"]
+                default: "crochet"
+              - name: date
+                label: "Completed"
+                hint: 'Shown as “Completed …”. Free text, e.g. “October 30th, 2022” or just “2014”.'
+                widget: string
+              - name: images
+                label: "Photos"
+                label_singular: "Photo"
+                hint: "First photo is the one shown in the grid. Drag to reorder."
+                widget: list
+                # Singular `field:` keeps entries bare strings — main.js expects
+                # craft.images as strings, not { src } objects.
+                field: { name: src, label: "Image", widget: image }
+              - name: materials
+                label: "Materials / supplies (optional)"
+                label_singular: "Material"
+                hint: "Reserved for affiliate links. Leave empty for now."
+                widget: list
+                required: false
+                fields:
+                  - { name: name, label: "Name", widget: string }
+                  - { name: url, label: "Link (affiliate URL)", widget: string, required: false }
