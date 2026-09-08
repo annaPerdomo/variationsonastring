@@ -94,20 +94,78 @@ themeToggle.addEventListener('click', () => {
 });
 
 // -----------------------------------------------------------------
-// 3. HANDMADE GALLERY — FILTER + SHOW MORE / SHOW FEWER
-//    Filtering hides non-matching cards entirely.
-//    Only the first INITIAL_VISIBLE matching cards show by default;
-//    the "Show all" button reveals the rest.
+// 3. HANDMADE GALLERY — DATA-DRIVEN, FILTER + SHOW MORE / SHOW FEWER
+//    Cards come from data/crafts.json. Filtering hides non-matching cards;
+//    only the first INITIAL_VISIBLE matches show until "Show all" is clicked.
 // -----------------------------------------------------------------
 const INITIAL_VISIBLE = 12;
 
-const allHandmadeCards  = Array.from(document.querySelectorAll('.handmade-card'));
+const handmadeGrid   = document.getElementById('handmadeGrid');
 const showMoreBtn    = document.getElementById('show-more-btn');
 const hiddenCountEl  = document.getElementById('handmade-hidden-count');
-const handmadeFooter   = document.getElementById('handmade-footer');
+const handmadeFooter = document.getElementById('handmade-footer');
 
+const CATEGORY_LABELS = {
+  crochet: 'Crochet',
+  knitting: 'Knitting',
+  'cross-stitch': 'Cross-stitch',
+  sewing: 'Sewing',
+};
+
+let allHandmadeCards = [];
 let currentFilter = 'all';
 let isExpanded    = false;
+
+// CSS shows only the first .handmade-card-img, so images must precede the overlay in the DOM.
+function buildHandmadeCard(craft) {
+  const card = document.createElement('div');
+  card.className = 'handmade-card';
+  card.dataset.cat = craft.category || '';
+
+  (craft.images || []).forEach((src, i) => {
+    if (!src) return;
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = i === 0 ? craft.title : `${craft.title} (${i + 1})`;
+    img.className = 'handmade-card-img';
+    img.loading = 'lazy';
+    card.appendChild(img);
+  });
+
+  const overlay = document.createElement('div');
+  overlay.className = 'handmade-overlay';
+  const h4 = document.createElement('h4');
+  h4.textContent = craft.title || '';
+  const p = document.createElement('p');
+  const label = CATEGORY_LABELS[craft.category] || craft.category || '';
+  p.textContent = craft.date ? `${label} · Completed ${craft.date}` : label;
+  overlay.append(h4, p);
+  card.appendChild(overlay);
+
+  return card;
+}
+
+// Sveltia CMS writes the `{ items: [...] }` wrapper form, not a bare array.
+async function loadHandmadeCards() {
+  if (!handmadeGrid) return;
+  try {
+    const res = await fetch('/data/crafts.json', { cache: 'no-cache' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data  = await res.json();
+    const items = Array.isArray(data) ? data : (data.items || []);
+    const frag  = document.createDocumentFragment();
+    items.forEach((craft) => frag.appendChild(buildHandmadeCard(craft)));
+    handmadeGrid.replaceChildren(frag);
+  } catch (err) {
+    console.error('Could not load handmade crafts:', err);
+    handmadeGrid.replaceChildren();
+    const notice = document.createElement('p');
+    notice.className = 'handmade-load-error';
+    notice.textContent = "Couldn't load the gallery right now — please refresh or check back later.";
+    handmadeGrid.appendChild(notice);
+  }
+  allHandmadeCards = Array.from(handmadeGrid.querySelectorAll('.handmade-card'));
+}
 
 function getMatchingCards() {
   return allHandmadeCards.filter((card) =>
@@ -161,8 +219,9 @@ showMoreBtn.addEventListener('click', () => {
   renderHandmadeCards();
 });
 
-// Initial render on page load
-renderHandmadeCards();
+// Listeners above are bound to static elements, so they stay valid once
+// cards are fetched and appended asynchronously below.
+loadHandmadeCards().then(renderHandmadeCards);
 
 // -----------------------------------------------------------------
 // 4. NAV SHADOW ON SCROLL
