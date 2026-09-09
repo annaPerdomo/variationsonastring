@@ -22,12 +22,15 @@
   --color-border:     rgba(28, 34, 51, 0.09);
   --color-text-muted: rgba(28, 34, 51, 0.7);
 
-  /* Accent colors used as TEXT need WCAG-AA contrast on the light cream
-     surface — the bright brand hues above only pass on dark mode. These
-     are darkened variants reused for text; dark mode resets them below. */
-  --accent-teal-text:     #00897b;
+  /* The brand hues above only clear 4.5:1 on dark. Darkened variants for
+     anything that uses an accent as text; dark mode resets them below. */
+  --accent-teal-text:     #0d6b63;
   --accent-lavender-text: #7b2cbf;
-  --accent-coral-text:    #d62828;
+  --accent-coral-text:    #b8301c;
+  --accent-sky-text:      #0b6b86;
+  --accent-marigold-text: #8a5400;
+  --accent-blush-text:    #a52753;
+  --accent-mint-text:     #276f4f;
 
   /* Hero eyebrow: muted ink in light mode (teal clashed with the
      warm blush hero); dark mode resets it to teal below. */
@@ -54,7 +57,7 @@
   --bg-about:   #fdf5ee;
   /* Each slab below repoints these per theme; in light mode they land on ink. */
   --color-on-dark:       #f0ece4;
-  --color-on-dark-muted: rgba(240, 236, 228, 0.6);
+  --color-on-dark-muted: rgba(240, 236, 228, 0.7);
   --color-on-dark-faint: rgba(240, 236, 228, 0.12);
 }
 
@@ -66,12 +69,16 @@
   --color-surface-2:  #252230;
   --color-nav:        rgba(20, 17, 30, 0.96);  /* dark: warm purple-black, matches hero family */
   --color-border:     rgba(240, 236, 228, 0.1);
-  --color-text-muted: rgba(240, 236, 228, 0.45);
+  --color-text-muted: rgba(240, 236, 228, 0.65);
 
-  /* On dark surfaces the bright brand hues already pass — reset to them */
-  --accent-teal-text:     var(--color-teal);
-  --accent-lavender-text: var(--color-lavender);
-  --accent-coral-text:    var(--color-coral);
+  /* Lighter than the raw hue: accents sit as text on tinted cards here. */
+  --accent-teal-text:     #1fdfbd;
+  --accent-lavender-text: #d9a5ff;
+  --accent-coral-text:    #ff9486;
+  --accent-sky-text:      #6ad6ec;
+  --accent-marigold-text: var(--color-marigold);
+  --accent-blush-text:    var(--color-blush);
+  --accent-mint-text:     var(--color-mint);
   --hero-eyebrow:         var(--accent-teal-text);
 
   --bg-hero:    #0f0d16;
@@ -82,7 +89,7 @@
   --bg-footer:  #0d0b14;
   /* These stay the same in dark mode — they're always light-on-dark */
   --color-on-dark:       #f0ece4;
-  --color-on-dark-muted: rgba(240, 236, 228, 0.6);
+  --color-on-dark-muted: rgba(240, 236, 228, 0.7);
   --color-on-dark-faint: rgba(240, 236, 228, 0.12);
 }
 
@@ -292,7 +299,7 @@ img {
   font-size: 0.8rem;
   font-weight: 500;
   font-style: normal;
-  color: var(--color-coral);
+  color: var(--accent-coral-text);
   letter-spacing: 0.2em;
 }
 
@@ -400,7 +407,7 @@ img {
   font-weight: 300;
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: var(--color-coral);
+  color: var(--accent-coral-text);
   margin-bottom: 12px;
 }
 
@@ -415,7 +422,7 @@ img {
 
 .section__title em {
   font-style: normal;
-  color: var(--color-coral);
+  color: var(--accent-coral-text);
 }
 
 .section__subtitle {
@@ -495,7 +502,7 @@ img {
 
 .hero__title em {
   font-style: normal;
-  color: var(--color-coral);
+  color: var(--accent-coral-text);
 }
 
 .hero__tagline {
@@ -538,9 +545,9 @@ img {
 .tag--coral   { background: rgba(255, 107, 107, 0.12); color: var(--accent-coral-text);    border: 1px solid rgba(255, 107, 107, 0.25); }
 .tag--teal    { background: rgba(0, 201, 167, 0.12);   color: var(--accent-teal-text);     border: 1px solid rgba(0, 201, 167, 0.25); }
 .tag--lavender{ background: rgba(199, 125, 255, 0.12); color: var(--accent-lavender-text); border: 1px solid rgba(199, 125, 255, 0.25); }
-.tag--gold    { background: rgba(255, 209, 102, 0.15); color: #b8860b;               border: 1px solid rgba(255, 209, 102, 0.35); }
-.tag--sky     { background: rgba(72, 202, 228, 0.12);  color: #0077b6;               border: 1px solid rgba(72, 202, 228, 0.3); }
-.tag--blush   { background: rgba(255, 179, 198, 0.15); color: #c2185b;               border: 1px solid rgba(255, 179, 198, 0.4); }
+.tag--gold    { background: rgba(255, 209, 102, 0.15); color: var(--accent-marigold-text);               border: 1px solid rgba(255, 209, 102, 0.35); }
+.tag--sky     { background: rgba(72, 202, 228, 0.12);  color: var(--accent-sky-text);               border: 1px solid rgba(72, 202, 228, 0.3); }
+.tag--blush   { background: rgba(255, 179, 198, 0.15); color: var(--accent-blush-text);               border: 1px solid rgba(255, 179, 198, 0.4); }
 
 /* CTA buttons */
 .hero__cta {
@@ -570,7 +577,7 @@ img {
 
 .btn--primary {
   background: var(--color-coral);
-  color: var(--color-paper);
+  color: #1c2233;  /* ink on coral is 5:1; white was 3.2:1 */
   position: relative;
   overflow: hidden;
 }
@@ -579,7 +586,7 @@ img {
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--color-coral);
+  background: rgba(255, 255, 255, 0.22);  /* hover must lighten — the label is ink */
   transform: translateX(-101%);
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -834,7 +841,7 @@ img {
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--color-ink);
-  opacity: 0.5;
+  opacity: 0.72;
 }
 
 .work__group-label::after {
@@ -914,7 +921,7 @@ img {
   margin-bottom: 18px;
   /* Borderless accent-tinted chip that reads as a soft pool of the card's
      accent light — a colored glow halo instead of a hard ring */
-  color: var(--card-accent);
+  color: var(--card-accent-text);
   background:
     linear-gradient(160deg, rgba(var(--card-accent-rgb), 0.18), rgba(var(--card-accent-rgb), 0.08));
   box-shadow:
@@ -988,7 +995,7 @@ img {
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--color-ink);
-  opacity: 0.55;  /* 0.4 was too dim in dark mode */
+  opacity: 0.72;  /* 0.55 fell under 4.5:1 on the tinted cards */
   margin-bottom: 6px;
 }
 
@@ -1003,7 +1010,7 @@ img {
 }
 
 .work-card:hover .work-card__title {
-  color: var(--card-accent);
+  color: var(--card-accent-text);
 }
 
 .work-card__body {
@@ -1045,7 +1052,7 @@ img {
 .work-card .stack-pill {
   background: rgba(var(--card-accent-rgb), 0.1);
   border-color: rgba(var(--card-accent-rgb), 0.35);
-  color: var(--card-accent);
+  color: var(--card-accent-text);
   opacity: 1;
 }
 
@@ -1055,7 +1062,7 @@ img {
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--card-accent);
+  color: var(--card-accent-text);
   text-decoration: none;
   display: inline-flex;
   align-items: center;
@@ -1066,7 +1073,7 @@ img {
 }
 
 .work-card__link:hover {
-  color: var(--card-accent);
+  color: var(--card-accent-text);
   border-bottom-color: var(--card-accent);
   gap: 14px;
 }
@@ -1087,11 +1094,11 @@ img {
 .work-card__link--git {
   border-bottom: none;
   color: var(--color-ink);
-  opacity: 0.55;
+  opacity: 0.72;
 }
 
 .work-card__link--git:hover {
-  color: var(--card-accent);
+  color: var(--card-accent-text);
   border-bottom-color: transparent;
   opacity: 1;
   gap: 8px;
@@ -1556,7 +1563,7 @@ img {
   font-weight: 400;
   letter-spacing: 0.08em;
   color: var(--color-ink);
-  opacity: 0.45;
+  opacity: 0.72;
   text-transform: uppercase;
 }
 
@@ -2243,7 +2250,9 @@ img {
    PORTFOLIO 2026 — CONTRACTOR REPOSITIONING
    Proof band, case studies, charts, services. Everything below reads
    from the tokens at the top of this file; per-case accents come from
-   --case-accent / --case-accent-rgb set inline on each <article>.
+   --case-accent / --case-accent-rgb / --case-accent-text set inline on
+   each <article>; the -text variant is what any accent-coloured copy uses,
+   so it can be dark enough on the light surfaces and bright on the dark.
 ===================================================================== */
 
 :root {
@@ -2278,7 +2287,7 @@ img {
   padding: 7px 14px;
   border-radius: 999px;
   background: var(--color-coral);
-  color: #fff !important;
+  color: #1c2233 !important;
   opacity: 1 !important;
   border: 1px solid transparent;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -2383,6 +2392,7 @@ img {
 .case {
   --card-accent: var(--case-accent);
   --card-accent-rgb: var(--case-accent-rgb);
+  --card-accent-text: var(--case-accent-text);
   display: grid;
   grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
   gap: 56px;
@@ -2484,7 +2494,7 @@ img {
   font-weight: 400;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--case-accent);
+  color: var(--case-accent-text);
   margin-bottom: 14px;
 }
 .case__title {
@@ -2511,7 +2521,6 @@ img {
   font-size: 1.08rem;
   line-height: 1.75;
   color: var(--color-ink);
-  opacity: 0.85;
   margin-bottom: 28px;
 }
 
@@ -2691,7 +2700,7 @@ img {
   font-family: var(--font-mono);
   font-size: 0.7rem;
   font-weight: 600;
-  color: #fff;
+  color: #1c2233;
   background: var(--case-accent);
 }
 .ladder b { font-weight: 600; }
@@ -2754,7 +2763,7 @@ img {
   font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 600;
-  color: #fff;
+  color: #1c2233;
   background: var(--case-accent);
   box-shadow: 0 0 0 4px var(--color-surface), 0 0 0 5px rgba(var(--case-accent-rgb), 0.3);
   z-index: 1;
@@ -2813,12 +2822,10 @@ img {
   content: '';
   position: absolute; left: 1px; top: 0.35em;
   width: 5px; height: 9px;
-  border-right: 2px solid var(--case-accent);
-  border-bottom: 2px solid var(--case-accent);
+  border-right: 2px solid var(--case-accent-text);
+  border-bottom: 2px solid var(--case-accent-text);
   transform: rotate(40deg);
-  filter: saturate(1.4) brightness(0.85);
 }
-[data-theme="dark"] .compare__after::before { filter: none; }
 
 /* Under the hood */
 .case__deep {
@@ -2836,13 +2843,11 @@ img {
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--case-accent);
+  color: var(--case-accent-text);
   display: flex;
   align-items: center;
   gap: 10px;
-  filter: saturate(1.3) brightness(0.8);
 }
-[data-theme="dark"] .case__deep summary { filter: none; }
 .case__deep summary::-webkit-details-marker { display: none; }
 .case__deep summary::before {
   content: '+';
@@ -2884,21 +2889,15 @@ img {
 .case .stack-pill {
   background: rgba(var(--case-accent-rgb), 0.1);
   border-color: rgba(var(--case-accent-rgb), 0.35);
-  color: var(--case-accent);
+  color: var(--case-accent-text);
   opacity: 1;
-  filter: saturate(1.3) brightness(0.8);
 }
-[data-theme="dark"] .case .stack-pill { filter: none; }
 .case__links {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 12px 24px;
 }
-.case .work-card__link:not(.work-card__link--git) {
-  filter: saturate(1.3) brightness(0.8);
-}
-[data-theme="dark"] .case .work-card__link { filter: none; }
 
 /* ── Services ──────────────────────────────────────────────────── */
 .services__grid {
@@ -2928,11 +2927,9 @@ img {
   border-radius: 12px;
   display: grid; place-items: center;
   background: rgba(var(--svc-rgb), 0.15);
-  color: var(--svc-accent);
+  color: var(--svc-accent-text);
   margin-bottom: 18px;
-  filter: saturate(1.3) brightness(0.85);
 }
-[data-theme="dark"] .service__icon { filter: none; }
 .service__icon .ico { width: 22px; height: 22px; }
 .service__title {
   font-family: var(--font-display);
@@ -2960,7 +2957,7 @@ img {
   text-decoration: none;
   border-bottom: 1px solid rgba(var(--svc-rgb), 0.6);
 }
-.service__proof a:hover { color: var(--svc-accent); }
+.service__proof a:hover { color: var(--svc-accent-text); }
 
 .services__how {
   display: grid;
@@ -3278,8 +3275,7 @@ img {
   border-radius: 50%;
   background: var(--case-accent);
 }
-.case__lede em { font-style: italic; color: var(--case-accent); filter: saturate(1.3) brightness(0.8); }
-[data-theme="dark"] .case__lede em { filter: none; }
+.case__lede em { font-style: italic; color: var(--case-accent-text); }
 
 @media (max-width: 900px) {
   .gallery { grid-template-columns: repeat(6, 1fr); margin-top: 24px; }
@@ -3412,12 +3408,10 @@ img {
   font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--case-accent);
-  filter: saturate(1.3) brightness(0.8);
+  color: var(--case-accent-text);
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease;
 }
-[data-theme="dark"] .case__collapse { filter: none; }
 .case__collapse:hover { background: rgba(var(--case-accent-rgb), 0.16); transform: translateY(-1px); }
 
 /* Phone bezel: always dark, with a faint accent ring, in both themes */
@@ -3484,12 +3478,10 @@ img {
   font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--case-accent);
-  filter: saturate(1.3) brightness(0.8);
+  color: var(--case-accent-text);
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease;
 }
-[data-theme="dark"] .case__toggle { filter: none; }
 .case__toggle::before {
   content: '';
   width: 8px; height: 8px;
@@ -3692,7 +3684,7 @@ img {
 }
 [data-theme="dark"] .about {
   --color-on-dark:       #f0ece4;
-  --color-on-dark-muted: rgba(240, 236, 228, 0.6);
+  --color-on-dark-muted: rgba(240, 236, 228, 0.72);
   --color-on-dark-faint: rgba(240, 236, 228, 0.12);
   --about-card:          rgba(255, 255, 255, 0.06);
   --about-card-hover:    rgba(255, 255, 255, 0.08);
@@ -3777,7 +3769,7 @@ img {
 
 [data-theme="dark"] .proof {
   --color-on-dark:       #f0ece4;
-  --color-on-dark-muted: rgba(240, 236, 228, 0.6);
+  --color-on-dark-muted: rgba(240, 236, 228, 0.72);
   --color-on-dark-faint: rgba(240, 236, 228, 0.12);
   --color-sky:      #48cae4;
   --color-teal:     #00c9a7;
@@ -3789,7 +3781,6 @@ img {
     #0f0d16;
   color: var(--color-on-dark);
 }
-[data-theme="dark"] .proof__source { opacity: 0.7; }
 
 /* ── Marquee — mint to aqua ────────────────────────────────────── */
 .marquee {
@@ -3844,7 +3835,7 @@ img {
 
 [data-theme="dark"] .about .cta-card {
   --color-on-dark:       #f0ece4;
-  --color-on-dark-muted: rgba(240, 236, 228, 0.6);
+  --color-on-dark-muted: rgba(240, 236, 228, 0.72);
   --color-on-dark-faint: rgba(240, 236, 228, 0.12);
   background:
     radial-gradient(90% 70% at 100% 0%, rgba(255, 107, 107, 0.3), transparent 60%),
@@ -3854,7 +3845,7 @@ img {
   border: none;
   box-shadow: 0 30px 60px -25px rgba(26, 26, 46, 0.6);
 }
-[data-theme="dark"] .about .cta-card__eyebrow { color: var(--color-coral); }
+[data-theme="dark"] .about .cta-card__eyebrow { color: var(--accent-coral-text); }
 [data-theme="dark"] .about .cta-card .btn--ghost {
   color: var(--color-on-dark);
   border-color: rgba(240, 236, 228, 0.35);
@@ -3889,7 +3880,7 @@ img {
 
 [data-theme="dark"] .footer {
   --color-on-dark:       #f0ece4;
-  --color-on-dark-muted: rgba(240, 236, 228, 0.6);
+  --color-on-dark-muted: rgba(240, 236, 228, 0.72);
   --color-on-dark-faint: rgba(240, 236, 228, 0.12);
   background: var(--bg-footer);
   color: var(--color-on-dark);
@@ -3905,6 +3896,6 @@ img {
 }
 [data-theme="dark"] .footer__copy {
   color: inherit;
-  opacity: 0.45;
+  opacity: 0.7;
 }
-[data-theme="dark"] .footer__heart { color: var(--color-coral); }
+[data-theme="dark"] .footer__heart { color: var(--accent-coral-text); }
