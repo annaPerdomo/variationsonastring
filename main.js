@@ -85,11 +85,22 @@ document.querySelectorAll('.reveal').forEach((el) => {
 const themeToggle = document.getElementById('theme-toggle');
 const root        = document.documentElement;
 
+const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+
+function applyThemeColor(theme) {
+  if (themeColorMeta) {
+    themeColorMeta.setAttribute('content', theme === 'dark' ? '#0f0d16' : '#fbf8f3');
+  }
+}
+
+applyThemeColor(root.getAttribute('data-theme'));
+
 themeToggle.addEventListener('click', () => {
   const isDark = root.getAttribute('data-theme') === 'dark';
   const next   = isDark ? 'light' : 'dark';
   root.setAttribute('data-theme', next);
   localStorage.setItem('theme', next);
+  applyThemeColor(next);
 });
 
 // -----------------------------------------------------------------

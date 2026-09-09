@@ -8,7 +8,7 @@
   <meta name="author" content="Anna Mendez Perdomo" />
   <meta name="keywords" content="Anna Mendez Perdomo, Anna Perdomo, variationsonastring, Variations on a String, full-stack developer for hire, freelance React developer, contract Next.js developer, TypeScript, Southern California developer, web developer Los Angeles, bilingual website developer, SEO website developer, portfolio" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
-  <meta name="theme-color" content="#1a1a2e" />
+  <meta name="theme-color" content="#fbf8f3" />
   <link rel="canonical" href="https://www.variationsonastring.com/" />
 
   <!-- Open Graph / Facebook / iMessage / Slack / LinkedIn -->
@@ -76,7 +76,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,600;1,9..40,300&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,600;1,9..40,300&display=swap"
     rel="stylesheet"
   />
 
@@ -92,14 +92,12 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
 
-  <!-- Apply the saved/OS color theme before first paint so the page
-       never flashes the wrong palette (FOUC). Kept inline and
-       render-blocking on purpose; the toggle lives in main.js. -->
+  <!-- Render-blocking on purpose: deferring it flashes the wrong palette.
+       prefers-color-scheme is deliberately not consulted; light is the default. -->
   <script>
     (function () {
       var saved = localStorage.getItem('theme');
-      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (saved === 'dark' || (!saved && prefersDark)) {
+      if (saved === 'dark') {
         document.documentElement.setAttribute('data-theme', 'dark');
       } else if (saved === 'light') {
         document.documentElement.setAttribute('data-theme', 'light');

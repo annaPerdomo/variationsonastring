@@ -14,13 +14,13 @@
   --color-blush:    #ffb3c6;
 
   /* Light mode surface colors */
-  --color-ink:        #1a1a2e;
-  --color-paper:      #fdf9f3;
+  --color-ink:        #1c2233;
+  --color-paper:      #fbf8f3;
   --color-surface:    #ffffff;
-  --color-surface-2:  #f5f0ea;
-  --color-nav:        rgba(253, 249, 243, 0.94);  /* light: warm semi-transparent */
-  --color-border:     rgba(26, 26, 46, 0.08);
-  --color-text-muted: rgba(26, 26, 46, 0.55);
+  --color-surface-2:  #f6f0e9;
+  --color-nav:        rgba(251, 248, 243, 0.86);
+  --color-border:     rgba(28, 34, 51, 0.09);
+  --color-text-muted: rgba(28, 34, 51, 0.7);
 
   /* Accent colors used as TEXT need WCAG-AA contrast on the light cream
      surface — the bright brand hues above only pass on dark mode. These
@@ -34,9 +34,9 @@
   --hero-eyebrow: var(--color-text-muted);
 
   /* Typography */
-  --font-serif: 'Playfair Display', serif;
-  --font-mono:  'Jost', sans-serif;
-  --font-sans:  'DM Sans', sans-serif;
+  --font-display: 'Outfit', 'DM Sans', sans-serif;
+  --font-mono:    'Jost', sans-serif;
+  --font-sans:    'DM Sans', sans-serif;
 
   /* Spacing */
   --section-padding-y: 120px;
@@ -47,11 +47,11 @@
 /* Light mode section backgrounds — defined on :root first so dark mode
    override below wins via cascade order (later = higher priority). */
 :root {
-  --bg-hero:    #fdf9f3;  /* fallback — gradient applied in CSS */
-  --bg-work:    #ffffff;
-  --bg-handmade:  #f5f0ff;
-  --bg-videos:  #edf5ff;
-  --bg-about:   #fdf6f0;
+  --bg-hero:    #fbf8f3;  /* fallback — gradient applied in CSS */
+  --bg-work:    #fdeee6;
+  --bg-handmade:  #f4effb;
+  --bg-videos:  #e9f2fb;
+  --bg-about:   #fdf5ee;
   /* Each slab below repoints these per theme; in light mode they land on ink. */
   --color-on-dark:       #f0ece4;
   --color-on-dark-muted: rgba(240, 236, 228, 0.6);
@@ -278,9 +278,10 @@ img {
 
 .nav__brand {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 500;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
   color: var(--color-ink);
   white-space: nowrap;
 }
@@ -288,11 +289,11 @@ img {
 /* "String" in coral — distinct from the big serif hero heading */
 .nav__brand-subtitle {
   font-family: var(--font-mono);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 500;
-  font-style: italic;
+  font-style: normal;
   color: var(--color-coral);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.2em;
 }
 
 /* Nav links */
@@ -303,13 +304,13 @@ img {
 }
 
 .nav__links a {
-  font-family: var(--font-mono);
-  font-size: 0.76rem;
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
   font-weight: 400;
   color: var(--color-ink);
   text-decoration: none;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
   padding-bottom: 3px;
   border-bottom: 2px solid transparent;
   transition: border-color 0.25s ease;
@@ -404,15 +405,16 @@ img {
 }
 
 .section__title {
-  font-family: var(--font-serif);
-  font-size: clamp(2.2rem, 4vw, 3.5rem);
-  font-weight: 900;
-  line-height: 1.1;
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 4.4vw, 3.8rem);
+  font-weight: 300;
+  letter-spacing: -0.015em;
+  line-height: 1.05;
   color: var(--color-ink);
 }
 
 .section__title em {
-  font-style: italic;
+  font-style: normal;
   color: var(--color-coral);
 }
 
@@ -482,25 +484,26 @@ img {
 }
 
 .hero__title {
-  font-family: var(--font-serif);
-  font-size: clamp(3.2rem, 6vw, 5.5rem);
-  line-height: 1.05;
-  font-weight: 900;
+  font-family: var(--font-display);
+  font-size: clamp(3.4rem, 6.6vw, 6rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  font-weight: 300;
   color: var(--color-ink);
   margin-bottom: 12px;
 }
 
 .hero__title em {
-  font-style: italic;
+  font-style: normal;
   color: var(--color-coral);
 }
 
 .hero__tagline {
-  font-family: var(--font-serif);
-  font-size: clamp(1.4rem, 2.5vw, 2rem);
-  font-weight: 700;
-  font-style: italic;
-  color: var(--accent-lavender-text);
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  color: var(--color-text-muted);
   margin-bottom: 28px;
 }
 
@@ -547,13 +550,13 @@ img {
 }
 
 .btn {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 16px 36px;
-  border-radius: 4px;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  padding: 15px 30px;
+  border-radius: 100px;
   text-decoration: none;
   display: inline-block;
   transition: transform 0.2s ease;
@@ -566,7 +569,7 @@ img {
 }
 
 .btn--primary {
-  background: var(--color-ink);
+  background: var(--color-coral);
   color: var(--color-paper);
   position: relative;
   overflow: hidden;
@@ -597,11 +600,9 @@ img {
 }
 
 .btn--ghost:hover {
-  background: var(--color-marigold);
-  border-color: var(--color-marigold);
-  /* Marigold is yellow in both themes, so force dark text — otherwise
-     dark mode's near-white --color-ink is unreadable on the fill. */
-  color: #1a1a2e;
+  background: var(--color-ink);
+  border-color: var(--color-ink);
+  color: var(--color-paper);
 }
 
 /* Hero right: animated SVG logo */
@@ -992,9 +993,9 @@ img {
 }
 
 .work-card__title {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 1.4rem;
-  font-weight: 700;
+  font-weight: 300;
   line-height: 1.25;
   color: var(--color-ink);
   margin-bottom: 0;
@@ -1399,13 +1400,13 @@ img {
 }
 
 .show-more-btn {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: 14px 40px;
-  border-radius: 4px;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  padding: 14px 32px;
+  border-radius: 100px;
   border: 1.5px solid var(--color-ink);
   background: transparent;
   color: var(--color-ink);
@@ -1450,9 +1451,9 @@ img {
 
 .handmade-card__overlay h4,
 .handmade-overlay h4 {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 0.95rem;
-  font-weight: 700;
+  font-weight: 300;
   margin-bottom: 3px;
   line-height: 1.3;
 }
@@ -1623,15 +1624,15 @@ img {
 }
 
 .about__title {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: clamp(2rem, 3.5vw, 3rem);
-  font-weight: 900;
+  font-weight: 300;
   line-height: 1.1;
   margin-bottom: 28px;
 }
 
 .about__title em {
-  font-style: italic;
+  font-style: normal;
   color: var(--color-coral);
 }
 
@@ -1651,16 +1652,16 @@ img {
 }
 
 .about__link {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
   font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--color-on-dark);
   text-decoration: none;
-  padding: 11px 20px;
-  border: 1px solid rgba(240, 236, 228, 0.35);
-  border-radius: 4px;
+  padding: 10px 20px;
+  border: 1px solid var(--color-on-dark-faint);
+  border-radius: 100px;
   transition: all 0.25s ease;
 }
 
@@ -1695,10 +1696,10 @@ img {
 }
 
 .skill-block__name {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 0.95rem;
-  font-weight: 700;
-  font-style: italic;
+  font-weight: 300;
+  font-style: normal;
   color: var(--color-on-dark);
   margin-bottom: 6px;
 }
@@ -1747,10 +1748,10 @@ img {
 }
 
 .stat__number {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 3rem;
-  font-weight: 900;
-  font-style: italic;
+  font-weight: 300;
+  font-style: normal;
   line-height: 1;
   margin-bottom: 6px;
 }
@@ -1762,7 +1763,7 @@ img {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-on-dark);
-  opacity: 0.55;
+  opacity: 0.72;
 }
 
 /* =====================================================================
@@ -1813,10 +1814,10 @@ img {
 }
 
 .footer__brand {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 1.05rem;
-  font-weight: 700;
-  font-style: italic;
+  font-weight: 300;
+  font-style: normal;
 }
 
 .footer__copy {
@@ -2333,9 +2334,9 @@ img {
 
 .proof__number {
   display: block;
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 900;
+  font-family: var(--font-display);
+  font-style: normal;
+  font-weight: 300;
   font-size: clamp(2.6rem, 4.5vw, 3.8rem);
   line-height: 1;
   color: var(--color-on-dark);
@@ -2490,9 +2491,9 @@ img {
   display: flex;
   align-items: center;
   gap: 14px;
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: clamp(1.8rem, 3vw, 2.5rem);
-  font-weight: 900;
+  font-weight: 300;
   line-height: 1.1;
   color: var(--color-ink);
   margin-bottom: 18px;
@@ -2532,8 +2533,8 @@ img {
 }
 .stat-tile__n {
   display: block;
-  font-family: var(--font-serif);
-  font-weight: 900;
+  font-family: var(--font-display);
+  font-weight: 300;
   font-size: 1.7rem;
   line-height: 1;
   color: var(--color-ink);
@@ -2651,9 +2652,9 @@ img {
 /* Resilience ladder */
 .case__story { margin-bottom: 22px; }
 .case__h4 {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 1.15rem;
-  font-weight: 700;
+  font-weight: 300;
   color: var(--color-ink);
   margin-bottom: 8px;
 }
@@ -2934,9 +2935,9 @@ img {
 [data-theme="dark"] .service__icon { filter: none; }
 .service__icon .ico { width: 22px; height: 22px; }
 .service__title {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 1.25rem;
-  font-weight: 700;
+  font-weight: 300;
   color: var(--color-ink);
   margin-bottom: 10px;
 }
@@ -3010,9 +3011,9 @@ img {
   margin-bottom: 10px;
 }
 .cta-card__title {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: clamp(1.5rem, 2.4vw, 2rem);
-  font-weight: 900;
+  font-weight: 300;
   line-height: 1.15;
   margin-bottom: 12px;
 }
@@ -3599,9 +3600,10 @@ img {
   text-align: center;
 }
 .work__cta-text {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
+  font-weight: 300;
   font-size: 1.25rem;
-  font-style: italic;
+  font-style: normal;
   color: var(--color-ink);
   opacity: 0.85;
 }
@@ -3624,8 +3626,7 @@ img {
   .about__work { margin-top: 72px; padding-top: 56px; }
 }
 
-/* Playfair carries no CJK glyphs: at weight 900 the fallback face gets
-   synthesised into a blur. */
+/* The display face has no CJK glyphs; the synthesised fallback blurs. */
 .cjk {
   font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic',
                'Noto Sans JP', 'Meiryo', sans-serif;
