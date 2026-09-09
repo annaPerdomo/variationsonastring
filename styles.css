@@ -308,6 +308,7 @@ img {
 /* Nav links */
 .nav__links {
   display: flex;
+  align-items: center;
   gap: 32px;
   list-style: none;
 }
@@ -320,13 +321,21 @@ img {
   text-decoration: none;
   letter-spacing: 0;
   text-transform: none;
-  padding-bottom: 3px;
+  display: inline-block;
+  /* Padding stays symmetric or the hover underline shifts the baseline. */
+  padding: 3px 0;
   border-bottom: 2px solid transparent;
+  border-top: 2px solid transparent;
   transition: border-color 0.25s ease;
 }
 
 .nav__links a:hover {
   border-bottom-color: var(--color-coral);
+}
+
+/* Tight line box: a tall inline box floats the text off the CTA centreline. */
+.nav__links li:not(.nav__hire) a {
+  line-height: 1;
 }
 
 /* Hamburger — desktop hides it; the mobile media query reveals it */
@@ -2284,7 +2293,7 @@ img {
 }
 
 /* ── Nav "Hire me" pill ─────────────────────────────────────────── */
-.nav__hire-link {
+.nav__links .nav__hire-link {
   display: inline-flex;
   align-items: center;
   padding: 7px 14px;
@@ -3100,7 +3109,14 @@ img {
   .shot--mobile { min-width: 96px; }
   /* Mobile drop panel shows the hire link as a regular item */
   .nav__hire { display: list-item; }
-  .nav__hire-link { padding: 0; background: transparent; color: var(--color-coral) !important; border: none; }
+  .nav .nav__links .nav__hire-link {
+    display: block;
+    padding: 16px 24px;
+    background: transparent;
+    color: var(--color-coral) !important;
+    border: none;
+    border-radius: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3742,7 +3758,7 @@ img {
 .nav__logo { gap: 10px; }
 .nav__right { gap: 22px; }
 .nav__links { gap: 22px; }
-.nav__hire-link { padding: 6px 13px; }
+.nav__links .nav__hire-link { padding: 6px 13px; }
 .theme-toggle { padding: 5px 12px; font-size: 0.9rem; }
 
 
