@@ -684,7 +684,7 @@ function buildLearn(){
   }
   if (L.priceAt) L.rules.push({t:"Houses listed at <b>"+money(L.priceAt)+" or more</b> rank down, because you passed on one at that price for the price."});
   Object.keys(L.cities).forEach(function(c){ L.rules.push({t:"<b>"+c+"</b> ranks down ("+L.cities[c]+" pass"+(L.cities[c]>1?"es":"")+" as too far from where you want to live)."}); });
-  Object.keys(L.zips).forEach(function(z){ L.rules.push({t:"ZIP <b>"+z+"</b> ranks down a little (a pass for the street) — unless the house is within 15 minutes of school, where the drive outweighs the block."}); });
+  Object.keys(L.zips).forEach(function(z){ L.rules.push({t:"ZIP <b>"+z+"</b> ranks down a little (a pass for the street) — unless the house is within 15 minutes of school at 5 pm (or under 10 off-peak), where the drive outweighs the block."}); });
   Object.keys(L.watchCities).forEach(function(c){ L.rules.push({t:"<b>"+c+"</b> gets a small boost because something there is on your watchlist."}); });
   L.notes.forEach(function(x){ var lab={hoa:"gated / HOA",layout:"layout",work:"condition"}[x.k]||x.k; L.rules.push({t:'Passed <b>'+esc(x.addr)+'</b> for '+lab+'. <span class="off">Not visible in the list numbers, so the next /check-listings sweep checks it on every detail page instead.</span>'}); });
   L.count=n;
@@ -697,7 +697,8 @@ function learnPenalty(r){
   if (L.priceAt && r.p>=L.priceAt){ pen+=30; why.push("At or above a price you passed on"); }
   var c=city(r.c); if (L.cities[c]){ pen+=35; why.push(c+" was too far for you before"); }
   // a street pass is about the block, not the drive — a house in that ZIP that is already close to school keeps its rank
-  var z=(r.c.match(/\d{5}$/)||[""])[0]; var near=COMMUTE[r.id]!=null && COMMUTE[r.id]<=COMMUTE_IDEAL;
+  // "near" = within the 15-minute ideal at 5 pm, or any figure on the card under 10 minutes (the off-peak one counts too)
+  var z=(r.c.match(/\d{5}$/)||[""])[0]; var near=(COMMUTE[r.id]!=null && COMMUTE[r.id]<=COMMUTE_IDEAL) || (COMMUTE_OFF[r.id]!=null && COMMUTE_OFF[r.id]<10) || (COMMUTE_RUSH[r.id]!=null && COMMUTE_RUSH[r.id]<10);
   if (z && L.zips[z] && !near){ pen+=15; why.push("Same ZIP as a street you passed on"); }
   if (L.watchCities[c]){ pen-=10; why.push("Near something you are watching"); }
   return {pen:pen, why:why};
