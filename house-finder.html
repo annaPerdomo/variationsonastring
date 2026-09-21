@@ -259,6 +259,7 @@ tr.z td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
 td a{text-decoration:none;font-weight:600;border-bottom:1px solid var(--rule)}
 td a:hover{border-bottom-color:currentColor}
 th.n,td.n{text-align:right}
+.subh{margin:28px 0 6px;font-size:15px}
 .st{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:2px;background:var(--sunk);color:var(--muted)}
 .st.sug{background:var(--accent-soft);color:var(--accent)}.st.wat{background:var(--accent);color:var(--accent-ink)}.st.pas{background:var(--no-soft);color:var(--no)}.st.over{background:var(--gold-soft);color:var(--gold)}
 .count{padding:10px 16px;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);background:var(--surface);border:1px solid var(--rule);border-top:0;border-radius:0 0 4px 4px}
@@ -326,7 +327,7 @@ th.n,td.n{text-align:right}
 
 <div class="bar"><div class="barin">
   <div class="brand">
-    <h1>Data-Driven House Search<small>Public demo · swept Sep 17, 2026</small></h1>
+    <h1>Data-Driven House Search<small>Public demo · swept Sep 20, 2026</small></h1>
     <div class="sync" id="sync"><i></i><span id="syncTxt">Saved on this device</span></div>
   </div>
   <div class="tabs" role="tablist">
@@ -505,7 +506,7 @@ th.n,td.n{text-align:right}
     <div class="box"><h3>Walk Score points at Uptown Whittier</h3><p>The 90601/90602 side has a real walkable downtown. OneHome prints a score on every listing; read it before committing a Saturday.</p></div>
     <div class="box"><h3>Decide what $800k really means</h3><p>Tick “Include up to $850k” on the Suggested tab and the shelf changes. Worth knowing whether the line is a wall or a preference.</p></div>
   </div>
-  <p class="foot">Swept from the MLS on Sep 17, 2026. Links open a web search for the address and MLS number. Watch and Pass choices are saved in this browser only. This page starts from our real watchlist, passes and open-house verdicts as of the last refresh; anything you change stays on your device. A real house hunt, built with Claude Code by <a href="https://www.variationsonastring.com/">Anna</a>.</p>
+  <p class="foot">Swept from the MLS on Sep 20, 2026. Links open a web search for the address and MLS number. Watch and Pass choices are saved in this browser only. This page starts from our real watchlist, passes and open-house verdicts as of the last refresh; anything you change stays on your device. A real house hunt, built with Claude Code by <a href="https://www.variationsonastring.com/">Anna</a>.</p>
 </section>
 
 </div>
@@ -867,7 +868,8 @@ function moveWatch(id, dir){
   ids.splice(i,1); ids.splice(j,0,id); setWatchOrder(ids);
 }
 function watchRow(id, pos, n){
-  var w=S.watched[id], r=byId[id]||{id:id,a:w.addr,c:w.area,p:w.p0,bd:0,ba:0,sf:0,pps:0};
+  var w=S.watched[id], ls=LSTATUS[id];
+  var r=byId[id]||(ls&&ls.addr?{id:id,a:ls.addr,c:ls.city||w.area,p:ls.p,bd:ls.bd,ba:ls.ba,sf:ls.sf,pps:ls.pps}:{id:id,a:w.addr,c:w.area,p:w.p0,bd:0,ba:0,sf:0,pps:0});
   var href = w.url || link(id);
   var cur=r.p||w.p0, d=daysSince(w.since), move="";
   if (w.p0 && cur && cur!==w.p0){ var diff=cur-w.p0; move=' · <span class="'+(diff<0?"drop":"rise")+'">'+(diff<0?"down ":"up ")+money(Math.abs(diff))+' since you started watching</span>'; }
@@ -890,8 +892,12 @@ function renderWatch(){
   var active = all.filter(function(id){ return !isGone(id); });
   var gone = all.length - active.length;
   var html = '<p class="rankhint">Your order, not the computer\'s: <b>#1 is the house you like most.</b> Drag a row or use ▲▼ — the order syncs to your other devices.</p>'+active.map(function(id,i){ return watchRow(id, i+1, active.length); }).join("");
-  if (!active.length) html = '<div class="empty">Everything here has gone off-market — see <a href="#gone" data-goto="gone">No longer available</a>.</div>';
-  if (gone) html += '<p class="foot">'+gone+' more on this list '+(gone===1?"has":"have")+' gone off-market — see <a href="#gone" data-goto="gone">No longer available</a>.</p>';
+  if (!active.length) html = '<div class="empty">Everything here has gone off-market — they are listed below and under <a href="#gone" data-goto="gone">No longer available</a>.</div>';
+  if (gone){
+    // under-contract / off-market houses stay visible here (with their status pill), just out of the ranked order
+    html += '<h3 class="subh">Under contract or off the market ('+gone+')</h3><p class="foot">Still on your list — if one falls out of escrow the next sweep sees it come back. Also under <a href="#gone" data-goto="gone">No longer available</a>.</p>'
+          + all.filter(isGone).map(function(id){ return watchRow(id, 0, 0); }).join("");
+  }
   host.innerHTML = html;
 }
 function renderPassed(){
